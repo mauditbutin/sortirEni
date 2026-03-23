@@ -55,12 +55,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection<int, Hike>
      */
     #[ORM\OneToMany(targetEntity: Hike::class, mappedBy: 'planner')]
-    private Collection $hikes;
+    private Collection $plannedHikes;
 
     /**
      * @var Collection<int, Hike>
      */
-    #[ORM\ManyToMany(targetEntity: Hike::class, mappedBy: 'participant')]
+    #[ORM\ManyToMany(targetEntity: Hike::class, mappedBy: 'participants')]
     private Collection $participatedHikes;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
@@ -68,7 +68,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->hikes = new ArrayCollection();
+        $this->plannedHikes = new ArrayCollection();
         $this->participatedHikes = new ArrayCollection();
     }
 
@@ -230,13 +230,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getHikes(): Collection
     {
-        return $this->hikes;
+        return $this->plannedHikes;
     }
 
     public function addHike(Hike $hike): static
     {
-        if (!$this->hikes->contains($hike)) {
-            $this->hikes->add($hike);
+        if (!$this->plannedHikes->contains($hike)) {
+            $this->plannedHikes->add($hike);
             $hike->setPlanner($this);
         }
 
