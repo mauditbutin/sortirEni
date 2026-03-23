@@ -29,7 +29,7 @@ class Hike
     private ?\DateTime $dateSubscription = null;
 
     #[ORM\Column]
-    private ?int $nbSubscription = null;
+    private ?int $nbMaxSubscription = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
@@ -49,18 +49,18 @@ class Hike
     #[ORM\ManyToOne(inversedBy: 'hikes')]
     private ?Campus $campus = null;
 
-    #[ORM\ManyToOne(inversedBy: 'hikes')]
+    #[ORM\ManyToOne(inversedBy: 'plannedHikes')]
     private ?User $planner = null;
 
     /**
      * @var Collection<int, User>
      */
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'participatedHikes')]
-    private Collection $participant;
+    private Collection $participants;
 
     public function __construct()
     {
-        $this->participant = new ArrayCollection();
+        $this->participants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -116,14 +116,14 @@ class Hike
         return $this;
     }
 
-    public function getNbSubscription(): ?int
+    public function getNbMaxSubscription(): ?int
     {
-        return $this->nbSubscription;
+        return $this->nbMaxSubscription;
     }
 
-    public function setNbSubscription(int $nbSubscription): static
+    public function setNbMaxSubscription(int $nbMaxSubscription): static
     {
-        $this->nbSubscription = $nbSubscription;
+        $this->nbMaxSubscription = $nbMaxSubscription;
 
         return $this;
     }
@@ -217,13 +217,13 @@ class Hike
      */
     public function getParticipant(): Collection
     {
-        return $this->participant;
+        return $this->participants;
     }
 
     public function addParticipant(User $participant): static
     {
-        if (!$this->participant->contains($participant)) {
-            $this->participant->add($participant);
+        if (!$this->participants->contains($participant)) {
+            $this->participants->add($participant);
         }
 
         return $this;
@@ -231,7 +231,7 @@ class Hike
 
     public function removeParticipant(User $participant): static
     {
-        $this->participant->removeElement($participant);
+        $this->participants->removeElement($participant);
 
         return $this;
     }
