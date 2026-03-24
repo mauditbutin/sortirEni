@@ -103,6 +103,7 @@ class AppFixtures extends Fixture
         $admin->setEmail('admin@admin.fr');
         $admin->setActive(true);
         $admin->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Niort']));
+        $admin->setPicture('admin.jpg');
         $manager->persist($admin);
 
         $maud = new User();
@@ -115,6 +116,7 @@ class AppFixtures extends Fixture
         $maud->setEmail('maud@maud.fr');
         $maud->setActive(true);
         $maud->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Chartres de Bretagne']));
+        $maud->setPicture('maud.webp');
         $manager->persist($maud);
 
         $baptiste = new User();
@@ -127,6 +129,7 @@ class AppFixtures extends Fixture
         $baptiste->setEmail('baptiste@baptiste.fr');
         $baptiste->setActive(true);
         $baptiste->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Quimper']));
+        $baptiste->setPicture('baptiste.webp');
         $manager->persist($baptiste);
 
         $raman = new User();
@@ -139,6 +142,7 @@ class AppFixtures extends Fixture
         $raman->setEmail('raman@raman.fr');
         $raman->setActive(true);
         $raman->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Nantes']));
+        $raman->setPicture('raman.png');
         $manager->persist($raman);
 
         $manager->flush();
@@ -230,6 +234,7 @@ class AppFixtures extends Fixture
         $hike1->setPlanner($manager->getRepository(User::class)->findOneBy(['username' => 'maud']));
         $hike1->addParticipant($manager->getRepository(User::class)->findOneBy(['username' => 'baptiste']));
         $hike1->addParticipant($manager->getRepository(User::class)->findOneBy(['username' => 'maud']));
+        $hike1->setPicture('moulin-boel.webp');
         $manager->persist($hike1);
 
         $hike2 = new Hike();
@@ -247,6 +252,7 @@ class AppFixtures extends Fixture
         $hike2->addParticipant($manager->getRepository(User::class)->findOneBy(['username' => 'baptiste']));
         $hike2->addParticipant($manager->getRepository(User::class)->findOneBy(['username' => 'raman']));
         $hike2->addParticipant($manager->getRepository(User::class)->findOneBy(['username' => 'maud']));
+        $hike2->setPicture('parc-gayeules.jpg');
         $manager->persist($hike2);
 
         $hike3 = new Hike();
@@ -264,6 +270,7 @@ class AppFixtures extends Fixture
         $hike3->addParticipant($manager->getRepository(User::class)->findOneBy(['username' => 'baptiste']));
         $hike3->addParticipant($manager->getRepository(User::class)->findOneBy(['username' => 'raman']));
         $hike3->addParticipant($manager->getRepository(User::class)->findOneBy(['username' => 'maud']));
+        $hike3->setPicture('canut.jpg');
         $manager->persist($hike3);
 
         $hike4 = new Hike();
@@ -280,6 +287,7 @@ class AppFixtures extends Fixture
         $hike4->setPlanner($manager->getRepository(User::class)->findOneBy(['username' => 'raman']));
         $hike4->addParticipant($manager->getRepository(User::class)->findOneBy(['username' => 'baptiste']));
         $hike4->addParticipant($manager->getRepository(User::class)->findOneBy(['username' => 'raman']));
+        $hike4->setPicture('lac-grand-lieu.jpg');
         $manager->persist($hike4);
 
         $hike5 = new Hike();
@@ -296,6 +304,7 @@ class AppFixtures extends Fixture
         $hike5->setPlanner($manager->getRepository(User::class)->findOneBy(['username' => 'raman']));
         $hike5->addParticipant($manager->getRepository(User::class)->findOneBy(['username' => 'baptiste']));
         $hike5->addParticipant($manager->getRepository(User::class)->findOneBy(['username' => 'raman']));
+        $hike5->setPicture('parc-briere.webp');
         $manager->persist($hike5);
 
         $hike6 = new Hike();
@@ -311,6 +320,7 @@ class AppFixtures extends Fixture
         $hike6->setLocation($manager->getRepository(Location::class)->findOneBy(['name' => 'Sentier des Douaniers - Pointe du Raz']));
         $hike6->setPlanner($manager->getRepository(User::class)->findOneBy(['username' => 'baptiste']));
         $hike6->addParticipant($manager->getRepository(User::class)->findOneBy(['username' => 'baptiste']));
+        $hike6->setPicture('pointe-raz.jpg');
         $manager->persist($hike6);
 
         $hike7 = new Hike();
@@ -327,6 +337,7 @@ class AppFixtures extends Fixture
         $hike7->setPlanner($manager->getRepository(User::class)->findOneBy(['username' => 'baptiste']));
         $hike7->addParticipant($manager->getRepository(User::class)->findOneBy(['username' => 'maud']));
         $hike7->addParticipant($manager->getRepository(User::class)->findOneBy(['username' => 'baptiste']));
+        $hike7->setPicture('keradennec.jpg');
         $manager->persist($hike7);
 
         $hike8 = new Hike();
@@ -342,6 +353,7 @@ class AppFixtures extends Fixture
         $hike8->setLocation($manager->getRepository(Location::class)->findOneBy(['name' => 'Forêt de Brocéliande - Paimpont']));
         $hike8->setPlanner($manager->getRepository(User::class)->findOneBy(['username' => 'maud']));
         $hike8->addParticipant($manager->getRepository(User::class)->findOneBy(['username' => 'maud']));
+        $hike8->setPicture('broceliande.jpg');
         $manager->persist($hike8);
 
         $manager->flush();
