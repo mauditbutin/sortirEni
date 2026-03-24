@@ -12,11 +12,8 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}
-            <h1>Roman !!!!</h1>
-            <h1>Maud</h1>
-            <h2>Baptiste</h2>
-            <p>coucou</p>
-        {% endblock %}
+    {% include 'views/nav/header.html.twig' %}
+        {% block body %}{% endblock %}
+    {% include 'views/nav/footer.html.twig' %}
     </body>
 </html>
