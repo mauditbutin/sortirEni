@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %} {{ parent() }} | Home{% endblock %}
 
 {% block body %}
     <style>
@@ -24,7 +24,7 @@
             <div>
                 <div>
                     <img
-                        src="{{ asset('images/logoSite/conception-modele-logo-montagne-minimaliste_698780-847.avif') }}"
+                        src="{{ asset('images/hikes/' ~ hike.picture ) }}"
                         alt="{{ hike.name }}" style="width: 10rem">
                 </div>
                 <div>
