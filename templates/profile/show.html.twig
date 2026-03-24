@@ -1,0 +1,53 @@
+{# Roman #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Profile - {{ user.firstname }} {{ user.lastname }}
+{% endblock %}
+
+{% block body %}
+
+    <div class="profile-wrapper">
+        <div class="profile-card">
+            {% if user.picture %}
+                <img src="{{ asset('images/profilPictures/' ~ user.picture) }}"
+                alt="Photo of {{ user.firstname }}"
+                class="profile-picture" />
+            {% else %}
+                <div class="profile-picture-placeholder">P</div>
+            {% endif %}
+
+            <h1 class="profile-name">{{ user.firstname ~ ' ' ~ user.lastname }}</h1>
+            <p class="profile-username">@{{ user.username }}</p>
+
+            <div class="profile-info">
+
+                <div class="info-row">
+                    <span class="info-label">Email</span>
+                    <span class="info-value">{{ user.email }}</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="info-label">Telephone</span>
+                    <span class="info-value">{{ user.phoneNumber}}</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="info-label">Campus</span>
+                    <span class="info-value">{{ user.campus ? user.campus.name : 'Not defined' }}</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="info-label">Status</span>
+                    <span class="info-value {{ user.active ? 'badge-active' : 'badge-inactive' }}">{{ user.active ? 'Actif' : 'Inactif'}}</span>
+                </div>
+            </div>
+
+            <a href="{{ path('app_login') }}" class="btn-back">Return to homepage</a>
+
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
