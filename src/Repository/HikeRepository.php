@@ -32,7 +32,8 @@ class HikeRepository extends ServiceEntityRepository
             ->join('hike.planner', 'planner')
             ->addSelect('planner')
             ->join('hike.status', 'status')
-            ->addSelect('status');
+            ->addSelect('status')
+            ->addOrderBy('hike.dateEvent', 'ASC');
 
         $query = $qb->getQuery(); //génère la requête
 
