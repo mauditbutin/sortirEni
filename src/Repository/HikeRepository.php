@@ -16,28 +16,27 @@ class HikeRepository extends ServiceEntityRepository
         parent::__construct($registry, Hike::class);
     }
 
-    //    /**
-    //     * @return Hike[] Returns an array of Hike objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('h')
-    //            ->andWhere('h.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('h.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
 
-    //    public function findOneBySomeField($value): ?Hike
-    //    {
-    //        return $this->createQueryBuilder('h')
-    //            ->andWhere('h.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    //Creation d'une jointure pour récupérer toutes les infos d'une rando et de ses objets associés
+    //A compléter au besoin
+    public function hikeFullInfo()
+    {
+        $qb = $this->createQueryBuilder('hike');
+        $qb
+            ->join('hike.difficulty', 'difficulty') //jointure à la table difficulty
+            ->addSelect('difficulty') // Les colonnes à rechercher
+            ->join('hike.campus', 'campus')
+            ->addSelect('campus')
+            ->join('hike.location', 'location')
+            ->addSelect('location')
+            ->join('hike.planner', 'planner')
+            ->addSelect('planner')
+            ->join('hike.status', 'status')
+            ->addSelect('status');
+
+        $query = $qb->getQuery(); //génère la requête
+
+        return $query->getResult(); //renvoie la requête
+    }
 }
+
