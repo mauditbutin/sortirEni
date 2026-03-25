@@ -20,6 +20,7 @@ class HikeFilterType extends AbstractType
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
                 'choice_label' => 'name',
+                'placeholder' => 'Selectionnez un campus',
                 'query_builder' => function (CampusRepository $campusRepository) {
                     return $campusRepository->createQueryBuilder('c')->addOrderBy('c.name');
                 }])
@@ -34,6 +35,7 @@ class HikeFilterType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
+            
             'required' => false
         ]);
     }

@@ -45,8 +45,9 @@ class HikeRepository extends ServiceEntityRepository
 
     public function hikeFiltered(HikeFilterDTO $hikeFilterDTO)
     {
-        $qb = $this->createQueryBuilder('hike');
+        $qb = $this->createQueryBuilder('hike'); //récupère toutes les hikes
 
+        //Si une condition du form est remplie, on ajoute un paramètre à la requête pour filtrer
         if ($hikeFilterDTO->getName()) {
             $qb->where('hike.name LIKE :nameSelected')
                 ->setParameter('nameSelected', '%' . $hikeFilterDTO->getName() . '%');
@@ -66,10 +67,29 @@ class HikeRepository extends ServiceEntityRepository
             $qb->andWhere('hike.dateEvent <= :dateEnd')
                 ->setParameter('dateEnd', $hikeFilterDTO->getDateEnd());
         }
-//        if ($organise) {
-//            $qb->join('hike.campus', 'campus')
-//                ->addSelect('name');
-//        }
+        if ($hikeFilterDTO->isOrganise()) {
+            $qb->andWhere('hike.planner = :user')
+                ->setParameter('user', $hikeFilterDTO->getUser());
+        }
+        if ($hikeFilterDTO->isParticipe()) {
+            $qb
+                ->join('hike.participants', 'p')
+                ->andWhere('p = :user')
+                ->setParameter('user', $hikeFilterDTO->getUser());
+        }
+        if ($hikeFilterDTO->isParticipePas()) {
+            $qb
+                ->andWhere(':user NOT MEMBER OF hike.participants')
+                ->setParameter('user', $hikeFilterDTO->getUser());
+        }
+        if ($hikeFilterDTO->isTerminee()) {
+            
+            $date = new \DateTime();
+            date_format($date, 'd-m-Y');
+
+            $qb->andWhere('hike.dateEvent <= :today')
+                ->setParameter('today', $date);
+        }
 
         $query = $qb->getQuery(); //génère la requête
 

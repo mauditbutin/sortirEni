@@ -3,6 +3,7 @@
 namespace App\Form\Model;
 
 use App\Entity\Campus;
+use App\Entity\User;
 use App\Repository\Form\Model\HikerFilterDTORepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,6 +16,8 @@ class HikeFilterDTO
     private ?string $name = null;
 
     private ?Campus $campus = null;
+
+    private ?User $user = null;
 
 
     private ?\DateTime $dateStart = null;
@@ -61,6 +64,16 @@ class HikeFilterDTO
         $this->campus = $campus;
 
         return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): void
+    {
+        $this->user = $user;
     }
 
     public function getDateStart(): ?\DateTime

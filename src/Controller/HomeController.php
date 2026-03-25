@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Hike;
+
 use App\Form\HikeFilterType;
 use App\Form\Model\HikeFilterDTO;
 use App\Repository\HikeRepository;
@@ -19,7 +19,10 @@ final class HomeController extends AbstractController
     {
 
         $hikeDTO = new HikeFilterDTO();
+        $hikeDTO->setUser($this->getUser()); //récupération de l'utilisateur connecté et set dans le DTO
+
         $hikes = $hikeRepository->hikeFullInfo();
+
         $form = $this->createForm(HikeFilterType::class, $hikeDTO);
         $form->handleRequest($request);
 
