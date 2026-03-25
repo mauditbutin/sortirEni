@@ -83,7 +83,7 @@ class HikeRepository extends ServiceEntityRepository
                 ->setParameter('user', $hikeFilterDTO->getUser());
         }
         if ($hikeFilterDTO->isTerminee()) {
-            
+
             $date = new \DateTime();
             date_format($date, 'd-m-Y');
 
@@ -94,6 +94,27 @@ class HikeRepository extends ServiceEntityRepository
         $query = $qb->getQuery(); //génère la requête
 
         return $query->getResult(); //renvoie la requête
+    }
+
+    public function findAllHikesPublished()
+    {
+
+        $creee = 'Créée';
+        $annulee = 'Annulée';
+
+        $qb = $this->createQueryBuilder('hike');
+        $qb
+            ->join('hike.status', 'status')
+            ->addSelect('status')
+            ->where('status.label NOT LIKE :creee')
+            ->setParameter('creee', $creee)
+            ->andWhere('status.label NOT LIKE :annulee')
+            ->setParameter('annulee', $annulee);
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+
     }
 }
 

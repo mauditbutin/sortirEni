@@ -12,13 +12,14 @@
             <div>
                 Description : {{ hike.description }} <br>
                 Organisateur : {{ hike.planner.username }} <br>
-                Date de l'évènement : {{ hike.dateEvent | date ('d-m-Y') }}
-                Date limite d'inscription : {{ hike.dateSubscription | date ('d-m-Y') }}
-                Difficulté : {{ hike.difficulty.label }}
-                Durée estimée : {{ hike.duration }}
-                Nombre de participants : {{ hike.participant|length }} / {{ hike.nbMaxSubscription }}
-                Point de rendez-vous : {{ hike.location.name }}
-                Campus de rattachement : {{ hike.campus.name }}
+                Date de l'évènement : {{ hike.dateEvent | date ('d-m-Y') }}<br>
+                Date limite d'inscription : {{ hike.dateSubscription | date ('d-m-Y') }}<br>
+                Statut : {{ hike.status.label }}<br>
+                Difficulté : {{ hike.difficulty.label }}<br>
+                Durée estimée : {{ hike.duration }}<br>
+                Nombre de participants : {{ hike.participant|length }} / {{ hike.nbMaxSubscription }}<br>
+                Point de rendez-vous : {{ hike.location.name }}<br>
+                Campus de rattachement : {{ hike.campus.name }}<br>
             </div>
         </div>
 
