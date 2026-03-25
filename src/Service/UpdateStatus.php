@@ -18,16 +18,18 @@ class UpdateStatus
 
         //Uniquement pour les hikes ouvertes
         foreach ($hikes as $hike) {
-            if (($hike->getDateEvent() < $date) and ($hike->getDateSubscription() < $date)) {
+            $dateEvent = $hike->getDateEvent();
+            $dateSubscription = $hike->getDateSubscription();
+
+            if (($dateEvent > $date) && ($dateSubscription > $date)) {
                 $hike->setStatus($statusRepository->findOneBy(['label' => 'Ouverte']));
-            }
-            if (($hike->getDateEvent() < $date) and ($hike->getDateSubscription() > $date)) {
+            } elseif (($dateEvent > $date) && ($hike->getDateSubscription() < $date)) {
                 $hike->setStatus($statusRepository->findOneBy(['label' => 'Clôturée']));
             }
-            if (($hike->getDateEvent() == $date) and ($hike->getDateSubscription() == $date)) {
+            
+            if ($dateEvent->format('Y-m-d') === $date->format('Y-m-d')) {
                 $hike->setStatus($statusRepository->findOneBy(['label' => 'Activité en cours']));
-            }
-            if (($hike->getDateEvent() < $date) and ($hike->getDateSubscription() > $date)) {
+            } elseif (($dateEvent < $date)) {
                 $hike->setStatus($statusRepository->findOneBy(['label' => 'Passée']));
             }
 
