@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ProfileController extends AbstractController
 {
-    #[Route('/account/{id}', name: 'app_profile')]
+    #[Route(path: '/account/{id}', name: 'app_profile')]
     public function show(int $id, UserRepository $userRepository ): Response
     {
         $user = $userRepository->find($id);
