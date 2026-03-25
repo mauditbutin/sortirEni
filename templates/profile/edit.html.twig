@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Modify my profile
+{% endblock %}
+
+{% block body %}
+<div class="edit-wrapper">
+    <div class="edit-card">
+        <h1 class="edit-title">Modify my profile</h1>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+
+        {% for message in app.flashes('danger') %}
+            <div class="alert alert-danger">{{ message }}</div>
+        {% endfor %}
+
+        {{ form_start(form) }}
+
+            <div class="form-group">
+                {{ form_row(form.firstname, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_row(form.lastname, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_row(form.email, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_row(form.phoneNumber, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <hr class="section-divider">
+            <p class="section-label">Change password (optional)</p>
+
+            <div class="form-group">
+                {{ form_row(form.plainPassword, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+
+
+
+                <button type="submit" class="btn btn-primary">
+                    Save
+                </button>
+
+                <a href="{{ path('app_profile', {id: user.id}) }}" class="btn btn-secondary">
+                    Cancel
+                </a>
+
+                <hr class="section-divider">
+
+            <div class="form-actions">
+
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
+
