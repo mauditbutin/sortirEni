@@ -19,10 +19,16 @@ final class HikeController extends AbstractController
     {
         $hike = new Hike();
         $hikeForm = $this->createForm(HikeCreateType::class, $hike);
-
         $hikeForm->handleRequest($request);
 
         if ($hikeForm->isSubmitted() && $hikeForm->isValid()){
+
+            // Gestion de l'image
+            $file = $hikeForm->get('picture')->getData();
+            $newFileName = $hike->getId() . '-' . uniqid() . '.' . $file->guessExtension();
+            $file->move('images/hikes', $newFileName);
+            $hike->setPicture($newFileName);
+
             // Gérer si c'est juste créé et pas soumis
             $hike->setStatus($manager->getRepository(Status::class)->findOneBy(['label' => 'Ouverte']));
             $hike->setPlanner($this->getUser());
