@@ -54,6 +54,29 @@ class ProfileController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+//            $pictureFile = $form->get('pictureFile')->getData();
+//            if ($pictureFile) {
+//                $newFilename = uniqid().'.'.$pictureFile->guessExtension();
+//
+//
+//                $pictureFile->move(
+//                    $this->getParameter('kernel.project_dir').'/assets/images/profilePictures',
+//                    $newFilename
+//                );
+//
+//                // Delete ild picture ---------------
+//                if ($user->getPicture()) {
+//                    $oldFile = $this->getParameter('kernel.project_dir').'/assets/images/profilePictures/'.$user->getPicture();
+//                    if (file_exists($oldFile)) {
+//                        unlink($oldFile);
+//                    }
+//                }
+//
+//                $user->setPicture($newFilename);
+//            }
+
+
             $plainPassword = $form->get('plainPassword')->getData();
 
             if ($plainPassword) {

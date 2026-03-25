@@ -8,14 +8,17 @@ use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class ProfileEditType extends AbstractType
 {
@@ -59,6 +62,19 @@ class ProfileEditType extends AbstractType
                 'placeholder' => 'Choose a campus',
             ])
 
+            ->add('picture', FileType::class, [
+                'label' => 'Photo of profile (JPG, PNG)',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '2m',
+                        'mimeTypes' => ['image/jpeg', 'image/png'],
+                        'mimeTypesMessage' => 'Please upload a valid image file.',
+                    ])
+                ],
+            ])
+
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'first_options' => ['label' => 'New Password'],
@@ -73,6 +89,11 @@ class ProfileEditType extends AbstractType
                         'min' => 8,
                         'minMessage' => 'Password must be at least 8 characters long',
                         'max' => 255,
+                    ]),
+
+                    new Regex([
+                        'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
+                        'message' => 'Mot de passe doit contenir: majuscule, minuscule, chiffre, caractère spécial (@$!%*?&)',
                     ]),
                 ],
             ]);
