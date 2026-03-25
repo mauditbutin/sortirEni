@@ -26,11 +26,14 @@ class UpdateStatus
             } elseif (($dateEvent > $date) && ($hike->getDateSubscription() < $date)) {
                 $hike->setStatus($statusRepository->findOneBy(['label' => 'Clôturée']));
             }
-            
+
             if ($dateEvent->format('Y-m-d') === $date->format('Y-m-d')) {
                 $hike->setStatus($statusRepository->findOneBy(['label' => 'Activité en cours']));
             } elseif (($dateEvent < $date)) {
                 $hike->setStatus($statusRepository->findOneBy(['label' => 'Passée']));
+            }
+            if ($dateEvent->diff($date)->format('%a') > 31) {
+                $hike->setStatus($statusRepository->findOneBy(['label' => 'Archivée']));
             }
 
 

@@ -21,6 +21,7 @@ final class HomeController extends AbstractController
     public function home(HikeRepository $hikeRepository, Request $request, UpdateStatus $updateStatus, StatusRepository $statusRepository, EntityManagerInterface $entityManager): Response
     {
 
+        //Mise à jour des statuts
         $updateStatus->updateStatus($hikeRepository, $statusRepository, $entityManager);
 
         $hikeDTO = new HikeFilterDTO();

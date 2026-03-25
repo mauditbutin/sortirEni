@@ -101,15 +101,14 @@ class HikeRepository extends ServiceEntityRepository
 
         $creee = 'Créée';
         $annulee = 'Annulée';
+        $archivee = 'Archivée';
 
         $qb = $this->createQueryBuilder('hike');
         $qb
             ->join('hike.status', 'status')
             ->addSelect('status')
-            ->where('status.label NOT LIKE :creee')
-            ->setParameter('creee', $creee)
-            ->andWhere('status.label NOT LIKE :annulee')
-            ->setParameter('annulee', $annulee);
+            ->where('status.label NOT IN (:exclues)')
+            ->setParameter('exclues', [$creee, $annulee, $archivee]);
 
         $query = $qb->getQuery();
 
