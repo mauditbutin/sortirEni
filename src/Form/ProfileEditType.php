@@ -8,6 +8,7 @@ use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -54,10 +55,14 @@ class ProfileEditType extends AbstractType
             ])
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
+                'placeholder' => 'Choose a campus',
             ])
+
             ->add('plainPassword', RepeatedType::class, [
-                'label' => 'New Password',
+                'type' => PasswordType::class,
+                'first_options' => ['label' => 'New Password'],
+                'second_options' => ['label' => 'Confirm Password'],
                 'mapped' => false,
                 'required' => false,
                 'attr' => [
