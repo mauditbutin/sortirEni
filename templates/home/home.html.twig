@@ -19,7 +19,16 @@
 
     <div class="example-wrapper">
 
+        {# affichage form de filtrage #}
+        <div>
+            <h2>Filtrez vos sorties : </h2>
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <button> Rechercher</button>
+            {{ form_end(form) }}
+        </div>
 
+        {# affichage des données #}
         {% for hike in hikes %}
             <div>
                 <div>

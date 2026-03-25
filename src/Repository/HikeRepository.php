@@ -2,9 +2,12 @@
 
 namespace App\Repository;
 
+use App\Entity\Campus;
 use App\Entity\Hike;
+use App\Form\Model\HikeFilterDTO;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 /**
  * @extends ServiceEntityRepository<Hike>
@@ -34,6 +37,39 @@ class HikeRepository extends ServiceEntityRepository
             ->join('hike.status', 'status')
             ->addSelect('status')
             ->addOrderBy('hike.dateEvent', 'ASC');
+
+        $query = $qb->getQuery(); //génère la requête
+
+        return $query->getResult(); //renvoie la requête
+    }
+
+    public function hikeFiltered(HikeFilterDTO $hikeFilterDTO)
+    {
+        $qb = $this->createQueryBuilder('hike');
+
+        if ($hikeFilterDTO->getName()) {
+            $qb->where('hike.name LIKE :nameSelected')
+                ->setParameter('nameSelected', '%' . $hikeFilterDTO->getName() . '%');
+        }
+
+        if ($hikeFilterDTO->getCampus()) {
+            $qb->join('hike.campus', 'campus')
+                ->addSelect('campus')
+                ->andWhere('hike.campus = :campusSelected')
+                ->setParameter('campusSelected', $hikeFilterDTO->getCampus());
+        }
+        if ($hikeFilterDTO->getDateStart()) {
+            $qb->andWhere('hike.dateEvent >= :dateStart')
+                ->setParameter('dateStart', $hikeFilterDTO->getDateStart());
+        }
+        if ($hikeFilterDTO->getDateEnd()) {
+            $qb->andWhere('hike.dateEvent <= :dateEnd')
+                ->setParameter('dateEnd', $hikeFilterDTO->getDateEnd());
+        }
+//        if ($organise) {
+//            $qb->join('hike.campus', 'campus')
+//                ->addSelect('name');
+//        }
 
         $query = $qb->getQuery(); //génère la requête
 
