@@ -2,11 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\City;
 use App\Entity\Hike;
 use App\Entity\Status;
 use App\Form\HikeCreateType;
+use App\Form\LocationCreateType;
+use App\Repository\CityRepository;
 use App\Repository\HikeRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\Location;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +20,10 @@ use Symfony\Component\Routing\Attribute\Route;
 final class HikeController extends AbstractController
 {
     #[Route('/create', name: 'create')]
-    public function hikeCreate(EntityManagerInterface $manager, Request $request): Response
+    public function hikeCreate(
+        EntityManagerInterface $manager,
+        CityRepository $cityRepository,
+        Request $request): Response
     {
         $hike = new Hike();
         $hike->setCampus($this->getUser()->getCampus());
@@ -55,8 +62,11 @@ final class HikeController extends AbstractController
             return $this->redirectToRoute('home');
         }
 
+        // Formulaire d'ajout de lieux
+        $location = new \App\Entity\Location();
+        $locationForm = $this->createForm(LocationCreateType::class, $location);
 
-        return $this->render('hike/create.html.twig', ['hikeForm' => $hikeForm]);
+        return $this->render('hike/create.html.twig', ['hikeForm' => $hikeForm, 'locationForm' => $locationForm]);
     }
 
     #[Route('/{id}', name: 'detail', requirements: ['id' => '[0-9]+'])]

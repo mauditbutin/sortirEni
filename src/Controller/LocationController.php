@@ -1,0 +1,59 @@
+<?php
+
+namespace App\Controller;
+
+use App\Entity\City;
+use App\Form\LocationCreateType;
+use App\Repository\CityRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+
+final class LocationController extends AbstractController
+{
+    #[Route('/location/addAjax', name: 'location_addAjax')]
+    public function addAjax(
+        EntityManagerInterface $manager,
+        Request $request,
+        CityRepository $cityRepository
+    ): JsonResponse
+    {
+        $location = new \App\Entity\Location();
+        $locationForm = $this->createForm(LocationCreateType::class, $location);
+        $locationForm->handleRequest($request);
+
+        if($locationForm->isSubmitted() && $locationForm->isValid()) {
+            $city = $cityRepository->findOneBy(
+                ['zipcode' => $locationForm->get('zipcode')->getData(),
+                    'name' => $locationForm->get('city')->getData()
+                ]);
+            if ($city) {
+                $location->setCity($city);
+            } else {
+                $newCity = new City();
+                $newCity->setName($locationForm->get('city')->getData());
+                $newCity->setZipcode($locationForm->get('zipcode')->getData());
+                $manager->persist($newCity);
+                $manager->flush();
+                $location->setCity($newCity);
+            }
+            $manager->persist($location);
+            $manager->flush();
+
+            return $this->json([
+                'success' => true,
+                'id' => $location->getId(),
+                'name' => $location->getName(),
+            ]);
+
+        }
+
+        return $this->json([
+            'success' => false,
+            'errors' => (string) $locationForm->getErrors(true, false)
+        ], 400);
+    }
+}

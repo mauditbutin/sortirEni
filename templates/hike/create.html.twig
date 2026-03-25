@@ -9,11 +9,48 @@
     <h2>Créer une randonnée</h2>
 
     {{  form_start(hikeForm) }}
-    {{  form_widget(hikeForm) }}
+        {{ form_row(hikeForm.name, {label: 'Nom'}) }}
+        {{ form_row(hikeForm.dateEvent, {label: 'Date et heure de l\'évènement'}) }}
+        {{ form_row(hikeForm.dateSubscription, {label: 'Date limite d\'inscription'}) }}
+        {{ form_row(hikeForm.nbMaxSubscription, {label: 'Nombre de places'}) }}
+        {{ form_row(hikeForm.difficulty, {label: 'Sélectionnez un niveau'}) }}
+        {{ form_row(hikeForm.duration, {label: 'Durée'}) }} minutes
+        {{ form_row(hikeForm.description, {label: 'Description et infos'}) }}
+        {{ form_row(hikeForm.picture, {label: 'Ajouter une photo'}) }}
+        {{ form_row(hikeForm.location, {label: 'Lieu de la randonnée'}) }}
+        <a href="#modaleFormLocation">Ajouter un lieu</a>
+        {{ form_row(hikeForm.campus, {label: 'Campus'}) }}
+        {{  form_widget(hikeForm) }}
+        <a href="{{ path('home') }}">Annuler</a>
     {{  form_end(hikeForm) }}
-    <a href="{{ path('home') }}">Annuler</a>
+
+
+    <div id="modaleFormLocation" class="modale">
+        <a href="#" class="modaleOverlay"></a>
+        <div class="modaleContent">
+            <h2>Ajouter un lieu</h2>
+
+            {{  form_start(locationForm, {'attr' : {'id': 'locationCreateForm'}}) }}
+                {{ form_row(locationForm.name, {label: 'Nom du lieu'}) }}
+                {{ form_row(locationForm.address, {label: 'Adresse'}) }}
+                {{ form_row(locationForm.zipcode, {label: 'Code Postal'}) }}
+                {{ form_row(locationForm.city, {label: 'Ville'}) }}
+                {{ form_row(locationForm.latitude, {label: 'Latitude'}) }}
+                {{ form_row(locationForm.longitude, {label: 'Longitude'}) }}
+                <button type="submit">Ajouter le lieu</button>
+            {{ form_end(locationForm) }}
+
+        </div>
+    </div>
+
+    <script>
+        const locationAjaxPath = "{{ path('location_addAjax') }}"
+    </script>
+
 
 {% endblock %}
+
+
 
 
 
