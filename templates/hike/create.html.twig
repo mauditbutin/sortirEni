@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+{{ parent() }} | Créer une randonnée
+{% endblock %}
+
+{% block body %}
+
+    <h2>Créer une randonnée</h2>
+
+    {{  form_start(hikeForm) }}
+    {{  form_widget(hikeForm) }}
+    <button>Valider</button>
+    {{  form_end(hikeForm) }}
+
+{% endblock %}
+
+
+
