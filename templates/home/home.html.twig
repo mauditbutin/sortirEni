@@ -31,21 +31,23 @@
         {# affichage des données #}
         {% for hike in hikes %}
             <div>
-                <div>
-                    <img
-                        src="{{ asset('images/hikes/' ~ hike.picture ) }}"
-                        alt="{{ hike.name }}" style="width: 10rem">
-                </div>
-                <div>
-                    nom : {{ hike.name }}
+                <a href="{{ path('hike_detail', {'id' : hike.id}) }}">
+                    <div>
+                        <img
+                            src="{{ asset('images/hikes/' ~ hike.picture ) }}"
+                            alt="{{ hike.name }}" style="width: 10rem">
+                    </div>
+                    <div>
+                        nom : {{ hike.name }}
+                        <br>
+                        description : {{ hike.description }}
+                        <br>
+                        organisateur : {{ hike.planner.username }}
+                        <br>
+                        date de l'évènement : {{ hike.dateEvent | date ('d-m-Y') }}
+                    </div>
                     <br>
-                    description : {{ hike.description }}
-                    <br>
-                    organisateur : {{ hike.planner.username }}
-                    <br>
-                    date de l'évènement : {{ hike.dateEvent | date ('d-m-Y') }}
-                </div>
-                <br>
+                </a>
 
             </div>
         {% endfor %}

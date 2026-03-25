@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Hike;
 use App\Entity\Status;
 use App\Form\HikeCreateType;
+use App\Repository\HikeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +23,7 @@ final class HikeController extends AbstractController
 
         $hikeForm->handleRequest($request);
 
-        if ($hikeForm->isSubmitted() && $hikeForm->isValid()){
+        if ($hikeForm->isSubmitted() && $hikeForm->isValid()) {
             // Gérer si c'est juste créé et pas soumis
             $hike->setStatus($manager->getRepository(Status::class)->findOneBy(['label' => 'Ouverte']));
             $hike->setPlanner($this->getUser());
@@ -38,4 +39,18 @@ final class HikeController extends AbstractController
 
         return $this->render('hike/create.html.twig', ['hikeForm' => $hikeForm]);
     }
+
+    #[Route('/{id}', name: 'detail', requirements: ['id' => '[0-9]+'])]
+    public function detail(int $id, HikeRepository $hikeRepository): Response
+    {
+        $user = $this->getUser();
+        $hike = $hikeRepository->find($id);
+
+        return $this->render('hike/detail.html.twig', [
+            'hike' => $hike,
+            'user' => $user
+        ]);
+    }
+
+
 }

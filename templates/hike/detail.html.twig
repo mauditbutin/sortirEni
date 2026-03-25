@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div>
+        <h2>{{ hike.name }}</h2>
+        <div>
+            <div>
+                <img
+                    src="{{ asset('images/hikes/' ~ hike.picture ) }}"
+                    alt="{{ hike.name }}" style="width: 10rem">
+            </div>
+            <div>
+                Description : {{ hike.description }} <br>
+                Organisateur : {{ hike.planner.username }} <br>
+                Date de l'évènement : {{ hike.dateEvent | date ('d-m-Y') }}
+                Date limite d'inscription : {{ hike.dateSubscription | date ('d-m-Y') }}
+                Difficulté : {{ hike.difficulty.label }}
+                Durée estimée : {{ hike.duration }}
+                Nombre de participants : {{ hike.participant|length }} / {{ hike.nbMaxSubscription }}
+                Point de rendez-vous : {{ hike.location.name }}
+                Campus de rattachement : {{ hike.campus.name }}
+            </div>
+        </div>
+
+        {% if user == hike.planner %}
+            <button> Modifier la randonnée</button>
+            <button> Annuler la randonnée</button>
+        {% elseif hike.participant.contains(user) %}
+            <button> Se désinscrire</button>
+        {% else %}
+            <button> S'inscrire</button>
+        {% endif %}
+
+
+    </div>
+{% endblock %}
+
+{% block title %}
+    {{ parent() }} | Hike Details
+{% endblock %}
+
