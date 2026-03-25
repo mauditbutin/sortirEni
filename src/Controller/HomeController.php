@@ -2,15 +2,15 @@
 
 namespace App\Controller;
 
-use App\Entity\Campus;
-use App\Entity\City;
-use App\Entity\Difficulty;
-use App\Entity\Hike;
-use App\Entity\Location;
-use App\Entity\Status;
-use App\Entity\User;
+
+use App\Form\HikeFilterType;
+use App\Form\Model\HikeFilterDTO;
 use App\Repository\HikeRepository;
+use App\Repository\StatusRepository;
+use App\Service\UpdateStatus;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -18,10 +18,24 @@ use Symfony\Component\Routing\Attribute\Route;
 final class HomeController extends AbstractController
 {
     #[Route('', name: '')]
-    public function home(HikeRepository $hikeRepository): Response
+    public function home(HikeRepository $hikeRepository, Request $request, UpdateStatus $updateStatus, StatusRepository $statusRepository, EntityManagerInterface $entityManager): Response
     {
-        $hikes = $hikeRepository->hikeFullInfo();
 
-        return $this->render('home/home.html.twig', ['hikes' => $hikes]);
+        $updateStatus->updateStatus($hikeRepository, $statusRepository, $entityManager);
+
+        $hikeDTO = new HikeFilterDTO();
+        $hikeDTO->setUser($this->getUser()); //récupération de l'utilisateur connecté et set dans le DTO
+
+        $hikes = $hikeRepository->findAllHikesPublished();
+
+
+        $form = $this->createForm(HikeFilterType::class, $hikeDTO);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $hikes = $hikeRepository->hikeFiltered($hikeDTO);
+        }
+
+        return $this->render('home/home.html.twig', ['hikes' => $hikes, 'form' => $form]);
     }
 }

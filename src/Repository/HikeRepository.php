@@ -2,9 +2,12 @@
 
 namespace App\Repository;
 
+use App\Entity\Campus;
 use App\Entity\Hike;
+use App\Form\Model\HikeFilterDTO;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 /**
  * @extends ServiceEntityRepository<Hike>
@@ -32,11 +35,86 @@ class HikeRepository extends ServiceEntityRepository
             ->join('hike.planner', 'planner')
             ->addSelect('planner')
             ->join('hike.status', 'status')
-            ->addSelect('status');
+            ->addSelect('status')
+            ->addOrderBy('hike.dateEvent', 'ASC');
 
         $query = $qb->getQuery(); //génère la requête
 
         return $query->getResult(); //renvoie la requête
+    }
+
+    public function hikeFiltered(HikeFilterDTO $hikeFilterDTO)
+    {
+        $qb = $this->createQueryBuilder('hike'); //récupère toutes les hikes
+
+        //Si une condition du form est remplie, on ajoute un paramètre à la requête pour filtrer
+        if ($hikeFilterDTO->getName()) {
+            $qb->where('hike.name LIKE :nameSelected')
+                ->setParameter('nameSelected', '%' . $hikeFilterDTO->getName() . '%');
+        }
+
+        if ($hikeFilterDTO->getCampus()) {
+            $qb->join('hike.campus', 'campus')
+                ->addSelect('campus')
+                ->andWhere('hike.campus = :campusSelected')
+                ->setParameter('campusSelected', $hikeFilterDTO->getCampus());
+        }
+        if ($hikeFilterDTO->getDateStart()) {
+            $qb->andWhere('hike.dateEvent >= :dateStart')
+                ->setParameter('dateStart', $hikeFilterDTO->getDateStart());
+        }
+        if ($hikeFilterDTO->getDateEnd()) {
+            $qb->andWhere('hike.dateEvent <= :dateEnd')
+                ->setParameter('dateEnd', $hikeFilterDTO->getDateEnd());
+        }
+        if ($hikeFilterDTO->isOrganise()) {
+            $qb->andWhere('hike.planner = :user')
+                ->setParameter('user', $hikeFilterDTO->getUser());
+        }
+        if ($hikeFilterDTO->isParticipe()) {
+            $qb
+                ->join('hike.participants', 'p')
+                ->andWhere('p = :user')
+                ->setParameter('user', $hikeFilterDTO->getUser());
+        }
+        if ($hikeFilterDTO->isParticipePas()) {
+            $qb
+                ->andWhere(':user NOT MEMBER OF hike.participants')
+                ->setParameter('user', $hikeFilterDTO->getUser());
+        }
+        if ($hikeFilterDTO->isTerminee()) {
+
+            $date = new \DateTime();
+            date_format($date, 'd-m-Y');
+
+            $qb->andWhere('hike.dateEvent <= :today')
+                ->setParameter('today', $date);
+        }
+
+        $query = $qb->getQuery(); //génère la requête
+
+        return $query->getResult(); //renvoie la requête
+    }
+
+    public function findAllHikesPublished()
+    {
+
+        $creee = 'Créée';
+        $annulee = 'Annulée';
+
+        $qb = $this->createQueryBuilder('hike');
+        $qb
+            ->join('hike.status', 'status')
+            ->addSelect('status')
+            ->where('status.label NOT LIKE :creee')
+            ->setParameter('creee', $creee)
+            ->andWhere('status.label NOT LIKE :annulee')
+            ->setParameter('annulee', $annulee);
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+
     }
 }
 
