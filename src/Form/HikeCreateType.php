@@ -11,6 +11,7 @@ use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -28,22 +29,22 @@ class HikeCreateType extends AbstractType
             ->add('name', TextType::class,
                 ['label' => 'Titre'])
             ->add('description', TextareaType::class, [
-                'label' => 'Description'
+                'label' => 'Description et infos'
             ])
             //----------------------------------------------
             // A mettre sous forme heures minutes -> minutes
             ->add('duration', IntegerType::class, [
-                'label' => 'Durée de l\'évènement (en minutes)'
+                'label' => 'Durée (en minutes)',
             ])
             //----------------------------------------------
-            ->add('dateEvent', DateType::class, [
-                'label' => 'Date de l\'évènement'
+            ->add('dateEvent', DateTimeType::class, [
+                'label' => 'Date et heure de l\'évènement'
             ])
             ->add('dateSubscription', DateType::class, [
                 'label' => 'Date limite d\'inscription'
             ])
             ->add('nbMaxSubscription', IntegerType::class, [
-                'label' => 'Nombre maximum de participants'
+                'label' => 'Nombre de places'
             ])
             ->add('picture', FileType::class, [
                 'label' => 'Ajouter une photo',
@@ -56,16 +57,18 @@ class HikeCreateType extends AbstractType
             ->add('difficulty', EntityType::class, [
                 'class' => Difficulty::class,
                 'label' => 'Difficulté',
+                'placeholder' => 'Sélectionnez un niveau',
                 'choice_label' => 'label',
             ])
             ->add('location', EntityType::class, [
                 'class' => Location::class,
                 'label' => 'Lieu de la randonnée',
+                'placeholder' => 'Sélectionnez un lieu',
                 'choice_label' => 'name',
             ])
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
-                'label' => 'Campus de rattachement',
+                'label' => 'Campus',
                 'choice_label' => 'name',
             ])
 //            ->add('planner', EntityType::class, [
@@ -82,9 +85,6 @@ class HikeCreateType extends AbstractType
         ])
         ->add('publish', SubmitType::class, [
             'label' => 'Publier',
-        ])
-        ->add('cancel', ButtonType::class, [
-            'label' => 'Annuler',
         ]);
 
     }

@@ -18,6 +18,7 @@ final class HikeController extends AbstractController
     public function hikeCreate(EntityManagerInterface $manager, Request $request): Response
     {
         $hike = new Hike();
+        $hike->setCampus($this->getUser()->getCampus());
         $hikeForm = $this->createForm(HikeCreateType::class, $hike);
         $hikeForm->handleRequest($request);
 
@@ -25,9 +26,13 @@ final class HikeController extends AbstractController
 
             // Gestion de l'image
             $file = $hikeForm->get('picture')->getData();
-            $newFileName = $hike->getId() . '-' . uniqid() . '.' . $file->guessExtension();
-            $file->move('images/hikes', $newFileName);
-            $hike->setPicture($newFileName);
+            if($file){
+                $newFileName = str_replace(' ', '-', $hike->getName()) . '-' . uniqid() . '.' . $file->guessExtension();
+                $file->move('images/hikes', $newFileName);
+                $hike->setPicture($newFileName);
+            } else {
+                $hike->setPicture('image-not-found.webp');
+            }
 
             // Gestion des autres champs auto
             $hike->setPlanner($this->getUser());
