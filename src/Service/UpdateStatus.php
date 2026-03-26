@@ -23,7 +23,7 @@ class UpdateStatus
         $this->entityManager = $entityManager;
     }
 
-    public function updateStatus()
+    public function updateStatus(): void
     {
         $date = new DateTime('now');
 
