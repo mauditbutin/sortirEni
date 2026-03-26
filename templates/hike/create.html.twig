@@ -8,7 +8,7 @@
 
     <h2>Créer une randonnée</h2>
 
-    {{  form_start(hikeForm) }}
+    {{  form_start(hikeForm, {'attr' : {'id' : 'hikeCreateForm'}}) }}
         {{ form_row(hikeForm.name, {label: 'Nom'}) }}
         {{ form_row(hikeForm.dateEvent, {label: 'Date et heure de l\'évènement'}) }}
         {{ form_row(hikeForm.dateSubscription, {label: 'Date limite d\'inscription'}) }}
@@ -18,7 +18,7 @@
         {{ form_row(hikeForm.description, {label: 'Description et infos'}) }}
         {{ form_row(hikeForm.picture, {label: 'Ajouter une photo'}) }}
         {{ form_row(hikeForm.location, {label: 'Lieu de la randonnée'}) }}
-        <a href="#modaleFormLocation">Ajouter un lieu</a>
+        <a href="#modaleFormLocation" id="buttonOpenLocationModale">Ajouter un lieu</a>
         {{ form_row(hikeForm.campus, {label: 'Campus'}) }}
         {{  form_widget(hikeForm) }}
         <a href="{{ path('home') }}">Annuler</a>
@@ -26,7 +26,7 @@
 
 
     <div id="modaleFormLocation" class="modale">
-        <a href="#" class="modaleOverlay"></a>
+        <a href="#" class="modaleOverlay" id="modaleLocationOverlay"></a>
         <div class="modaleContent">
             <h2>Ajouter un lieu</h2>
 
@@ -38,6 +38,7 @@
                 {{ form_row(locationForm.latitude, {label: 'Latitude'}) }}
                 {{ form_row(locationForm.longitude, {label: 'Longitude'}) }}
                 <button type="submit">Ajouter le lieu</button>
+                <a href="#" id="buttonCloseLocationModale">Annuler</a>
             {{ form_end(locationForm) }}
 
         </div>

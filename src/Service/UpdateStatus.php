@@ -9,12 +9,36 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class UpdateStatus
 {
-    public function updateStatus(HikeRepository $hikeRepository, StatusRepository $statusRepository, EntityManagerInterface $entityManager)
+    private HikeRepository $hikeRepository;
+    private StatusRepository $statusRepository;
+    private EntityManagerInterface $entityManager;
+
+    //Constructeur pour ne pas avoir à injecter tout dans la fonction
+
+    public function __construct(HikeRepository $hikeRepository, StatusRepository $statusRepository, EntityManagerInterface $entityManager)
+    {
+
+        $this->hikeRepository = $hikeRepository;
+        $this->statusRepository = $statusRepository;
+        $this->entityManager = $entityManager;
+    }
+
+    public function updateStatus(): void
     {
         $date = new DateTime('now');
 
 
-        $hikes = $hikeRepository->findAllHikesPublished();
+        $hikes = $this->hikeRepository->findAllHikesPublished();
+
+        //find all des états
+        $status = $this->statusRepository->findAll();
+
+        //tableau associatif des états
+        $tableauDeStatus = [];
+        foreach ($status as $element) {
+            $tableauDeStatus [$element->getLabel()] = $element;
+        }
+
 
         //Uniquement pour les hikes ouvertes
         foreach ($hikes as $hike) {
@@ -22,25 +46,30 @@ class UpdateStatus
             $dateSubscription = $hike->getDateSubscription();
 
             if (($dateEvent > $date) && ($dateSubscription > $date)) {
-                $hike->setStatus($statusRepository->findOneBy(['label' => 'Ouverte']));
+                //$hike->setStatus($this->statusRepository->findOneBy(['label' => 'Ouverte']));
+                $hike->setStatus($tableauDeStatus['Ouverte']);
             } elseif (($dateEvent > $date) && ($hike->getDateSubscription() < $date)) {
-                $hike->setStatus($statusRepository->findOneBy(['label' => 'Clôturée']));
+                // $hike->setStatus($this->statusRepository->findOneBy(['label' => 'Clôturée']));
+                $hike->setStatus($tableauDeStatus['Clôturée']);
             }
 
             if ($dateEvent->format('Y-m-d') === $date->format('Y-m-d')) {
-                $hike->setStatus($statusRepository->findOneBy(['label' => 'Activité en cours']));
+//                $hike->setStatus($this->statusRepository->findOneBy(['label' => 'Activité en cours']));
+                $hike->setStatus($tableauDeStatus['Activité en cours']);
             } elseif (($dateEvent < $date)) {
-                $hike->setStatus($statusRepository->findOneBy(['label' => 'Passée']));
+//                $hike->setStatus($this->statusRepository->findOneBy(['label' => 'Passée']));
+                $hike->setStatus($tableauDeStatus['Passée']);
             }
             if ($dateEvent->diff($date)->format('%a') > 31) {
-                $hike->setStatus($statusRepository->findOneBy(['label' => 'Archivée']));
+//                $hike->setStatus($this->statusRepository->findOneBy(['label' => 'Archivée']));
+                $hike->setStatus($tableauDeStatus['Archivée']);
             }
 
 
-            $entityManager->persist($hike);
+            $this->entityManager->persist($hike);
         }
 
-        $entityManager->flush();
+        $this->entityManager->flush();
 
     }
 }
