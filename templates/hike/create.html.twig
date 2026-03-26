@@ -17,8 +17,14 @@
         {{ form_row(hikeForm.duration, {label: 'Durée'}) }} minutes
         {{ form_row(hikeForm.description, {label: 'Description et infos'}) }}
         {{ form_row(hikeForm.picture, {label: 'Ajouter une photo'}) }}
+        {{ form_row(hikeForm.city, {label: 'Trier par ville'}) }}
         {{ form_row(hikeForm.location, {label: 'Lieu de la randonnée'}) }}
         <a href="#modaleFormLocation" id="buttonOpenLocationModale">Ajouter un lieu</a>
+            <fieldset>
+                <div>Adresse : <span id="adressLocationHikeCreate"></span></div>
+                <div>Code Postal : <span id="zipLocationHikeCreate"></span></div>
+                <div>Ville : <span id="cityLocationHikeCreate"></span></div>
+            </fieldset>
         {{ form_row(hikeForm.campus, {label: 'Campus'}) }}
         {{  form_widget(hikeForm) }}
         <a href="{{ path('home') }}">Annuler</a>
@@ -45,7 +51,8 @@
     </div>
 
     <script>
-        const locationAjaxPath = "{{ path('location_addAjax') }}"
+        const locationAjaxPath = "{{ path('api_location_addAjax') }}"
+        {#const getLocationsByCity = "{{ path('api_location_getLocationsByCity') }}"#}
     </script>
 
 
