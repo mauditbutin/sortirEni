@@ -7,6 +7,7 @@ use App\Form\HikeFilterType;
 use App\Form\Model\HikeFilterDTO;
 use App\Repository\HikeRepository;
 use App\Repository\StatusRepository;
+use App\Security\Voter\HikeVoter;
 use App\Service\UpdateStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,6 +29,7 @@ final class HomeController extends AbstractController
         $hikeDTO->setUser($this->getUser()); //récupération de l'utilisateur connecté et set dans le DTO
 
         $hikes = $hikeRepository->hikeFiltered($hikeDTO);
+        //Fonction d'authorisation d'accès du HikeVoter
 
 
         $form = $this->createForm(HikeFilterType::class, $hikeDTO);

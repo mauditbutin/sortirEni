@@ -9,7 +9,11 @@ use App\Form\HikeCreateType;
 use App\Form\LocationCreateType;
 use App\Repository\CityRepository;
 use App\Repository\HikeRepository;
+use App\Repository\StatusRepository;
+use App\Repository\UserRepository;
+use App\Security\Voter\HikeVoter;
 use Doctrine\ORM\EntityManagerInterface;
+use http\Client\Curl\User;
 use phpDocumentor\Reflection\Location;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,20 +26,24 @@ final class HikeController extends AbstractController
     #[Route('/create', name: 'create')]
     public function hikeCreate(
         EntityManagerInterface $manager,
-        CityRepository $cityRepository,
-        Request $request): Response
+        CityRepository         $cityRepository,
+        Request                $request): Response
     {
+
         $hike = new Hike();
+        //Fonction d'authorisation d'accès du HikeVoter
+        $this->denyAccessUnlessGranted(HikeVoter::VIEW, $hike);
         $hike->setCampus($this->getUser()->getCampus());
         $hikeForm = $this->createForm(HikeCreateType::class, $hike);
 
+
         $hikeForm->handleRequest($request);
 
-        if ($hikeForm->isSubmitted() && $hikeForm->isValid()){
+        if ($hikeForm->isSubmitted() && $hikeForm->isValid()) {
 
             // Gestion de l'image
             $file = $hikeForm->get('picture')->getData();
-            if($file){
+            if ($file) {
                 $newFileName = str_replace(' ', '-', $hike->getName()) . '-' . uniqid() . '.' . $file->guessExtension();
                 $file->move('images/hikes', $newFileName);
                 $hike->setPicture($newFileName);
@@ -48,10 +56,10 @@ final class HikeController extends AbstractController
             $hike->addParticipant($this->getUser());
 
             // Ajout du statut selon le bouton cliqué
-            if($hikeForm->getClickedButton() && 'create' === $hikeForm->getClickedButton()->getName()){
+            if ($hikeForm->getClickedButton() && 'create' === $hikeForm->getClickedButton()->getName()) {
                 $hike->setStatus($manager->getRepository(Status::class)->findOneBy(['label' => 'Créée']));
                 $this->addFlash('success', 'Votre randonnée a bien été créée, n\'hésitez pas à la publier');
-            } else if ($hikeForm->getClickedButton() && 'publish' === $hikeForm->getClickedButton()->getName()){
+            } else if ($hikeForm->getClickedButton() && 'publish' === $hikeForm->getClickedButton()->getName()) {
                 $hike->setStatus($manager->getRepository(Status::class)->findOneBy(['label' => 'Ouverte']));
                 $this->addFlash('success', 'Votre randonnée a bien été publiée');
             }
@@ -73,7 +81,14 @@ final class HikeController extends AbstractController
     public function detail(int $id, HikeRepository $hikeRepository): Response
     {
         $user = $this->getUser();
-        $hike = $hikeRepository->find($id);
+        $hike = $hikeRepository->HikeFullInfo($id);
+
+        if (!$hike) {
+            throw $this->createNotFoundException('Randonnée introuvable.');
+        }
+
+        // Fonction d'authorisation d'accès du HikeVoter
+        $this->denyAccessUnlessGranted(HikeVoter::VIEW, $hike);
 
         return $this->render('hike/detail.html.twig', [
             'hike' => $hike,
@@ -81,5 +96,61 @@ final class HikeController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}/subscribe', name: 'subscribe', requirements: ['id' => '[0-9]+'])]
+    public function subscribe(HikeRepository $hikeRepository, int $id, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+    {
+        $userConnected = $this->getUser()->getUserIdentifier();
+        $user = $userRepository->findOneBy(['username' => $userConnected]);
+        $hike = $hikeRepository->find($id);
+
+        $this->denyAccessUnlessGranted(HikeVoter::SUBSCRIBE, $hike);
+
+        $hike->addParticipant($user);
+
+        $entityManager->persist($hike);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('hike_detail', ['id' => $hike->getId()]);
+
+    }
+
+    #[Route('/{id}/unsubscribe', name: 'unsubscribe', requirements: ['id' => '[0-9]+'])]
+    public function unsubscribe(HikeRepository $hikeRepository, int $id, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+    {
+        $userConnected = $this->getUser()->getUserIdentifier();
+        $user = $userRepository->findOneBy(['username' => $userConnected]);
+        $hike = $hikeRepository->find($id);
+
+
+        $this->denyAccessUnlessGranted(HikeVoter::UNSUBSCRIBE, $hike);
+
+        $hike->removeParticipant($user);
+
+        $entityManager->persist($hike);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('hike_detail', ['id' => $hike->getId()]);
+
+    }
+
+
+    #[Route('/{id}/cancel', name: 'cancel', requirements: ['id' => '[0-9]+'])]
+    public function cancel(HikeRepository $hikeRepository, int $id, EntityManagerInterface $entityManager, StatusRepository $statusRepository): Response
+    {
+
+        $hike = $hikeRepository->find($id);
+        $status = $statusRepository->findOneBy(['label' => 'Annulée']);
+
+
+        $this->denyAccessUnlessGranted(HikeVoter::CANCEL, $hike);
+
+        $hike->setStatus($status);
+
+        $entityManager->persist($hike);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('hike_detail', ['id' => $hike->getId()]);
+
+    }
 
 }

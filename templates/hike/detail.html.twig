@@ -25,11 +25,19 @@
 
         {% if user == hike.planner %}
             <button> Modifier la randonnée</button>
-            <button> Annuler la randonnée</button>
+            {% if hike.status.label != 'Annulée' %}
+                <a href="{{ path('hike_cancel', {'id': hike.id}) }}">
+                    <button> Annuler la randonnée</button>
+                </a>
+            {% endif %}
         {% elseif hike.participant.contains(user) %}
-            <button> Se désinscrire</button>
+            <a href="{{ path('hike_unsubscribe', {'id': hike.id}) }}">
+                <button> Se désinscrire</button>
+            </a>
         {% else %}
-            <button> S'inscrire</button>
+            <a href="{{ path('hike_subscribe', {'id': hike.id}) }}">
+                <button> S'inscrire</button>
+            </a>
         {% endif %}
 
 
