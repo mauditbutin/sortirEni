@@ -1,12 +1,23 @@
-/**
-Formulaire d'ajout de randonnées > Formulaire d'ajout de lieu
--> Mise à jour du select de lieux après avoir sélectionné une ville
--> Chargement automatique du lieu après son ajout
- **/
+/***********************************************************************************/
+/***********************************************************************************/
+/** Formulaire d'ajout de randonnées + Formulaire d'ajout de lieu
+> Mise à jour du select de lieux après avoir sélectionné une ville
+> Ajout de lieu dans une modale + changement dynamique après validation
+> Maj dynamique de l'adresse en sélectionnant un lieu **/
+/***********************************************************************************/
+/***********************************************************************************/
+
 
 const hikeForm = document.getElementById('hikeCreateForm');
+const divAdress = document.getElementById('adressLocationHikeCreate');
+const divZip = document.getElementById('zipLocationHikeCreate');
+const divCity = document.getElementById('cityLocationHikeCreate');
 
 if (hikeForm){
+
+    /****************************************************************************/
+    /* Ouverture / fermeture modale d'ajout d'un lieu */
+    /****************************************************************************/
 
     // Ouverture de la modale d'ajout d'un lieu
     const buttonOpenLocationModale = document.getElementById('buttonOpenLocationModale');
@@ -25,7 +36,11 @@ if (hikeForm){
         modale.style.display = 'none'
     })
 
-    // Validation de la modale d'ajout d'un lieu
+
+    /****************************************************************************/
+    /* Validation modale d'ajout d'un lieu */
+    /****************************************************************************/
+
     const locationForm = document.getElementById('locationCreateForm');
     locationForm.addEventListener('submit', async function (event){
         event.preventDefault();
@@ -49,12 +64,23 @@ if (hikeForm){
             select.appendChild(newOption);
 
             modale.style.display = 'none';
+
+            let dataInfos = await callApi('http://localhost:8081/sortirEni/public/location/infos/' + data.id);
+            divAdress.innerText = dataInfos[0].address;
+            divZip.innerText = dataInfos[0].city.zipcode;
+            divCity.innerText = dataInfos[0].city.name;
+
+
         } else {
             alert('Erreur : ' + data.errors);
         }
     });
 
-    // Tri dynamique des locations selon city
+
+    /****************************************************************************/
+    /* Update dynamique du select des lieux selon ville
+    /****************************************************************************/
+
     const selectCity = document.getElementById('hike_create_city');
     const selectLocation = document.getElementById('hike_create_location');
     //Path api : getLocationsByCity
@@ -67,6 +93,18 @@ if (hikeForm){
             newOption.text = el.name;
             selectLocation.appendChild(newOption);
         }
+    })
+
+
+    /****************************************************************************/
+    /* Mise à jour dynamique de l'adresse selon lieu choisi */
+    /****************************************************************************/
+
+    selectLocation.addEventListener('change', async function(el){
+        let data = await callApi('http://localhost:8081/sortirEni/public/location/infos/' + el.target.value);
+        divAdress.innerText = data[0].address;
+        divZip.innerText = data[0].city.zipcode;
+        divCity.innerText = data[0].city.name;
     })
 
 }
