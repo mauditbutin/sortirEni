@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
 use App\Entity\City;
 use App\Form\LocationCreateType;
 use App\Repository\CityRepository;
+use App\Repository\LocationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,7 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class LocationController extends AbstractController
 {
-    #[Route('/location/addAjax', name: 'location_addAjax')]
+    #[Route('/location/addAjax', name: 'api_location_addAjax')]
     public function addAjax(
         EntityManagerInterface $manager,
         Request $request,
@@ -55,5 +56,14 @@ final class LocationController extends AbstractController
             'success' => false,
             'errors' => (string) $locationForm->getErrors(true, false)
         ], 400);
+    }
+
+    #[Route('/location/byCity/{id}', name: 'api_location_getLocationsByCity')]
+    public function getLocationsByCity(
+        LocationRepository $locationRepository,
+        int $id)
+    {
+        $locations = $locationRepository->getLocationsByCity($id);
+        return $this->json($locations, Response::HTTP_OK, [], ['groups' => 'location_api']);
     }
 }
