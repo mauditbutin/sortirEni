@@ -17,7 +17,7 @@
             <div class="alert alert-danger">{{ message }}</div>
         {% endfor %}
 
-        {{ form_start(form) }}
+        {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
 
             <div class="form-group">
                 {{ form_row(form.firstname, {'attr': {'class': 'form-control'}}) }}
