@@ -61,7 +61,7 @@ final class LocationController extends AbstractController
     #[Route('/location/byCity/{id}', name: 'api_location_getLocationsByCity')]
     public function getLocationsByCity(
         LocationRepository $locationRepository,
-        int $id)
+        int $id=null)
     {
         $locations = $locationRepository->getLocationsByCity($id);
         return $this->json($locations, Response::HTTP_OK, [], ['groups' => 'location_api']);
@@ -70,7 +70,7 @@ final class LocationController extends AbstractController
     #[Route('/location/infos/{id}', name: 'api_location_getInfos')]
     public function getLocationInfos(
         LocationRepository $locationRepository,
-        int $id)
+        int $id=null)
     {
         $locations = $locationRepository->getLocationInfosById($id);
         return $this->json($locations, Response::HTTP_OK, [], ['groups' => 'location_api']);
