@@ -21,10 +21,21 @@ class LocationRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('location');
         $qb
             ->join('location.city', 'city')
-//            ->addSelect('city')
+            ->addSelect('city')
             ->where('city.id = :id')
             ->setParameter('id', $id);
 
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
+
+    public function getLocationInfosById(int $id)
+    {
+        $qb = $this->createQueryBuilder('location')
+            ->join('location.city', 'city')
+            ->addSelect('city')
+            ->where('location.id = :id')
+            ->setParameter('id', $id);
         $query = $qb->getQuery();
         return $query->getResult();
     }
