@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Campus;
+use App\Entity\City;
 use App\Entity\Difficulty;
 use App\Entity\Hike;
 use App\Entity\Location;
@@ -38,6 +39,12 @@ class HikeCreateType extends AbstractType
             ->add('duration', IntegerType::class)
             ->add('description', TextareaType::class)
             ->add('picture', FileType::class, [
+                'mapped' => false
+            ])
+            ->add('city', EntityType::class, [
+                'class' => City::class,
+                'placeholder' => 'Sélectionnez une ville',
+                'choice_label' => 'name',
                 'mapped' => false
             ])
             ->add('location', EntityType::class, [
