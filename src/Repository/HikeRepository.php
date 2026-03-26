@@ -47,6 +47,17 @@ class HikeRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('hike'); //récupère toutes les hikes
 
+        $creee = 'Créée';
+        $annulee = 'Annulée';
+        $archivee = 'Archivée';
+
+        $qb
+            ->join('hike.status', 'status')
+            ->addSelect('status')
+            ->where('status.label NOT IN (:exclues)')
+            ->setParameter('exclues', [$creee, $annulee, $archivee]);
+
+
         //Si une condition du form est remplie, on ajoute un paramètre à la requête pour filtrer
         if ($hikeFilterDTO->getName()) {
             $qb->where('hike.name LIKE :nameSelected')
