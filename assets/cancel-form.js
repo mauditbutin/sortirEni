@@ -1,0 +1,1 @@
+const cancelHike = document.getElementById('')

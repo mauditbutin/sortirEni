@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\City;
 use App\Entity\Hike;
 use App\Entity\Status;
+use App\Form\CancelHikeType;
 use App\Form\HikeCreateType;
 use App\Form\LocationCreateType;
 use App\Repository\CityRepository;
@@ -135,21 +136,28 @@ final class HikeController extends AbstractController
 
 
     #[Route('/{id}/cancel', name: 'cancel', requirements: ['id' => '[0-9]+'])]
-    public function cancel(HikeRepository $hikeRepository, int $id, EntityManagerInterface $entityManager, StatusRepository $statusRepository): Response
+    public function cancel(HikeRepository $hikeRepository, int $id, EntityManagerInterface $entityManager, StatusRepository $statusRepository, Request $request): Response
     {
 
         $hike = $hikeRepository->find($id);
         $status = $statusRepository->findOneBy(['label' => 'Annulée']);
-
-
+        $form = $this->createForm(CancelHikeType::class);
         $this->denyAccessUnlessGranted(HikeVoter::CANCEL, $hike);
 
-        $hike->setStatus($status);
+        $form->handleRequest($request);
 
-        $entityManager->persist($hike);
-        $entityManager->flush();
+        if ($form->isSubmitted() and $form->isValid()) {
+            $description = $form->get('description')->getData();
+            $hike->setDescription($description);
 
-        return $this->redirectToRoute('hike_detail', ['id' => $hike->getId()]);
+            $hike->setStatus($status);
+
+            $entityManager->persist($hike);
+            $entityManager->flush();
+        }
+
+
+        return $this->redirectToRoute('hike_detail', ['id' => $hike->getId(), 'form' => $form]);
 
     }
 
