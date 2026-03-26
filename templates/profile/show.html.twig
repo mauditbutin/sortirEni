@@ -9,11 +9,11 @@
     <div class="profile-wrapper">
         <div class="profile-card">
             {% if user.picture %}
-                <img src="{{ asset('images/profilePictures/' ~ user.picture) }}"
+                <img src="{{ asset('uploads/profile_pictures/' ~ user.picture) }}"
                 alt="Photo of {{ user.firstname }}"
-                class="profile-picture" />
+                class="profile-avatar" />
             {% else %}
-                <div class="profile-picture-placeholder"></div>
+                <div class="profile-avatar-placeholder">👤</div>
             {% endif %}
 
             <h1 class="profile-name">{{ user.firstname ~ ' ' ~ user.lastname }}</h1>

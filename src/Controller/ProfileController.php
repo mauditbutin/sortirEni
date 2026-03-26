@@ -55,26 +55,24 @@ class ProfileController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-//            $pictureFile = $form->get('pictureFile')->getData();
-//            if ($pictureFile) {
-//                $newFilename = uniqid().'.'.$pictureFile->guessExtension();
-//
-//
-//                $pictureFile->move(
-//                    $this->getParameter('kernel.project_dir').'/assets/images/profilePictures',
-//                    $newFilename
-//                );
-//
-//                // Delete ild picture ---------------
-//                if ($user->getPicture()) {
-//                    $oldFile = $this->getParameter('kernel.project_dir').'/assets/images/profilePictures/'.$user->getPicture();
-//                    if (file_exists($oldFile)) {
-//                        unlink($oldFile);
-//                    }
-//                }
-//
-//                $user->setPicture($newFilename);
-//            }
+            $pictureFile = $form->get('picture')->getData();
+            if ($pictureFile) {
+                $newFilename = uniqid() . '.' . $pictureFile->guessExtension();
+
+                $uploadDir = $this->getParameter('kernel.project_dir') . '/public/uploads/profile_pictures';
+
+                $pictureFile->move($uploadDir, $newFilename);
+
+                if ($user->getPicture()) {
+                    $oldFilePath = $uploadDir . '/' . $user->getPicture();
+                    if (file_exists($oldFilePath)) {
+                        unlink($oldFilePath); // unlink() - supprime le fichier du serveur
+                    }
+                }
+                    $user->setPicture($newFilename);
+                    }
+
+
 
 
             $plainPassword = $form->get('plainPassword')->getData();
@@ -86,6 +84,7 @@ class ProfileController extends AbstractController
 
             $entityManager->persist($user);
             $entityManager->flush();
+
             $this->addFlash('success', 'Profile edited successfully');
             return $this->redirectToRoute('app_profile', ['id' => $user->getId()]);
         }
