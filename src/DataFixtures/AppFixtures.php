@@ -30,11 +30,11 @@ class AppFixtures extends Fixture
         $this->addHike($manager);
     }
 
-    public function addStatus(ObjectManager $manager):void
+    public function addStatus(ObjectManager $manager): void
     {
-        $status = ['Créée', 'Ouverte', 'Clôturée', 'Activité en cours', 'Passée', 'Annulée'];
+        $status = ['Créée', 'Ouverte', 'Clôturée', 'Activité en cours', 'Passée', 'Annulée', 'Archivée'];
 
-        foreach ($status as $el){
+        foreach ($status as $el) {
             $newStatus = new Status();
             $newStatus->setLabel($el);
             $manager->persist($newStatus);
@@ -42,11 +42,11 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
-    public function addDifficulty(ObjectManager $manager):void
+    public function addDifficulty(ObjectManager $manager): void
     {
         $difficulties = ['Facile', 'Intermédiaire', 'Expert'];
 
-        foreach ($difficulties as $el){
+        foreach ($difficulties as $el) {
             $newDifficulty = new Difficulty();
             $newDifficulty->setLabel($el);
             $manager->persist($newDifficulty);
@@ -54,7 +54,7 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
-    public function addCampus(ObjectManager $manager):void
+    public function addCampus(ObjectManager $manager): void
     {
         $campus = ['Chartres de Bretagne', 'Nantes', 'Niort', 'Quimper'];
 
@@ -66,7 +66,7 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
-    public function addCity(ObjectManager $manager):void
+    public function addCity(ObjectManager $manager): void
     {
         $chartres = new City();
         $chartres->setName('Chartres de Bretagne');
@@ -91,7 +91,7 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
-    public function addUser(ObjectManager $manager):void
+    public function addUser(ObjectManager $manager): void
     {
         $admin = new User();
         $admin->setRoles(['ROLE_ADMIN']);
@@ -148,7 +148,7 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
-    public function addLocation(ObjectManager $manager):void
+    public function addLocation(ObjectManager $manager): void
     {
 
         $location1 = new Location();
@@ -218,7 +218,7 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
-    public function addHike(ObjectManager $manager):void
+    public function addHike(ObjectManager $manager): void
     {
         $hike1 = new Hike();
         $hike1->setName('Randonnée puis crêpe au Moulin du Boël');
