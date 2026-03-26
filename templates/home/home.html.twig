@@ -19,38 +19,41 @@
 
     <div class="example-wrapper">
 
-        {# affichage form de filtrage #}
+    {# affichage form de filtrage #}
+    <div>
+        <h2>Filtrez vos sorties : </h2>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button> Rechercher</button>
+        {{ form_end(form) }}
+    </div>
+
+    {# affichage des données #}
+    {% for hike in hikes %}
         <div>
-            <h2>Filtrez vos sorties : </h2>
-            {{ form_start(form) }}
-            {{ form_widget(form) }}
-            <button> Rechercher</button>
-            {{ form_end(form) }}
-        </div>
-
-        {# affichage des données #}
-        {% for hike in hikes %}
-            <div>
-                <a href="{{ path('hike_detail', {'id' : hike.id}) }}">
-                    <div>
-                        <img
-                            src="{{ asset('images/hikes/' ~ hike.picture ) }}"
-                            alt="{{ hike.name }}" style="width: 10rem">
-                    </div>
-                    <div>
-                        nom : {{ hike.name }}
-                        <br>
-                        description : {{ hike.description }}
-                        <br>
-                        organisateur : {{ hike.planner.username }}
-                        <br>
-                        date de l'évènement : {{ hike.dateEvent | date ('d-m-Y') }}
-                    </div>
+            <a href="{{ path('hike_detail', {'id' : hike.id}) }}">
+                <div>
+                    <img
+                        src="{{ asset('images/hikes/' ~ hike.picture ) }}"
+                        alt="{{ hike.name }}" style="width: 10rem">
+                </div>
+                <div>
+                    nom : {{ hike.name }}
                     <br>
-                </a>
+                    description : {{ hike.description }}
+            </a>
+            <br>
+            <a href="{{ path('app_profile', {'id' : hike.planner.id}) }}">
+                organisateur : {{ hike.planner.username }}
+            </a>
+            <br>
+            date de l'évènement : {{ hike.dateEvent | date ('d-m-Y') }}
+        </div>
+        <br>
 
-            </div>
-        {% endfor %}
+
+        </div>
+    {% endfor %}
 
     </div>
 {% endblock %}

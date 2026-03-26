@@ -18,16 +18,16 @@ use Symfony\Component\Routing\Attribute\Route;
 final class HomeController extends AbstractController
 {
     #[Route('', name: '')]
-    public function home(HikeRepository $hikeRepository, Request $request, UpdateStatus $updateStatus, StatusRepository $statusRepository, EntityManagerInterface $entityManager): Response
+    public function home(HikeRepository $hikeRepository, Request $request, UpdateStatus $updateStatus): Response
     {
 
         //Mise à jour des statuts
-        $updateStatus->updateStatus($hikeRepository, $statusRepository, $entityManager);
+        $updateStatus->updateStatus();
 
         $hikeDTO = new HikeFilterDTO();
         $hikeDTO->setUser($this->getUser()); //récupération de l'utilisateur connecté et set dans le DTO
 
-        $hikes = $hikeRepository->findAllHikesPublished();
+        $hikes = $hikeRepository->hikeFiltered($hikeDTO);
 
 
         $form = $this->createForm(HikeFilterType::class, $hikeDTO);
