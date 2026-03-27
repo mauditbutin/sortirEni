@@ -7,15 +7,7 @@
 {% block body %}
 <div class="edit-wrapper">
     <div class="edit-card">
-        <h1 class="edit-title">Modify my profile</h1>
-
-        {% for message in app.flashes('success') %}
-            <div class="alert alert-success">{{ message }}</div>
-        {% endfor %}
-
-        {% for message in app.flashes('danger') %}
-            <div class="alert alert-danger">{{ message }}</div>
-        {% endfor %}
+        <h1 class="edit-title">Modifier mon profil</h1>
 
         {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
 
@@ -36,21 +28,19 @@
             </div>
 
             <hr class="section-divider">
-            <p class="section-label">Change password (optional)</p>
+            <p class="section-label">Changer le mot de passe (facultatif)</p>
 
             <div class="form-group">
                 {{ form_row(form.plainPassword, {'attr': {'class': 'form-control'}}) }}
             </div>
 
 
-
-
                 <button type="submit" class="btn btn-primary">
-                    Save
+                    Sauvegarder
                 </button>
 
-                <a href="{{ path('app_profile', {id: user.id}) }}" class="btn btn-secondary">
-                    Cancel
+                <a href="{{ path('app_profile', {'id': app.user.id}) }}" class="btn btn-secondary">
+                    Annuler
                 </a>
 
                 <hr class="section-divider">

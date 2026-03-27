@@ -20,7 +20,7 @@ class ProfileController extends AbstractController
         $user = $userRepository->find($id);
         // if user not founded
         if (!$user) {
-            throw $this->createNotFoundException('User not found !!!');
+            throw $this->createNotFoundException('Utilisateur introuvable');
         }
         // render - make back html page
         return $this->render('profile/show.html.twig', [
@@ -41,10 +41,10 @@ class ProfileController extends AbstractController
         $user = $userRepository->find($id);
 
         if (!$user) {
-            throw $this->createNotFoundException('User not found !!!');
+            throw $this->createNotFoundException('Utilisateur introuvable');
         }
         if ($this->getUser() !== $user) {
-            $this->addFlash('danger','You are not allowed to edit this user, only your profile');
+            $this->addFlash('error','Vous n\'êtes pas autorisé à modifier ce profil');
 
             return $this->redirectToRoute('home');
         }
@@ -85,7 +85,7 @@ class ProfileController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Profile edited successfully');
+            $this->addFlash('success', 'Le profil a bien été modifié');
             return $this->redirectToRoute('app_profile', ['id' => $user->getId()]);
         }
 
