@@ -14,6 +14,15 @@
 </head>
 <body>
 {% include 'views/nav/header.html.twig' %}
+
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <div class="alert alert-{{ label }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
 {% block body %}{% endblock %}
 {% include 'views/nav/footer.html.twig' %}
 </body>
