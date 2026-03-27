@@ -140,14 +140,14 @@ final class HikeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() and $form->isValid()) {
-            $description = $form->get('description')->getData();
+            $description = 'Annulée : ' . $form->get('description')->getData() . '.' . "\n" . $hike->getDescription();
             $hike->setDescription($description);
 
             $hike->setStatus($status);
-            dd($hike);
 
             $entityManager->persist($hike);
             $entityManager->flush();
+            
         }
 
 

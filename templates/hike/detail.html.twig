@@ -25,7 +25,7 @@
 
         {% if user == hike.planner %}
             <button> Modifier la randonnée</button>
-            {% if hike.status.label != 'Annulée' %}
+            {% if hike.status.label == 'Ouverte' or hike.status.label == 'Clôturée' %}
                 <a href="#modalCancel" id="buttonOpenLocationModale">
                     <button id="buttonHikeCancel"> Annuler la randonnée</button>
                 </a>
@@ -47,11 +47,9 @@
         <a href="#" class="modaleOverlay" id="modaleCancelOverlay"></a>
         <div class="modaleContent">
             <h2>Motif d'annulation de la randonnée : </h2>
-            {{ form_start(formCancel) }}
+            {{ form_start(formCancel, {'action': path('hike_cancel', {'id': hike.id}), 'method': 'POST'}) }}
             {{ form_widget(formCancel) }}
-            <a href="{{ path('hike_cancel', {'id': hike.id}) }}">
-                <button type="submit">Confirmer l'annulation</button>
-            </a>
+            <button type="submit">Confirmer l'annulation</button>
             <button id="buttonCancelModale">Retour</button>
             {{ form_end(formCancel) }}
         </div>
@@ -59,9 +57,9 @@
     </div>
 
 
-    <script>
-        const cancelPath = "{{ path('hike_cancel') }}"
-    </script>
+    {#    <script> #}
+    {#        const cancelPath = "{{ path('hike_cancel') }}" #}
+    {#    </script> #}
 {% endblock %}
 
 {% block title %}
