@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Form\ProfileEditType;
 use App\Repository\UserRepository;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,7 +21,7 @@ class ProfileController extends AbstractController
         $user = $userRepository->find($id);
         // if user not founded
         if (!$user) {
-            throw $this->createNotFoundException('User not found !!!');
+            throw $this->createNotFoundException('Utilisateur introuvable');
         }
         // render - make back html page
         return $this->render('profile/show.html.twig', [
@@ -35,16 +36,17 @@ class ProfileController extends AbstractController
         UserRepository $userRepository,
         Request $request,
         EntityManagerInterface $entityManager,
-        UserPasswordHasherInterface $passwordHasher
+        UserPasswordHasherInterface $passwordHasher,
+        FileUploader $fileUploader,
     ): Response
     {
         $user = $userRepository->find($id);
 
         if (!$user) {
-            throw $this->createNotFoundException('User not found !!!');
+            throw $this->createNotFoundException('Utilisateur introuvable');
         }
         if ($this->getUser() !== $user) {
-            $this->addFlash('danger','You are not allowed to edit this user, only your profile');
+            $this->addFlash('error','Vous n\'êtes pas autorisé à modifier ce profil');
 
             return $this->redirectToRoute('home');
         }
@@ -57,20 +59,28 @@ class ProfileController extends AbstractController
 
             $pictureFile = $form->get('picture')->getData();
             if ($pictureFile) {
-                $newFilename = uniqid() . '.' . $pictureFile->guessExtension();
-
-                $uploadDir = $this->getParameter('kernel.project_dir') . '/public/uploads/profile_pictures';
-
-                $pictureFile->move($uploadDir, $newFilename);
-
-                if ($user->getPicture()) {
-                    $oldFilePath = $uploadDir . '/' . $user->getPicture();
-                    if (file_exists($oldFilePath)) {
-                        unlink($oldFilePath); // unlink() - supprime le fichier du serveur
-                    }
+//                $newFilename = uniqid() . '.' . $pictureFile->guessExtension();
+//
+//                $uploadDir = $this->getParameter('kernel.project_dir') . '/public/uploads/profile_pictures';
+//
+//                $pictureFile->move($uploadDir, $newFilename);
+//
+//                if ($user->getPicture()) {
+//                    $oldFilePath = $uploadDir . '/' . $user->getPicture();
+//                    if (file_exists($oldFilePath)) {
+//                        unlink($oldFilePath); // unlink() - supprime le fichier du serveur
+//                    }
+//                }
+//
+//                $user->setPicture($newFilename);
+                if ($user->getPicture()){
+                    $fileUploader->deleteFile($user->getPicture(), 'images/profilePictures');
+                    $user->setPicture($fileUploader->uploadFile($pictureFile, 'images/profilePictures', $user->getUsername()));
+                } else {
+                    $user->setPicture($fileUploader->uploadFile($pictureFile, 'images/profilePictures', $user->getUsername()));
                 }
-                    $user->setPicture($newFilename);
-                    }
+
+            }
 
 
 
@@ -85,7 +95,7 @@ class ProfileController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Profile edited successfully');
+            $this->addFlash('success', 'Le profil a bien été modifié');
             return $this->redirectToRoute('app_profile', ['id' => $user->getId()]);
         }
 

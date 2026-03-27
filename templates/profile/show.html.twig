@@ -9,7 +9,7 @@
     <div class="profile-wrapper">
         <div class="profile-card">
             {% if user.picture %}
-                <img src="{{ asset('uploads/profile_pictures/' ~ user.picture) }}"
+                <img src="{{ asset('images/profilePictures/' ~ user.picture) }}"
                 alt="Photo of {{ user.firstname }}"
                 class="profile-avatar" />
             {% else %}
@@ -42,10 +42,10 @@
                 </div>
             </div>
 
-            <a href="{{ path('app_login') }}" class="btn-back">Return to homepage</a>
             {% if app.user == user %}
-                <a href="{{ path('app_profile_edit', {id: user.id}) }}" class="btn-edit">Edit my profile</a>
+                <a href="{{ path('app_profile_edit', {id: user.id}) }}" class="btn-edit">Modifier mon profil</a>
             {% endif %}
+            <a href="{{ path('home') }}" class="btn-back">Retour</a>
 
         </div>
     </div>
