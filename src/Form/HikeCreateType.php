@@ -51,7 +51,7 @@ class HikeCreateType extends AbstractType
                 'class' => Location::class,
                 'placeholder' => 'Sélectionnez un lieu',
                 'choice_label' => 'name',
-                'choices' => []
+//                'choices' => []
             ])
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,

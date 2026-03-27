@@ -29,3 +29,61 @@
     height: fit-content;
     padding: 2em;
 }
+
+
+/****************************************/
+/* MESSAGES FLASH */
+/****************************************/
+
+
+.alert-success {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    max-inline-size: min(25ch, 90vw);
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 1.2rem;
+    color: #41ffa7;
+    background-color: #032e27;
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: toast 3.3s ease forwards;
+    pointer-events: none;
+}
+
+.alert-error {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    max-inline-size: min(25ch, 90vw);
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 1.2rem;
+    color: #ff4341;
+    background-color: #032e27;
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: toast 3.3s ease forwards;
+    pointer-events: none;
+}
+
+@keyframes toast {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    10% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    90% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-10px);
+        visibility: hidden;
+    }
+}
