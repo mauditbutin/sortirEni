@@ -153,7 +153,7 @@ class AppFixtures extends Fixture
 
         $location1 = new Location();
         $location1->setName('Le Moulin du Boël');
-        $location1->setAddress('22 Le Boël, 35580 Guichen');
+        $location1->setAddress('22 Le Boël');
         $location1->setLatitude(47.9918449);
         $location1->setLongitude(-1.756662399999982);
         $location1->setCity($manager->getRepository(City::class)->findOneBy(['name' => 'Chartres de Bretagne']));
@@ -161,7 +161,7 @@ class AppFixtures extends Fixture
 
         $location2 = new Location();
         $location2->setName('Parc des Gayeulles');
-        $location2->setAddress('Rue du Professeur Maurice Audin, 35700 Rennes');
+        $location2->setAddress('Rue du Professeur Maurice Audin');
         $location2->setLatitude(48.1291);
         $location2->setLongitude(-1.6358);
         $location2->setCity($manager->getRepository(City::class)->findOneBy(['name' => 'Chartres de Bretagne']));
@@ -169,7 +169,7 @@ class AppFixtures extends Fixture
 
         $location3 = new Location();
         $location3->setName('Vallée du Canut');
-        $location3->setAddress('La Vallée du Canut, 35580 Lassy');
+        $location3->setAddress('La Vallée du Canut');
         $location3->setLatitude(47.9786);
         $location3->setLongitude(-1.8089);
         $location3->setCity($manager->getRepository(City::class)->findOneBy(['name' => 'Chartres de Bretagne']));
@@ -177,7 +177,7 @@ class AppFixtures extends Fixture
 
         $location4 = new Location();
         $location4->setName('Lac de Grand-Lieu');
-        $location4->setAddress('Bouaye, 44830');
+        $location4->setAddress('Bouaye');
         $location4->setLatitude(47.0482);
         $location4->setLongitude(-1.6945);
         $location4->setCity($manager->getRepository(City::class)->findOneBy(['name' => 'Nantes']));
@@ -185,7 +185,7 @@ class AppFixtures extends Fixture
 
         $location5 = new Location();
         $location5->setName('Parc naturel de la Brière');
-        $location5->setAddress('Kerhinet, 44410 Saint-Lyphard');
+        $location5->setAddress('Kerhinet');
         $location5->setLatitude(47.3725);
         $location5->setLongitude(-2.3152);
         $location5->setCity($manager->getRepository(City::class)->findOneBy(['name' => 'Nantes']));
@@ -193,7 +193,7 @@ class AppFixtures extends Fixture
 
         $location6 = new Location();
         $location6->setName('Sentier des Douaniers - Pointe du Raz');
-        $location6->setAddress('Pointe du Raz, 29770 Plogoff');
+        $location6->setAddress('Pointe du Raz');
         $location6->setLatitude(48.0390);
         $location6->setLongitude(-4.7435);
         $location6->setCity($manager->getRepository(City::class)->findOneBy(['name' => 'Quimper']));
@@ -201,14 +201,14 @@ class AppFixtures extends Fixture
 
         $location7 = new Location();
         $location7->setName('Bois de Keradennec');
-        $location7->setAddress('Rue de Keradennec, 29000 Quimper');
+        $location7->setAddress('Rue de Keradennec');
         $location7->setLatitude(47.9876);
         $location7->setLongitude(-4.0795);
         $location7->setCity($manager->getRepository(City::class)->findOneBy(['name' => 'Quimper']));
         $manager->persist($location7);
 
         $location8 = new Location();
-        $location8->setName('Forêt de Brocéliande - Paimpont');
+        $location8->setName('Forêt de Brocéliande');
         $location8->setAddress('35380 Paimpont');
         $location8->setLatitude(48.0182);
         $location8->setLongitude(-2.1713);

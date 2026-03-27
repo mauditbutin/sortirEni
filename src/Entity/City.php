@@ -6,7 +6,9 @@ use App\Repository\CityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
+//#[Groups(['city_api'])]
 #[ORM\Entity(repositoryClass: CityRepository::class)]
 class City
 {
@@ -15,9 +17,11 @@ class City
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['location_api'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Groups(['location_api'])]
     #[ORM\Column(length: 50)]
     private ?string $zipcode = null;
 
