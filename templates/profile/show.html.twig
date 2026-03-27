@@ -9,7 +9,7 @@
     <div class="profile-wrapper">
         <div class="profile-card">
             {% if user.picture %}
-                <img src="{{ asset('uploads/profile_pictures/' ~ user.picture) }}"
+                <img src="{{ asset('images/profilePictures/' ~ user.picture) }}"
                 alt="Photo of {{ user.firstname }}"
                 class="profile-avatar" />
             {% else %}

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Form\ProfileEditType;
 use App\Repository\UserRepository;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,7 +36,8 @@ class ProfileController extends AbstractController
         UserRepository $userRepository,
         Request $request,
         EntityManagerInterface $entityManager,
-        UserPasswordHasherInterface $passwordHasher
+        UserPasswordHasherInterface $passwordHasher,
+        FileUploader $fileUploader,
     ): Response
     {
         $user = $userRepository->find($id);
@@ -57,20 +59,28 @@ class ProfileController extends AbstractController
 
             $pictureFile = $form->get('picture')->getData();
             if ($pictureFile) {
-                $newFilename = uniqid() . '.' . $pictureFile->guessExtension();
-
-                $uploadDir = $this->getParameter('kernel.project_dir') . '/public/uploads/profile_pictures';
-
-                $pictureFile->move($uploadDir, $newFilename);
-
-                if ($user->getPicture()) {
-                    $oldFilePath = $uploadDir . '/' . $user->getPicture();
-                    if (file_exists($oldFilePath)) {
-                        unlink($oldFilePath); // unlink() - supprime le fichier du serveur
-                    }
+//                $newFilename = uniqid() . '.' . $pictureFile->guessExtension();
+//
+//                $uploadDir = $this->getParameter('kernel.project_dir') . '/public/uploads/profile_pictures';
+//
+//                $pictureFile->move($uploadDir, $newFilename);
+//
+//                if ($user->getPicture()) {
+//                    $oldFilePath = $uploadDir . '/' . $user->getPicture();
+//                    if (file_exists($oldFilePath)) {
+//                        unlink($oldFilePath); // unlink() - supprime le fichier du serveur
+//                    }
+//                }
+//
+//                $user->setPicture($newFilename);
+                if ($user->getPicture()){
+                    $fileUploader->deleteFile($user->getPicture(), 'images/profilePictures');
+                    $user->setPicture($fileUploader->uploadFile($pictureFile, 'images/profilePictures', $user->getUsername()));
+                } else {
+                    $user->setPicture($fileUploader->uploadFile($pictureFile, 'images/profilePictures', $user->getUsername()));
                 }
-                    $user->setPicture($newFilename);
-                    }
+
+            }
 
 
 

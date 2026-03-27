@@ -13,6 +13,7 @@ use App\Repository\HikeRepository;
 use App\Repository\StatusRepository;
 use App\Repository\UserRepository;
 use App\Security\Voter\HikeVoter;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,10 +24,12 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/hike', name: 'hike_')]
 final class HikeController extends AbstractController
 {
+
     #[Route('/create', name: 'create')]
     public function hikeCreate(
         EntityManagerInterface $manager,
         CityRepository         $cityRepository,
+        FileUploader $fileUploader,
         Request                $request): Response
     {
 
@@ -36,7 +39,6 @@ final class HikeController extends AbstractController
         $hike->setCampus($this->getUser()->getCampus());
         $hikeForm = $this->createForm(HikeCreateType::class, $hike);
 
-
         $hikeForm->handleRequest($request);
 
         if ($hikeForm->isSubmitted() && $hikeForm->isValid()) {
@@ -44,9 +46,7 @@ final class HikeController extends AbstractController
             // Gestion de l'image
             $file = $hikeForm->get('picture')->getData();
             if ($file) {
-                $newFileName = str_replace(' ', '-', $hike->getName()) . '-' . uniqid() . '.' . $file->guessExtension();
-                $file->move('images/hikes', $newFileName);
-                $hike->setPicture($newFileName);
+                $hike->setPicture($fileUploader->uploadFile($file, 'images/hikes', $hike->getName()));
             } else {
                 $hike->setPicture('image-not-found.webp');
             }
