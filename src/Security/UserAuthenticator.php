@@ -2,11 +2,13 @@
 
 namespace App\Security;
 
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
@@ -19,21 +21,30 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
 class UserAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
-
     public const LOGIN_ROUTE = 'app_login';
-
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
-    {
-    }
+    public function __construct(
+        private UrlGeneratorInterface $urlGenerator,
+        private UserRepository $userRepository){} // need to search with username or email
 
     public function authenticate(Request $request): Passport
     {
-        $username = $request->getPayload()->getString('username');
+        $identifier = $request->getPayload()->getString('username');
 
-        $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $username);
+        $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $identifier);
 
         return new Passport(
-            new UserBadge($username),
+            new UserBadge($identifier, function ($identifier) {
+                $user = $this->userRepository->findByUsernameOrEmail($identifier);
+                if (!$user) {
+                    throw new CustomUserMessageAuthenticationException('Invalid username or email.');
+                }
+                if (!$user->isActive()) {
+                    throw new CustomUserMessageAuthenticationException('Your account is inactive. Please contact support.');
+                }
+
+                return $user;
+            }),
+
             new PasswordCredentials($request->getPayload()->getString('password')),
             [
                 new CsrfTokenBadge('authenticate', $request->getPayload()->getString('_csrf_token')),
@@ -41,6 +52,7 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
             ]
         );
     }
+
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
@@ -50,7 +62,7 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
 
         // For example:
          return new RedirectResponse($this->urlGenerator->generate('home'));
-//        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+        // throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 
     protected function getLoginUrl(Request $request): string
