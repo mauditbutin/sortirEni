@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Form\ProfileEditType;
 use App\Repository\UserRepository;
+use App\Security\Voter\UserVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,9 +16,10 @@ class ProfileController extends AbstractController
 {
     // ------------------------------Display the profile of user -----------------------------------------
     #[Route(path: '/account/{id}', name: 'app_profile')]
-    public function show(int $id, UserRepository $userRepository ): Response
+    public function show(int $id, UserRepository $userRepository): Response
     {
         $user = $userRepository->find($id);
+        $this->denyAccessUnlessGranted(UserVoter::VIEW, $user);
         // if user not founded
         if (!$user) {
             throw $this->createNotFoundException('User not found !!!');
@@ -31,20 +33,21 @@ class ProfileController extends AbstractController
     // ---------------------------Modify the profile-------------------------------------------------------
     #[Route(path: '/account/{id}/edit', name: 'app_profile_edit')]
     public function edit(
-        int $id,
-        UserRepository $userRepository,
-        Request $request,
-        EntityManagerInterface $entityManager,
+        int                         $id,
+        UserRepository              $userRepository,
+        Request                     $request,
+        EntityManagerInterface      $entityManager,
         UserPasswordHasherInterface $passwordHasher
     ): Response
     {
         $user = $userRepository->find($id);
+        $this->denyAccessUnlessGranted(UserVoter::EDIT, $user);
 
         if (!$user) {
             throw $this->createNotFoundException('User not found !!!');
         }
         if ($this->getUser() !== $user) {
-            $this->addFlash('danger','You are not allowed to edit this user, only your profile');
+            $this->addFlash('danger', 'You are not allowed to edit this user, only your profile');
 
             return $this->redirectToRoute('home');
         }
@@ -69,10 +72,8 @@ class ProfileController extends AbstractController
                         unlink($oldFilePath); // unlink() - supprime le fichier du serveur
                     }
                 }
-                    $user->setPicture($newFilename);
-                    }
-
-
+                $user->setPicture($newFilename);
+            }
 
 
             $plainPassword = $form->get('plainPassword')->getData();

@@ -8,6 +8,7 @@ use App\Form\Model\HikeFilterDTO;
 use App\Repository\HikeRepository;
 use App\Repository\StatusRepository;
 use App\Security\Voter\HikeVoter;
+use App\Security\Voter\UserVoter;
 use App\Service\UpdateStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,6 +23,8 @@ final class HomeController extends AbstractController
     public function home(HikeRepository $hikeRepository, Request $request, UpdateStatus $updateStatus): Response
     {
 
+        $user = $this->getUser();
+        $this->denyAccessUnlessGranted(UserVoter::VIEW, $user);
         //Mise à jour des statuts
         $updateStatus->updateStatus();
 
