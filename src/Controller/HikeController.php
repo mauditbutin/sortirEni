@@ -13,6 +13,7 @@ use App\Repository\HikeRepository;
 use App\Repository\StatusRepository;
 use App\Repository\UserRepository;
 use App\Security\Voter\HikeVoter;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,10 +24,12 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/hike', name: 'hike_')]
 final class HikeController extends AbstractController
 {
+
     #[Route('/create', name: 'create')]
     public function hikeCreate(
         EntityManagerInterface $manager,
         CityRepository         $cityRepository,
+        FileUploader $fileUploader,
         Request                $request): Response
     {
 
@@ -36,7 +39,6 @@ final class HikeController extends AbstractController
         $hike->setCampus($this->getUser()->getCampus());
         $hikeForm = $this->createForm(HikeCreateType::class, $hike);
 
-
         $hikeForm->handleRequest($request);
 
         if ($hikeForm->isSubmitted() && $hikeForm->isValid()) {
@@ -44,9 +46,7 @@ final class HikeController extends AbstractController
             // Gestion de l'image
             $file = $hikeForm->get('picture')->getData();
             if ($file) {
-                $newFileName = str_replace(' ', '-', $hike->getName()) . '-' . uniqid() . '.' . $file->guessExtension();
-                $file->move('images/hikes', $newFileName);
-                $hike->setPicture($newFileName);
+                $hike->setPicture($fileUploader->uploadFile($file, 'images/hikes', $hike->getName()));
             } else {
                 $hike->setPicture('image-not-found.webp');
             }
@@ -102,10 +102,16 @@ final class HikeController extends AbstractController
     public function subscribe(Hike $hike, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
+        $nbParticipants = count($hike->getParticipant());
 
-        $hike->addParticipant($user);
-        $entityManager->persist($hike);
-        $entityManager->flush();
+        if ($nbParticipants < $hike->getNbMaxSubscription()) {
+            $hike->addParticipant($user);
+            $entityManager->persist($hike);
+            $entityManager->flush();
+            $this->addFlash('success', 'Inscription validée');
+        } else {
+            $this->addFlash('error', 'Il n\'y a plus de place pour cette randonnée');
+        }
 
         return $this->redirectToRoute('hike_detail', ['id' => $hike->getId()]);
 
@@ -121,6 +127,7 @@ final class HikeController extends AbstractController
         $entityManager->persist($hike);
         $entityManager->flush();
 
+        $this->addFlash('success', 'Désinscription validée');
         return $this->redirectToRoute('hike_detail', ['id' => $hike->getId()]);
 
     }
@@ -145,11 +152,33 @@ final class HikeController extends AbstractController
 
             $entityManager->persist($hike);
             $entityManager->flush();
+            $this->addFlash('success', 'Sortie annulée');
 
         }
 
 
         return $this->redirectToRoute('hike_detail', ['id' => $hike->getId(), 'form' => $form]);
+
+    }
+
+    #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '[0-9]+'])]
+    public function delete(HikeRepository $hikeRepository, int $id, EntityManagerInterface $entityManager, StatusRepository $statusRepository, Request $request): Response
+    {
+
+        $hike = $hikeRepository->find($id);
+        $status = $statusRepository->findOneBy(['label' => 'Créée']);
+     
+        $this->denyAccessUnlessGranted(HikeVoter::DELETE, $hike);
+
+        if ($hike->getStatus() == $status) {
+
+            $entityManager->remove($hike);
+            $entityManager->flush();
+            $this->addFlash('success', 'Sortie supprimée');
+        }
+
+
+        return $this->redirectToRoute('home');
 
     }
 
