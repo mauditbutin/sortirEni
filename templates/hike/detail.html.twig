@@ -16,7 +16,7 @@
                 Date limite d'inscription : {{ hike.dateSubscription | date ('d-m-Y') }}<br>
                 Statut : {{ hike.status.label }}<br>
                 Difficulté : {{ hike.difficulty.label }}<br>
-                Durée estimée : {{ hike.duration }}<br>
+                Durée estimée : {{ durationString }}<br>
                 Nombre de participants : {{ hike.participant|length }} / {{ hike.nbMaxSubscription }}<br>
 
                 participants : <br>{% for participant in hike.participant %} <a
