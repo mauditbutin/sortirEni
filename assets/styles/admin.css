@@ -10,7 +10,7 @@ div.onglets div:target {
     display: inline;
 }
 
-#tabRando, #tabUser {
+#tabRando, #tabUser, #tabVille, #tabCampus {
     scroll-margin-top: 100vh;
 }
 
