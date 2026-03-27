@@ -65,7 +65,7 @@ if (hikeForm){
 
             modale.style.display = 'none';
 
-            let dataInfos = await callApi('http://localhost:8081/sortirEni/public/location/infos/' + data.id);
+            let dataInfos = await callApi(getLocationInfo + '/' + data.id);
             divAdress.innerText = dataInfos[0].address;
             divZip.innerText = dataInfos[0].city.zipcode;
             divCity.innerText = dataInfos[0].city.name;
@@ -83,9 +83,9 @@ if (hikeForm){
 
     const selectCity = document.getElementById('hike_create_city');
     const selectLocation = document.getElementById('hike_create_location');
-    //Path api : getLocationsByCity
+
     selectCity.addEventListener('change', async function (el){
-        let data = await callApi('http://localhost:8081/sortirEni/public/location/byCity/' + el.target.value);
+        let data = await callApi(getLocationsByCity + '/' + el.target.value);
         selectLocation.length = 0;
         for(let el of data){
             let newOption = document.createElement('option');
@@ -101,7 +101,7 @@ if (hikeForm){
     /****************************************************************************/
 
     selectLocation.addEventListener('change', async function(el){
-        let data = await callApi('http://localhost:8081/sortirEni/public/location/infos/' + el.target.value);
+        let data = await callApi(getLocationInfo + '/' + el.target.value);
         divAdress.innerText = data[0].address;
         divZip.innerText = data[0].city.zipcode;
         divCity.innerText = data[0].city.name;
