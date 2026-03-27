@@ -31,8 +31,7 @@ class Hike
 
     #[ORM\Column]
     #[Assert\Positive(message: "La durée de la randonnée doit être supérieure à 0 minutes")]
-    #[Assert\NotBlank(message: "Entrez une durée")]
-    #[Assert\Type(type: 'integer', message: "Entrez un chiffre")]
+    #[Assert\Type(type: 'integer', message: "Entrez une durée")]
     private ?int $duration = null;
 
     #[ORM\Column]

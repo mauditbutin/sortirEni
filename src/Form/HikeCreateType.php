@@ -12,6 +12,7 @@ use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -21,6 +22,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class HikeCreateType extends AbstractType
 {
@@ -36,7 +38,36 @@ class HikeCreateType extends AbstractType
                 'placeholder' => 'Sélectionnez un niveau',
                 'choice_label' => 'label',
             ])
-            ->add('duration', IntegerType::class)
+            ->add('durationHours', ChoiceType::class, [
+                'mapped' => false,
+                'placeholder' => 'heures',
+                'choices' => [
+                    '00' => 0,
+                    '01' => 1,
+                    '02' => 2,
+                    '03' => 3,
+                    '04' => 4,
+                    '05' => 5,
+                    '06' => 6,
+                    '07' => 7,
+                    '08' => 8,
+                    '09' => 9,
+                    '10' => 10
+                ],
+            ])
+            ->add('durationMinutes', ChoiceType::class, [
+                'mapped' => false,
+                'placeholder' => 'minutes',
+                'choices' => [
+                    '00' => 0,
+                    '15' => 15,
+                    '30' => 30,
+                    '45' => 45,
+                ],
+                'constraints' => [
+                    new Assert\NotBlank(message: 'Entrez une durée'),
+                ],
+            ])
             ->add('description', TextareaType::class)
             ->add('picture', FileType::class, [
                 'mapped' => false
@@ -51,7 +82,7 @@ class HikeCreateType extends AbstractType
                 'class' => Location::class,
                 'placeholder' => 'Sélectionnez un lieu',
                 'choice_label' => 'name',
-                'choices' => []
+//                'choices' => []
             ])
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
