@@ -14,8 +14,6 @@ use App\Repository\StatusRepository;
 use App\Repository\UserRepository;
 use App\Security\Voter\HikeVoter;
 use Doctrine\ORM\EntityManagerInterface;
-use http\Client\Curl\User;
-use phpDocumentor\Reflection\Location;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -147,7 +145,7 @@ final class HikeController extends AbstractController
 
             $entityManager->persist($hike);
             $entityManager->flush();
-            
+
         }
 
 
