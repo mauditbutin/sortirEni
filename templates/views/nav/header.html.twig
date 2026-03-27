@@ -2,22 +2,27 @@
     <nav>
         <img src="{{ asset('images/logoSite/conception-modele-logo-montagne-minimaliste_698780-847.avif') }}" alt=""
              style="width: 10rem">
-        <ul>
-            <li>
-                <a href="{{ path('home') }}">Accueil</a>
-            </li>
-            <li>
-                <a href="{{ path('hike_create') }}">Ajouter une randonnée</a>
-            </li>
-            <li>
-                <a href="#">Mon compte</a>
-            </li>
-            <li>
-                <a href="#">Espace admin</a>
-            </li>
-            <li>
-                <a href="{{ path('app_logout') }}">Déconnexion</a>
-            </li>
-        </ul>
+
+        {% if app.user %}
+            <ul>
+                <li>
+                    <a href="{{ path('home') }}">Accueil</a>
+                </li>
+                <li>
+                    <a href="{{ path('hike_create') }}">Ajouter une randonnée</a>
+                </li>
+                <li>
+                    <a href="{{ path ('app_profile', {'id': app.user.id})}}">Mon compte</a>
+                </li>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li>
+                        <a href="#">Espace admin</a>
+                    </li>
+                {% endif %}
+                <li>
+                    <a href="{{ path('app_logout') }}">Déconnexion</a>
+                </li>
+            </ul>
+        {% endif %}
     </nav>
 </header>
