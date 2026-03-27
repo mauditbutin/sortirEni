@@ -47,6 +47,31 @@ class HikeRepository extends ServiceEntityRepository
         return $query->getOneOrNullResult(); //renvoie la requête
     }
 
+
+    //récupération de toutes les randos et de leurs infos associées
+    public function AllHikesFullInfo()
+    {
+        $qb = $this->createQueryBuilder('hike');
+        $qb
+            ->join('hike.difficulty', 'difficulty') //jointure à la table difficulty
+            ->addSelect('difficulty') // Les colonnes à rechercher
+            ->join('hike.campus', 'campus')
+            ->addSelect('campus')
+            ->join('hike.location', 'location')
+            ->addSelect('location')
+            ->join('hike.participants', 'participants')
+            ->addSelect('participants')
+            ->join('hike.planner', 'planner')
+            ->addSelect('planner')
+            ->join('hike.status', 'status')
+            ->addSelect('status')
+            ->addOrderBy('hike.dateEvent', 'ASC');
+
+        $query = $qb->getQuery(); //génère la requête
+
+        return $query->getResult(); //renvoie la requête
+    }
+
     public function hikeFiltered(HikeFilterDTO $hikeFilterDTO)
     {
         $qb = $this->createQueryBuilder('hike'); //récupère toutes les hikes

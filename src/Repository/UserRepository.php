@@ -34,10 +34,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
+
     public function findByUsernameOrEmail(string $identifier): ?User
     {
         return $this->createQueryBuilder('u')
-
             ->where('u.username = :identifier OR u.email = :identifier')
             ->setParameter('identifier', $identifier)
             ->getQuery()
@@ -82,5 +82,23 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         )
             ->setParameter('query', $identifier)
             ->getOneOrNullResult();
+    }
+
+    public function AllUsersAndInfos()
+    {
+
+        $qb = $this->createQueryBuilder('user');
+        $qb
+            ->leftJoin('user.campus', 'campus')
+            ->addSelect('campus')
+            ->leftJoin('user.plannedHikes', 'plannedHikes')
+            ->addSelect('plannedHikes')
+            ->leftJoin('user.participatedHikes', 'participatedHikes')
+            ->addSelect('participatedHikes')
+            ->addOrderBy('user.username', 'ASC');
+
+        $query = $qb->getQuery(); //génère la requête
+
+        return $query->getResult(); //renvoie la requête
     }
 }
