@@ -14,6 +14,7 @@ use App\Repository\StatusRepository;
 use App\Repository\UserRepository;
 use App\Security\Voter\HikeVoter;
 use App\Service\FileUploader;
+use App\Service\TimeConverter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +31,9 @@ final class HikeController extends AbstractController
         EntityManagerInterface $manager,
         CityRepository         $cityRepository,
         FileUploader $fileUploader,
-        Request                $request): Response
+        Request                $request,
+        TimeConverter $timeConverter
+    ): Response
     {
 
         $hike = new Hike();
@@ -55,6 +58,12 @@ final class HikeController extends AbstractController
             $hike->setPlanner($this->getUser());
             $hike->addParticipant($this->getUser());
 
+            // Gestion du temps de la randonnée
+            $hike->setDuration(
+                $timeConverter->durationIntoMinutes(
+                    $hikeForm->get('durationHours')->getData(), $hikeForm->get('durationMinutes')->getData()
+                ));
+
             // Ajout du statut selon le bouton cliqué
             if ($hikeForm->getClickedButton() && 'create' === $hikeForm->getClickedButton()->getName()) {
                 $hike->setStatus($manager->getRepository(Status::class)->findOneBy(['label' => 'Créée']));
@@ -78,7 +87,7 @@ final class HikeController extends AbstractController
     }
 
     #[Route('/{id}', name: 'detail', requirements: ['id' => '[0-9]+'])]
-    public function detail(int $id, HikeRepository $hikeRepository): Response
+    public function detail(int $id, HikeRepository $hikeRepository, TimeConverter $timeConverter): Response
     {
         $user = $this->getUser();
         $hike = $hikeRepository->HikeFullInfo($id);
@@ -88,12 +97,17 @@ final class HikeController extends AbstractController
             throw $this->createNotFoundException('Randonnée introuvable.');
         }
 
+        // Convertisseur du int en H/m
+        $durationString = $timeConverter->minutesIntoDuration($hike->getDuration());
+
         // Fonction d'authorisation d'accès du HikeVoter
         $this->denyAccessUnlessGranted(HikeVoter::VIEW, $hike);
 
         return $this->render('hike/detail.html.twig', [
             'hike' => $hike,
-            'user' => $user, 'formCancel' => $formCancel
+            'user' => $user,
+            'formCancel' => $formCancel,
+            'durationString' => $durationString
         ]);
     }
 
@@ -167,7 +181,7 @@ final class HikeController extends AbstractController
 
         $hike = $hikeRepository->find($id);
         $status = $statusRepository->findOneBy(['label' => 'Créée']);
-     
+
         $this->denyAccessUnlessGranted(HikeVoter::DELETE, $hike);
 
         if ($hike->getStatus() == $status) {

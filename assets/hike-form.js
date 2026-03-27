@@ -87,6 +87,7 @@ if (hikeForm){
     selectCity.addEventListener('change', async function (el){
         let data = await callApi(getLocationsByCity + '/' + el.target.value);
         selectLocation.length = 0;
+        createPlaceholder(selectLocation,'Sélectionnez un lieu');
         for(let el of data){
             let newOption = document.createElement('option');
             newOption.value = el.id;
@@ -114,4 +115,13 @@ async function callApi(url) {
     if (response.ok) {
         return response.json();
     }
+}
+
+function createPlaceholder(select, innertext){
+    let placeholder = document.createElement('option');
+    placeholder.text = innertext;
+    placeholder.selected = true;
+    placeholder.disabled = true;
+    placeholder.value = '';
+    select.appendChild(placeholder);
 }
