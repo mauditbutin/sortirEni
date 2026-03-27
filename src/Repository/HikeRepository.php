@@ -22,7 +22,7 @@ class HikeRepository extends ServiceEntityRepository
 
     //Creation d'une jointure pour récupérer toutes les infos d'une rando et de ses objets associés
     //A compléter au besoin
-    public function hikeFullInfo()
+    public function HikeFullInfo(int $id)
     {
         $qb = $this->createQueryBuilder('hike');
         $qb
@@ -32,15 +32,19 @@ class HikeRepository extends ServiceEntityRepository
             ->addSelect('campus')
             ->join('hike.location', 'location')
             ->addSelect('location')
+            ->join('hike.participants', 'participants')
+            ->addSelect('participants')
             ->join('hike.planner', 'planner')
             ->addSelect('planner')
             ->join('hike.status', 'status')
             ->addSelect('status')
-            ->addOrderBy('hike.dateEvent', 'ASC');
+            ->addOrderBy('hike.dateEvent', 'ASC')
+            ->where('hike.id = :id')
+            ->setParameter('id', $id);
 
         $query = $qb->getQuery(); //génère la requête
 
-        return $query->getResult(); //renvoie la requête
+        return $query->getOneOrNullResult(); //renvoie la requête
     }
 
     public function hikeFiltered(HikeFilterDTO $hikeFilterDTO)
