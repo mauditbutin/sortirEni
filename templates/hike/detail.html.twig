@@ -18,16 +18,27 @@
                 Difficulté : {{ hike.difficulty.label }}<br>
                 Durée estimée : {{ hike.duration }}<br>
                 Nombre de participants : {{ hike.participant|length }} / {{ hike.nbMaxSubscription }}<br>
+
+                participants : <br>{% for participant in hike.participant %} <a
+                href="{{ path('app_profile', {'id': participant.id}) }}"><img
+                    src="{{ asset('images/profilePictures/' ~ participant.picture) }}"
+                    alt="{{ participant.username }}" style="width: 5rem"> {{ participant.username }}</a><br>{% endfor %}
+
                 Point de rendez-vous : {{ hike.location.name }}<br>
                 Campus de rattachement : {{ hike.campus.name }}<br>
             </div>
         </div>
 
-        {% if user == hike.planner %}
+        {% if user == hike.planner or is_granted('ROLE_ADMIN') %}
             <button> Modifier la randonnée</button>
-            {% if hike.status.label == 'Ouverte' or hike.status.label == 'Clôturée' %}
+            {% if hike.status.label == 'Ouverte' or hike.status.label == 'Clôturée' or is_granted('ROLE_ADMIN') %}
                 <a href="#modalCancel" id="buttonOpenLocationModale">
                     <button id="buttonHikeCancel"> Annuler la randonnée</button>
+                </a>
+            {% endif %}
+            {% if hike.status.label == 'Créée' or is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('hike_delete', {'id': hike.id}) }}">
+                    <button> Supprimer la randonnée</button>
                 </a>
             {% endif %}
         {% elseif hike.participant.contains(user) %}
@@ -35,9 +46,11 @@
                 <button> Se désinscrire</button>
             </a>
         {% else %}
-            <a href="{{ path('hike_subscribe', {'id': hike.id}) }}">
-                <button> S'inscrire</button>
-            </a>
+            {% if hike.status.label != 'Créée' %}
+                <a href="{{ path('hike_subscribe', {'id': hike.id}) }}">
+                    <button> S'inscrire</button>
+                </a>
+            {% endif %}
         {% endif %}
 
 
