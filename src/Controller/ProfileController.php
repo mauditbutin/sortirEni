@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Form\ProfileEditType;
 use App\Repository\UserRepository;
+use App\Security\Voter\UserVoter;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,9 +17,10 @@ class ProfileController extends AbstractController
 {
     // ------------------------------Display the profile of user -----------------------------------------
     #[Route(path: '/account/{id}', name: 'app_profile')]
-    public function show(int $id, UserRepository $userRepository ): Response
+    public function show(int $id, UserRepository $userRepository): Response
     {
         $user = $userRepository->find($id);
+        $this->denyAccessUnlessGranted(UserVoter::VIEW, $user);
         // if user not founded
         if (!$user) {
             throw $this->createNotFoundException('Utilisateur introuvable');
@@ -41,6 +43,7 @@ class ProfileController extends AbstractController
     ): Response
     {
         $user = $userRepository->find($id);
+        $this->denyAccessUnlessGranted(UserVoter::EDIT, $user);
 
         if (!$user) {
             throw $this->createNotFoundException('Utilisateur introuvable');

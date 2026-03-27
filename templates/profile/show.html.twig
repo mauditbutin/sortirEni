@@ -28,7 +28,7 @@
 
                 <div class="info-row">
                     <span class="info-label">Telephone</span>
-                    <span class="info-value">{{ user.phoneNumber}}</span>
+                    <span class="info-value">{{ user.phoneNumber }}</span>
                 </div>
 
                 <div class="info-row">
@@ -38,7 +38,8 @@
 
                 <div class="info-row">
                     <span class="info-label">Status</span>
-                    <span class="info-value {{ user.active ? 'badge-active' : 'badge-inactive' }}">{{ user.active ? 'Actif' : 'Inactif'}}</span>
+                    <span
+                        class="info-value {{ user.active ? 'badge-active' : 'badge-inactive' }}">{{ user.active ? 'Actif' : 'Inactif' }}</span>
                 </div>
             </div>
 

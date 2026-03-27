@@ -74,7 +74,7 @@ final class HikeVoter extends Voter
                 break;
 
             case self::SUBSCRIBE:
-                if (($user->getUserIdentifier() !== $hike->getPlanner()->getUserIdentifier()) and (!$hike->getParticipant()->contains($user)) and ($date < $hike->getDateSubscription())) {
+                if (($user->getUserIdentifier() !== $hike->getPlanner()->getUserIdentifier()) and (!$hike->getParticipant()->contains($user)) and ($date < $hike->getDateSubscription()) and ($hike->getStatus()->getLabel() == 'Ouverte')) {
                     return true;
                 }
                 break;
