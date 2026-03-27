@@ -4,16 +4,19 @@
              style="width: 10rem">
         <ul>
             <li>
-                <a href="{{ path('home') }}">Home</a>
+                <a href="{{ path('home') }}">Accueil</a>
             </li>
             <li>
-                <a href="#">Profil</a>
+                <a href="{{ path('hike_create') }}">Ajouter une randonnée</a>
             </li>
             <li>
-                <a href="#">hikes</a>
+                <a href="#">Mon compte</a>
             </li>
             <li>
-                <a href="{{ path('hike_create') }}">Create</a>
+                <a href="#">Espace admin</a>
+            </li>
+            <li>
+                <a href="{{ path('app_logout') }}">Déconnexion</a>
             </li>
         </ul>
     </nav>
