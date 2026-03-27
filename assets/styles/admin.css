@@ -1,0 +1,16 @@
+/****************************************/
+/* ONGLETS PAGE ADMIN */
+/****************************************/
+
+div.onglets div {
+    display: none;
+}
+
+div.onglets div:target {
+    display: inline;
+}
+
+#tabRando, #tabUser, #tabVille, #tabCampus {
+    scroll-margin-top: 100vh;
+}
+

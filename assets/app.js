@@ -9,5 +9,6 @@ import './styles/app.css';
 import './styles/general.css';
 import './hike-form.js';
 import './cancel-form.js';
+import './styles/admin.css'
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
