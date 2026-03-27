@@ -20,6 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/hike', name: 'hike_')]
 final class HikeController extends AbstractController
@@ -83,6 +84,7 @@ final class HikeController extends AbstractController
     {
         $user = $this->getUser();
         $hike = $hikeRepository->HikeFullInfo($id);
+        $formCancel = $this->createForm(CancelHikeType::class);
 
         if (!$hike) {
             throw $this->createNotFoundException('Randonnée introuvable.');
@@ -93,21 +95,17 @@ final class HikeController extends AbstractController
 
         return $this->render('hike/detail.html.twig', [
             'hike' => $hike,
-            'user' => $user
+            'user' => $user, 'formCancel' => $formCancel
         ]);
     }
 
     #[Route('/{id}/subscribe', name: 'subscribe', requirements: ['id' => '[0-9]+'])]
-    public function subscribe(HikeRepository $hikeRepository, int $id, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+    #[IsGranted('HIKE_SUBSCRIBE', 'hike')]
+    public function subscribe(Hike $hike, EntityManagerInterface $entityManager): Response
     {
-        $userConnected = $this->getUser()->getUserIdentifier();
-        $user = $userRepository->findOneBy(['username' => $userConnected]);
-        $hike = $hikeRepository->find($id);
-
-        $this->denyAccessUnlessGranted(HikeVoter::SUBSCRIBE, $hike);
+        $user = $this->getUser();
 
         $hike->addParticipant($user);
-
         $entityManager->persist($hike);
         $entityManager->flush();
 
@@ -116,17 +114,12 @@ final class HikeController extends AbstractController
     }
 
     #[Route('/{id}/unsubscribe', name: 'unsubscribe', requirements: ['id' => '[0-9]+'])]
-    public function unsubscribe(HikeRepository $hikeRepository, int $id, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+    #[IsGranted('HIKE_UNSUBSCRIBE', 'hike')]
+    public function unsubscribe(Hike $hike, EntityManagerInterface $entityManager): Response
     {
-        $userConnected = $this->getUser()->getUserIdentifier();
-        $user = $userRepository->findOneBy(['username' => $userConnected]);
-        $hike = $hikeRepository->find($id);
 
-
-        $this->denyAccessUnlessGranted(HikeVoter::UNSUBSCRIBE, $hike);
-
+        $user = $this->getUser();
         $hike->removeParticipant($user);
-
         $entityManager->persist($hike);
         $entityManager->flush();
 
@@ -151,6 +144,7 @@ final class HikeController extends AbstractController
             $hike->setDescription($description);
 
             $hike->setStatus($status);
+            dd($hike);
 
             $entityManager->persist($hike);
             $entityManager->flush();
