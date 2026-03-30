@@ -103,12 +103,28 @@ if (hikeForm){
     /* Mise à jour dynamique de l'adresse selon lieu choisi */
     /****************************************************************************/
 
-    selectLocation.addEventListener('change', async function(el){
-        let data = await callApi(getLocationInfo + '/' + el.target.value);
+    async function updateDisplayAdress(idLocation){
+        if (idLocation == null){
+            return;
+        }
+        let data = await callApi(getLocationInfo + '/' + idLocation);
         divAdress.innerText = data[0].address;
         divZip.innerText = data[0].city.zipcode;
         divCity.innerText = data[0].city.name;
-    })
+    }
+
+    // selectLocation.addEventListener('change', async function(el){
+    //     let data = await callApi(getLocationInfo + '/' + el.target.value);
+    //     divAdress.innerText = data[0].address;
+    //     divZip.innerText = data[0].city.zipcode;
+    //     divCity.innerText = data[0].city.name;
+    // })
+
+    selectLocation.addEventListener('change', function (el){
+        updateDisplayAdress(el.target.value).catch(console.error);
+    });
+
+    updateDisplayAdress(selectLocation.value).catch(console.error);
 
 }
 
