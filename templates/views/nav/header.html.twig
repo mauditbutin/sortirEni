@@ -12,11 +12,11 @@
                     <a href="{{ path('hike_create') }}">Ajouter une randonnée</a>
                 </li>
                 <li>
-                    <a href="{{ path ('app_profile', {'id': app.user.id})}}">Mon compte</a>
+                    <a href="{{ path ('app_profile', {'id': app.user.id}) }}">Mon compte</a>
                 </li>
                 {% if is_granted('ROLE_ADMIN') %}
                     <li>
-                        <a href="#">Espace admin</a>
+                        <a href="{{ path('admin_main') }}">Espace admin</a>
                     </li>
                 {% endif %}
                 <li>

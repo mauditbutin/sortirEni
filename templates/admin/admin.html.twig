@@ -1,0 +1,115 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AdminController!{% endblock %}
+
+{% block body %}
+    <style>
+        .example-wrapper {
+            margin: 1em auto;
+            max-width: 800px;
+            width: 95%;
+            font: 18px/1.5 sans-serif;
+        }
+
+        .example-wrapper code {
+            background: #F5F5F5;
+            padding: 2px 6px;
+        }
+    </style>
+
+    <a href="#tabRando">
+        <button> Gestion des randonnées</button>
+    </a>
+    <a href="#tabUser">
+        <button> Gestion des utilisateurs</button>
+    </a>
+
+    <a href="#tabCampus">
+        <button> Gestion des Campus</button>
+    </a>
+
+    <a href="#tabVille">
+        <button> Gestion des Villes</button>
+    </a>
+
+    <div class="onglets">
+        <div id="tabRando">
+            {% for hike in hikes %}
+                <a href="{{ path('app_profile', {'id' : hike.planner.id}) }}">
+                    Organisateur : {{ hike.planner.username }}<br>
+                </a>
+                <a href="{{ path('hike_detail', {'id' : hike.id}) }}">
+                    Nom : {{ hike.name }}<br>
+                    Status : {{ hike.status.label }}<br>
+                </a>
+                -------<br>
+            {% endfor %}
+        </div>
+
+        <div id="tabUser">
+            {% for user in users %}
+                <a href="{{ path('app_profile', {'id' : user.id}) }}">
+                    <img
+                        src="{{ asset('images/profilePictures/' ~ user.picture) }}"
+                        alt="{{ user.username }}" style="width: 5rem">
+                    Username : {{ user.username }}<br>
+                </a>
+                firstname : {{ user.firstname }}
+                lastname : {{ user.lastname }}
+                mail : {{ user.email }}
+
+                Randonnées organisées :
+                {% for hike in user.plannedHikes %}
+                    {% if hike.id is not null %}
+                        <a href="{{ path('hike_detail', {'id' : hike.id}) }}">
+                            Nom : {{ hike.name }}<br>
+                        </a>
+                    {% endif %}
+                    -------<br>
+                {% endfor %}
+
+                Inscription aux randonnées :
+                {% for hike in user.participatedHikes %}
+                    {% if hike.id is not null %}
+                        <a href="{{ path('hike_detail', {'id' : hike.id}) }}">
+                            Nom : {{ hike.name }}<br>
+                        </a>
+                    {% endif %}
+                    -------<br>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        <div id="tabCampus">
+            {% for element in campus %}
+                Campus : {{ element.name }}<br>
+                Randonnées organisées sur ce campus : <br>
+                {% for hike in element.hikes %}
+                    {% if hike.id is not null %}
+                        {{ hike.name }}<br>
+                    {% endif %}
+                {% endfor %}
+                Elèves de ce campus :<br>
+                {% for eleve in element.users %}
+                    {% if eleve.id is not null %}
+                        {{ eleve.username }}<br>
+                    {% endif %}
+                {% endfor %}
+                ---------<br>
+            {% endfor %}
+        </div>
+
+        <div id="tabVille">
+            {% for ville in villes %}
+                Ville : {{ ville.name }}<br>
+                Code Postale : {{ ville.zipcode }} <br>
+                Emplacements :<br>
+                {% for location in ville.locations %}
+                    {{ location.name }}<br>
+                {% endfor %}
+                ------ <br>
+            {% endfor %}
+
+        </div>
+    </div>
+{% endblock %}

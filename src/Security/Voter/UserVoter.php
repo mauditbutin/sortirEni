@@ -13,11 +13,14 @@ final class UserVoter extends Voter
     public const EDIT = 'USER_EDIT';
     public const VIEW = 'USER_VIEW';
 
+    public const ADMIN = 'ADMIN_ACCESS';
+
+
     protected function supports(string $attribute, mixed $subject): bool
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::EDIT, self::VIEW])
+        return in_array($attribute, [self::EDIT, self::VIEW, self::ADMIN])
             && $subject instanceof User;
     }
 
@@ -42,6 +45,12 @@ final class UserVoter extends Voter
                 if ($user === $userConnected) {
                     return true;
                 } elseif (in_array('ROLE_ADMIN', $userConnected->getRoles())) {
+                    return true;
+                }
+                break;
+
+            case self::ADMIN:
+                if (in_array('ROLE_ADMIN', $userConnected->getRoles())) {
                     return true;
                 }
                 break;
