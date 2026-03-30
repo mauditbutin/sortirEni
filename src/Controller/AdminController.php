@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\AddUserType;
 use App\Form\UploadCSVType;
 use App\Repository\CampusRepository;
 use App\Repository\CityRepository;
