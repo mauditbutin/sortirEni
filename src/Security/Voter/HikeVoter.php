@@ -42,6 +42,7 @@ final class HikeVoter extends Voter
 
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
+
             case self::EDIT:
                 if ($user->getUserIdentifier() == $hike->getPlanner()->getUserIdentifier()) {
                     return true;
@@ -51,9 +52,14 @@ final class HikeVoter extends Voter
                 break;
 
             case self::VIEW:
-                if ($user) {
+                if ($user and (($hike->getStatus()->getLabel() !== 'Créée'))) {
+                    return true;
+                } elseif ($user->getUserIdentifier() == $hike->getPlanner()->getUserIdentifier() and $hike->getStatus()->getLabel() !== 'Créée') {
+                    return true;
+                } else if ((in_array('ROLE_ADMIN', $user->getRoles()))) {
                     return true;
                 }
+
                 break;
 
             case self::CANCEL:

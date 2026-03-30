@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminController!{% endblock %}
+{% block title %} | Admin{% endblock %}
 
 {% block body %}
     <style>
@@ -58,6 +58,13 @@
         {# ----------------------------------------------------- #}
         {# Onglet gestion des utilisateurs #}
         <div id="tabUser">
+
+            <a href="{{ path('admin_formUser') }}">
+                <button>ajouter un utilisateur</button>
+            </a>
+            <a href="{{ path('admin_uploadcsv') }}">
+                <button>importer un fichier .csv</button>
+            </a>
             {% for user in users %}
                 <a href="{{ path('app_profile', {'id' : user.id}) }}">
                     <img
