@@ -30,15 +30,16 @@
         </div>
 
         {% if user == hike.planner or is_granted('ROLE_ADMIN') %}
-            <button> Modifier la randonnée</button>
+            <button><a href="{{ path('hike_edit', {'id': hike.id}) }}">Modifier la randonnée</a></button>
             {% if hike.status.label == 'Ouverte' or hike.status.label == 'Clôturée' or is_granted('ROLE_ADMIN') %}
                 <a href="#modalCancel" id="buttonOpenLocationModale">
                     <button id="buttonHikeCancel"> Annuler la randonnée</button>
                 </a>
             {% endif %}
             {% if hike.status.label == 'Créée' or is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('hike_publish', {'id': hike.id}) }}"><button>Publier la randonnée</button></a>
                 <a href="{{ path('hike_delete', {'id': hike.id}) }}">
-                    <button> Supprimer la randonnée</button>
+                    <button> Supprimer</button>
                 </a>
             {% endif %}
         {% elseif hike.participant.contains(user) %}

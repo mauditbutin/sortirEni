@@ -7,6 +7,7 @@ use App\Entity\Hike;
 use App\Entity\Status;
 use App\Form\CancelHikeType;
 use App\Form\HikeCreateType;
+use App\Form\HikeUpdateType;
 use App\Form\LocationCreateType;
 use App\Repository\CityRepository;
 use App\Repository\HikeRepository;
@@ -75,7 +76,9 @@ final class HikeController extends AbstractController
             $manager->persist($hike);
             $manager->flush();
 
-            return $this->redirectToRoute('home');
+            $id = $hike->getId();
+
+            return $this->redirectToRoute('hike_detail', ['id' => $id]);
         }
 
         // Formulaire d'ajout de lieux
@@ -84,6 +87,49 @@ final class HikeController extends AbstractController
 
         return $this->render('hike/create.html.twig', ['hikeForm' => $hikeForm, 'locationForm' => $locationForm]);
     }
+
+    #[Route('/{id}/edit', name: 'edit', requirements: ['id' => '[0-9]+'])]
+    #[IsGranted('HIKE_EDIT', 'hike')]
+    public function hikeEdit(
+        Hike $hike,
+        EntityManagerInterface $manager,
+        FileUploader $fileUploader,
+        Request $request,
+        TimeConverter $timeConverter,
+        HikeRepository $hikeRepository,
+        int $id):Response
+    {
+        $hike = $hikeRepository->find($id);
+
+        $hikeForm = $this->createForm(HikeUpdateType::class, $hike);
+        $hikeForm->handleRequest($request);
+
+        if ($hikeForm->isSubmitted() && $hikeForm->isValid()) {
+
+            // Gestion de l'image avec supression si image préexistante
+            $file = $hikeForm->get('picture')->getData();
+            if ($file) {
+                if ($hike->getPicture()){
+                    $fileUploader->deleteFile($hike->getPicture(), 'images/hikes');
+                    $hike->setPicture($fileUploader->uploadFile($file, 'images/hikes', $hike->getName()));
+                } else {
+                    $hike->setPicture($fileUploader->uploadFile($file, 'images/hikes', $hike->getName()));
+                }
+            }
+
+            $manager->persist($hike);
+            $manager->flush();
+            $this->addFlash('success', 'Votre randonnée a bien été modifiée');
+            return $this->redirectToRoute('hike_detail', ['id' => $id]);
+        }
+
+        // Formulaire d'ajout de lieux
+        $location = new \App\Entity\Location();
+        $locationForm = $this->createForm(LocationCreateType::class, $location);
+
+        return $this->render('hike/edit.html.twig', ['hikeForm' => $hikeForm, 'locationForm' => $locationForm, "hike" => $hike]);
+    }
+
 
     #[Route('/{id}', name: 'detail', requirements: ['id' => '[0-9]+'])]
     public function detail(int $id, HikeRepository $hikeRepository, TimeConverter $timeConverter): Response
@@ -193,6 +239,29 @@ final class HikeController extends AbstractController
 
         return $this->redirectToRoute('home');
 
+    }
+
+    #[Route('/{id}/publish', name: 'publish', requirements: ['id' => '[0-9]+'])]
+    public function publish(
+        int $id,
+        HikeRepository $hikeRepository,
+        StatusRepository $statusRepository,
+        EntityManagerInterface $manager
+    )
+    {
+        $hike = $hikeRepository->find($id);
+
+        if ($hike->getStatus()->getLabel() !== 'Créée'){
+            $this->addFlash('error', 'La randonnée est déjà publiée');
+            return $this->redirectToRoute('hike_detail', ['id' => $id] );
+        }
+
+        $hike->setStatus($statusRepository->findOneBy(['label' => 'Ouverte']));
+        $manager->persist($hike);
+        $manager->flush();
+
+        $this->addFlash('success', 'La randonnée a bien été publiée');
+        return $this->redirectToRoute('hike_detail', ['id' => $id] );
     }
 
 }
