@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
@@ -19,6 +20,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Assert\NotBlank(message: "Choisissez un pseudo")]
     private ?string $username = null;
 
     /**
@@ -34,19 +36,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: "Entrez un prénom")]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: "Entrez un nom")]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: "Entrez un numéro de téléphone")]
     private ?string $phoneNumber = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank(message: "Entrez un email")]
+    #[Assert\Email(message: 'Entrez un email valide')]
     private ?string $email = null;
 
     #[ORM\Column]
-    private ?bool $active = null;
+    private ?bool $active = true;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $picture = null;

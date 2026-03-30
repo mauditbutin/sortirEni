@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\City;
+
 use App\Entity\Hike;
 use App\Entity\Status;
 use App\Form\CancelHikeType;
@@ -12,7 +12,6 @@ use App\Form\LocationCreateType;
 use App\Repository\CityRepository;
 use App\Repository\HikeRepository;
 use App\Repository\StatusRepository;
-use App\Repository\UserRepository;
 use App\Security\Voter\HikeVoter;
 use App\Service\FileUploader;
 use App\Service\TimeConverter;
@@ -31,15 +30,15 @@ final class HikeController extends AbstractController
     public function hikeCreate(
         EntityManagerInterface $manager,
         CityRepository         $cityRepository,
-        FileUploader $fileUploader,
+        FileUploader           $fileUploader,
         Request                $request,
-        TimeConverter $timeConverter
+        TimeConverter          $timeConverter
     ): Response
     {
 
         $hike = new Hike();
-        //Fonction d'authorisation d'accès du HikeVoter
-        $this->denyAccessUnlessGranted(HikeVoter::VIEW, $hike);
+        
+
         $hike->setCampus($this->getUser()->getCampus());
         $hikeForm = $this->createForm(HikeCreateType::class, $hike);
 

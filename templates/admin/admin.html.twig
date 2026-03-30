@@ -17,22 +17,7 @@
         }
     </style>
 
-    {# ===== Messages Flash ===== #}
-    {% for message in app.flashes('success') %}
-        <div style="background: #eafaf1; color: #27ae60; border: 1px solid #2ecc71;
-                    border-radius: 6px; padding: 10px 16px; margin-bottom: 10px;">
-            {{ message }}
-        </div>
-    {% endfor %}
-
-    {% for message in app.flashes('danger') %}
-        <div style="background: #fdecea; color: #c0392b; border: 1px solid #e74c3c;
-                    border-radius: 6px; padding: 10px 16px; margin-bottom: 10px;">
-            {{ message }}
-        </div>
-    {% endfor %}
-
-
+    {# Les boutons pour l'affichage #}
     <a href="#tabRando">
         <button> Gestion des randonnées</button>
     </a>
@@ -48,6 +33,12 @@
         <button> Gestion des Villes</button>
     </a>
 
+    {# ----------------------------------------------------- #}
+
+
+    {# Affichage des données #}
+
+    {# Onglet gestion des Randonnées #}
     <div class="onglets">
         <div id="tabRando">
             {% for hike in hikes %}
@@ -62,7 +53,16 @@
             {% endfor %}
         </div>
 
+        {# ----------------------------------------------------- #}
+        {# Onglet gestion des utilisateurs #}
         <div id="tabUser">
+
+            <a href="{{ path('admin_formUser') }}">
+                <button>ajouter un utilisateur</button>
+            </a>
+            <a href="{{ path('admin_uploadcsv') }}">
+                <button>importer un fichier .csv</button>
+            </a>
             {% for user in users %}
                 <a href="{{ path('app_profile', {'id' : user.id}) }}">
                     <img
@@ -117,6 +117,8 @@
             {% endfor %}
         </div>
 
+        {# ----------------------------------------------------- #}
+        {# Onglet gestion des campus #}
         <div id="tabCampus">
             {% for element in campus %}
                 Campus : {{ element.name }}<br>
@@ -136,6 +138,8 @@
             {% endfor %}
         </div>
 
+        {# ----------------------------------------------------- #}
+        {# Onglet gestion des villes #}
         <div id="tabVille">
             {% for ville in villes %}
                 Ville : {{ ville.name }}<br>

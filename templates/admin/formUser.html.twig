@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} | Admin | Add User{% endblock %}
+
+
+{% block body %}
+
+    {{ form_start(formUser) }}
+    {{ form_widget(formUser) }}
+    <button>Créer un utilisateur</button>
+    {{ form_end(formUser) }}
+
+{% endblock %}
