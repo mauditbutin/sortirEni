@@ -23,12 +23,25 @@
 
     <h1 class="titre-home">Découvre les randonnées<br>prévues et inscris-toi !</h1>
 
-    <div>
-        <h2>Filtrez vos sorties : </h2>
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <button> Rechercher</button>
-        {{ form_end(form) }}
+    <div class="home-conteneur-filter">
+        <button type="button" class="button-collapsible">Trier les résultats</button>
+        <div class="content-collapsible">
+            {{ form_start(form) }}
+                <div>
+                {{ form_row(form.name, {label: 'Titre'}) }}
+                {{ form_row(form.campus, {label: 'Campus'}) }}
+                {{ form_row(form.dateStart, {label: 'Date de début'}) }}
+                {{ form_row(form.dateEnd, {label: 'Date de fin'}) }}
+                </div>
+                <div>
+                    {{ form_row(form.organise, {label: 'J\'organise'}) }}
+                    {{ form_row(form.participe, {label: 'Je participe'}) }}
+                    {{ form_row(form.participePas, {label: 'Je ne participe pas'}) }}
+                    {{ form_row(form.terminee, {label: 'Randonnées terminées'}) }}
+                </div>
+            <button>Rechercher</button>
+            {{ form_end(form) }}
+        </div>
     </div>
 
     <div class="home-conteneur-hikes">

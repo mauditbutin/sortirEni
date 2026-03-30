@@ -13,5 +13,6 @@ import './styles/home.css';
 
 import './hike-form.js';
 import './cancel-form.js';
+import './front.js';
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');

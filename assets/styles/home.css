@@ -11,6 +11,51 @@
 
 
 /****************************************/
+/* Liste > Filtre des hikes */
+/****************************************/
+
+.home-conteneur-filter {
+    text-align: center;
+}
+
+.button-collapsible {
+    background-color: rgba(78, 93, 57, 0);
+    color: #F0EFE4;
+    cursor: pointer;
+    font-family: "BioRhyme", serif;
+    border: none;
+    border-bottom: 1px solid #F0EFE4;
+    padding-bottom: 0.8rem;
+    text-align: center;
+    font-size: 1.2em;
+}
+
+.button-collapsible:after{
+    content: '\25BC';
+    font-size: 0.9rem;
+    color: #F0EFE4;
+    margin-left: 0.5rem;
+}
+
+.active:after {
+    content: '\25B2';
+}
+
+.content-collapsible {
+    display: none;
+    overflow: hidden;
+    max-height: 0;
+    margin-top: 1rem;
+    transition: max-height 0.2s ease-out;
+    justify-content: center;
+}
+
+.content-collapsible input {
+
+}
+
+
+/****************************************/
 /* Liste > Cartes des hikes */
 /****************************************/
 
