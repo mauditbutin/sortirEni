@@ -1,0 +1,102 @@
+/****************************************/
+/* Liste des hikes */
+/****************************************/
+
+.titre-home {
+    color: #FF9D53;
+    font-family: "BioRhyme Expanded", serif;
+    text-align: center;
+    font-size: 2.5em;
+}
+
+
+/****************************************/
+/* Liste > Cartes des hikes */
+/****************************************/
+
+.home-conteneur-hikes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.home-conteneur-hikes a {
+    text-decoration: none;
+}
+
+.home-box-oneHike {
+    background-color: #F0EFE4;
+    border-radius: 8px;
+    width: 550px;
+    margin: 0.5rem;
+}
+
+.oneHike-container-coverImg {
+    width: 100%;
+    height: 150px;
+    border-radius: 8px;
+}
+
+.oneHike-coverImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px 8px 0px 0px;
+}
+
+.home-box-oneHike h2 {
+    font-family: "BioRhyme", serif;
+    color: #22310C;
+    font-size: 1.5em;
+    margin-bottom: 0.4em;
+}
+
+.oneHike-infos {
+    padding: 1rem;
+}
+
+.oneHike-infosCartouches {
+    display: flex;
+    font-family: "BioRhyme", serif;
+    margin-bottom: 0.4em;
+}
+
+.oneHike-infosCartouches div {
+    padding: 0.2rem 0.4rem;
+    margin-right: 0.5rem;
+    border-radius: 5px;
+}
+
+.oneHike-infosCartouches .date {
+    background-color: #FF9D53;
+    color: #22310C;
+}
+
+.oneHike-infosCartouches .duration {
+    background-color: #708451;
+    color: #F0EFE4;
+}
+
+.oneHike-infosCartouches .subscription {
+    background-color: #22310C;
+    color: #F0EFE4;
+}
+
+.oneHike-difficulty {
+    color: #22310C;
+    margin-bottom: 0.8em;
+}
+
+.oneHike-difficulty .etoile{
+    color: #EE7113;
+}
+
+.oneHike-description {
+    color: #22310C;
+}
+
+.oneHike-description .lirePlus {
+    color: #EE7113;
+    text-decoration: underline;
+}
+
