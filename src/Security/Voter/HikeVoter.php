@@ -52,9 +52,9 @@ final class HikeVoter extends Voter
                 break;
 
             case self::VIEW:
-                if ($user and (($hike->getStatus()->getLabel() !== 'Créée'))) {
+                if ($user === $hike->getPlanner() and (($hike->getStatus()->getLabel() == 'Créée'))) {
                     return true;
-                } elseif ($user->getUserIdentifier() == $hike->getPlanner()->getUserIdentifier() and $hike->getStatus()->getLabel() !== 'Créée') {
+                } elseif (($hike->getStatus()->getLabel() !== 'Créée') and ($hike->getStatus()->getLabel() !== 'Archivée')) {
                     return true;
                 } else if ((in_array('ROLE_ADMIN', $user->getRoles()))) {
                     return true;
