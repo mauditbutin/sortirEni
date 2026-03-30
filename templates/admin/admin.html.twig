@@ -17,6 +17,22 @@
         }
     </style>
 
+    {# ===== Messages Flash ===== #}
+    {% for message in app.flashes('success') %}
+        <div style="background: #eafaf1; color: #27ae60; border: 1px solid #2ecc71;
+                    border-radius: 6px; padding: 10px 16px; margin-bottom: 10px;">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('danger') %}
+        <div style="background: #fdecea; color: #c0392b; border: 1px solid #e74c3c;
+                    border-radius: 6px; padding: 10px 16px; margin-bottom: 10px;">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+
     <a href="#tabRando">
         <button> Gestion des randonnées</button>
     </a>
@@ -57,6 +73,27 @@
                 firstname : {{ user.firstname }}
                 lastname : {{ user.lastname }}
                 mail : {{ user.email }}
+
+                {% if user.active %}
+                    <span style="color: yellowgreen; font-weight: bold;">Active</span><br>
+                    <a href="{{ path('admin_deactivate_user', {id: user.id}) }}"
+                       onclick="return confirm('Disable {{ user.firstname }} {{ user.lastname }} ?\nHe will be removed from all his hikes.');"
+                       style="background: #e74c3c; color: ghostwhite; padding: 4px 12px;
+                              border-radius: 4px; text-decoration: none;
+                              font-size: 0.85rem; margin-left: 8px;">Disable
+                    </a>
+                {% else %}
+                    <span style="color: red; font-weight: bold;">Inactiv</span>
+
+                    <a href="{{ path('admin_activate_user', {id: user.id}) }}"
+                       onclick="return confirm('Reactivation account of {{ user.firstname }} {{ user.lastname }} ?');"
+                       style="background: #27ae60; color: ghostwhite; padding: 4px 12px;
+                              border-radius: 4px; text-decoration: none;
+                              font-size: 0.85rem; margin-left: 8px;">Reactivate
+                    </a>
+
+                {% endif %}
+
 
                 Randonnées organisées :
                 {% for hike in user.plannedHikes %}
