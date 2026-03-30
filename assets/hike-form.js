@@ -81,8 +81,10 @@ if (hikeForm){
     /* Update dynamique du select des lieux selon ville
     /****************************************************************************/
 
-    const selectCity = document.getElementById('hike_create_city');
-    const selectLocation = document.getElementById('hike_create_location');
+    // const selectCity = document.getElementById('hike_create_city');
+    // const selectLocation = document.getElementById('hike_create_location');
+    const selectCity = document.querySelector('.hike_city_select');
+    const selectLocation = document.querySelector('.hike_location_select');
 
     selectCity.addEventListener('change', async function (el){
         let data = await callApi(getLocationsByCity + '/' + el.target.value);

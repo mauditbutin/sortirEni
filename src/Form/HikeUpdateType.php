@@ -9,6 +9,7 @@ use App\Entity\Hike;
 use App\Entity\Location;
 use App\Entity\Status;
 use App\Entity\User;
+use App\Repository\LocationRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -20,13 +21,22 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class HikeUpdateType extends AbstractType
 {
+
+    public function __construct(private LocationRepository $locationRepository)
+    {
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+            $locationRepository = $this->locationRepository;
+
             $builder
                 ->add('name', TextType::class)
                 ->add('dateEvent', DateTimeType::class)
@@ -56,12 +66,52 @@ class HikeUpdateType extends AbstractType
                     'class' => Location::class,
                     'placeholder' => 'Sélectionnez un lieu',
                     'choice_label' => 'name',
-//                'choices' => []
+                    'choices' => []
                 ])
                 ->add('campus', EntityType::class, [
                     'class' => Campus::class,
                     'choice_label' => 'name',
                 ])
+                ->addEventListener(
+                    FormEvents::PRE_SET_DATA,
+                    function (FormEvent $event) use ($locationRepository){
+                        $hike = $event->getData();
+                        $form = $event->getForm();
+                        $locations = $locationRepository->getLocationsByCity($hike->getLocation()->getCity()->getId());
+                        $form->add('city', EntityType::class, [
+                            'class' => City::class,
+                                'choice_label' => 'name',
+                                'mapped' => false,
+                                'data' => $hike->getLocation()->getCity(),
+                                'attr' => ['class' => 'hike_city_select']
+                            ]);
+                        $form->remove('location');
+                        $form->add('location', EntityType::class, [
+                            'class' => Location::class,
+                            'choice_label' => 'name',
+                            'choices' => $locations,
+                            'data' => $hike->getLocation(),
+                            'attr' => ['class' => 'hike_location_select']
+                        ]);
+                    }
+                )
+                ->addEventListener(
+                    FormEvents::PRE_SUBMIT,
+                    function (FormEvent $event) use ($locationRepository){
+                        $datas = $event->getData();
+                        $locations = $locationRepository->getLocationsByCity($datas['city']);
+                        $form = $event->getForm();
+                        $form->remove('location');
+                        $form->add('location', EntityType::class, [
+                            'class' => Location::class,
+                            'placeholder' => 'Sélectionner un lieu',
+                            'choice_label' => 'name',
+                            'choices' => $locations
+                        ]);
+
+
+                    }
+                )
         ;
     }
 
