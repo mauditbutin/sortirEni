@@ -60,7 +60,7 @@ class UpdateStatus
 //                $hike->setStatus($this->statusRepository->findOneBy(['label' => 'Passée']));
                 $hike->setStatus($tableauDeStatus['Passée']);
             }
-            if ($dateEvent->diff($date)->format('%a') > 31) {
+            if ( $hike->getStatus() == $tableauDeStatus['Passée'] && ($dateEvent->diff($date)->format('%a') > 31) ) {
 //                $hike->setStatus($this->statusRepository->findOneBy(['label' => 'Archivée']));
                 $hike->setStatus($tableauDeStatus['Archivée']);
             }
