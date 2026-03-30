@@ -20,15 +20,21 @@ class Location
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'Entrez un nom de lieu')]
+    #[Assert\Length(min: 5, max: 255, minMessage: "Votre nom de lieu doit faire au moins 5 caractères", maxMessage: "Votre nom de lieu ne doit pas dépasser 255 caractères")]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Entrez une adresse')]
+    #[Assert\Length(min: 5, max: 255, minMessage: "Votre adresse doit faire au moins 5 caractères", maxMessage: "Votre adresse ne doit pas dépasser 255 caractères")]
     private ?string $address = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('float', message: 'La latitude doit être un nombre')]
     private ?float $latitude = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('float')]
+    #[Assert\Type('float', message: 'La longitude doit être un nombre')]
     private ?float $longitude = null;
 
     #[ORM\ManyToOne(inversedBy: 'locations')]

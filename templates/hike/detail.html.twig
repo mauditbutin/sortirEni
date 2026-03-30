@@ -30,7 +30,7 @@
         </div>
 
         {% if user == hike.planner or is_granted('ROLE_ADMIN') %}
-            <button> Modifier la randonnée</button>
+            <button><a href="{{ path('hike_edit', {'id': hike.id}) }}">Modifier la randonnée</a></button>
             {% if hike.status.label == 'Ouverte' or hike.status.label == 'Clôturée' or is_granted('ROLE_ADMIN') %}
                 <a href="#modalCancel" id="buttonOpenLocationModale">
                     <button id="buttonHikeCancel"> Annuler la randonnée</button>
