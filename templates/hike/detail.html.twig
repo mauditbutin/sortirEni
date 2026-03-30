@@ -37,8 +37,9 @@
                 </a>
             {% endif %}
             {% if hike.status.label == 'Créée' or is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('hike_publish', {'id': hike.id}) }}"><button>Publier la randonnée</button></a>
                 <a href="{{ path('hike_delete', {'id': hike.id}) }}">
-                    <button> Supprimer la randonnée</button>
+                    <button> Supprimer</button>
                 </a>
             {% endif %}
         {% elseif hike.participant.contains(user) %}

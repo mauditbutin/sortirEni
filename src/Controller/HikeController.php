@@ -242,4 +242,27 @@ final class HikeController extends AbstractController
 
     }
 
+    #[Route('/{id}/publish', name: 'publish', requirements: ['id' => '[0-9]+'])]
+    public function publish(
+        int $id,
+        HikeRepository $hikeRepository,
+        StatusRepository $statusRepository,
+        EntityManagerInterface $manager
+    )
+    {
+        $hike = $hikeRepository->find($id);
+
+        if ($hike->getStatus()->getLabel() !== 'Créée'){
+            $this->addFlash('error', 'La randonnée est déjà publiée');
+            return $this->redirectToRoute('hike_detail', ['id' => $id] );
+        }
+
+        $hike->setStatus($statusRepository->findOneBy(['label' => 'Ouverte']));
+        $manager->persist($hike);
+        $manager->flush();
+
+        $this->addFlash('success', 'La randonnée a bien été publiée');
+        return $this->redirectToRoute('hike_detail', ['id' => $id] );
+    }
+
 }
