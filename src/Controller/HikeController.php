@@ -118,6 +118,12 @@ final class HikeController extends AbstractController
                 }
             }
 
+            // Gestion du temps de la randonnée
+            $hike->setDuration(
+                $timeConverter->durationIntoMinutes(
+                    $hikeForm->get('durationHours')->getData(), $hikeForm->get('durationMinutes')->getData()
+                ));
+
             $manager->persist($hike);
             $manager->flush();
             $this->addFlash('success', 'Votre randonnée a bien été modifiée');

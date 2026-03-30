@@ -21,6 +21,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -47,10 +48,20 @@ class HikeUpdateType extends AbstractType
                     'placeholder' => 'Sélectionnez un niveau',
                     'choice_label' => 'label',
                 ])
-                ->add('duration', IntegerType::class, [
-                    'constraints' => [
-                        new Assert\NotBlank(message: 'Entrez une durée en minutes'),
-                    ]
+                ->add('durationHours', ChoiceType::class, [
+                    'mapped' => false,
+                    'placeholder' => 'heures',
+                    'choices' => [
+                        '00' => 0, '01' => 1, '02' => 2, '03' => 3, '04' => 4, '05' => 5,
+                        '06' => 6, '07' => 7, '08' => 8, '09' => 9, '10' => 10
+                    ],
+                ])
+                ->add('durationMinutes', ChoiceType::class, [
+                    'mapped' => false,
+                    'placeholder' => 'minutes',
+                    'choices' => [
+                        '00' => 0, '15' => 15, '30' => 30, '45' => 45,
+                    ],
                 ])
                 ->add('description', TextareaType::class)
                 ->add('picture', FileType::class, [
@@ -93,6 +104,26 @@ class HikeUpdateType extends AbstractType
                             'data' => $hike->getLocation(),
                             'attr' => ['class' => 'hike_location_select']
                         ]);
+                        $form->add('durationHours', ChoiceType::class, [
+                            'mapped' => false,
+                            'placeholder' => 'heures',
+                            'choices' => [
+                                '00' => 0, '01' => 1,'02' => 2, '03' => 3, '04' => 4, '05' => 5,
+                                '06' => 6, '07' => 7, '08' => 8, '09' => 9, '10' => 10
+                            ],
+                            'data' => intdiv($hike->getDuration(), 60)
+                        ]);
+                        $form->add('durationMinutes', ChoiceType::class, [
+                                'mapped' => false,
+                                'placeholder' => 'minutes',
+                                'choices' => [
+                                    '00' => 0,'15' => 15, '30' => 30, '45' => 45,
+                                ],
+                                'data' => $hike->getDuration()%60
+                        ]);
+
+
+                        ;
                     }
                 )
                 ->addEventListener(
@@ -108,6 +139,15 @@ class HikeUpdateType extends AbstractType
                             'choice_label' => 'name',
                             'choices' => $locations
                         ]);
+
+                        $hours = (int)$datas['durationHours'];
+                        $minutes = (int)$datas['durationMinutes'];
+
+                        if ($hours === 0 && $minutes === 0) {
+                            $form->addError(
+                                new FormError('La durée doit être supérieure à 0 minute')
+                            );
+                        }
 
 
                     }

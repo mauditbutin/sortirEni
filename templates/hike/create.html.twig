@@ -19,6 +19,7 @@
             {{ form_row(hikeForm.durationHours, {label:'Heures'}) }}
             {{ form_row(hikeForm.durationMinutes, {label:'Minutes'}) }}
         </fieldset>
+        {{ form_errors(hikeForm) }}
         {{ form_row(hikeForm.description, {label: 'Description et infos'}) }}
         {{ form_row(hikeForm.picture, {label: 'Ajouter une photo'}) }}
         {{ form_row(hikeForm.city, {label: 'Choisir une ville'}) }}

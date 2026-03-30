@@ -22,6 +22,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -74,9 +75,6 @@ class HikeCreateType extends AbstractType
                     '30' => 30,
                     '45' => 45,
                 ],
-                'constraints' => [
-                    new Assert\NotBlank(message: 'Entrez une durée'),
-                ],
             ])
             ->add('description', TextareaType::class)
             ->add('picture', FileType::class, [
@@ -119,6 +117,15 @@ class HikeCreateType extends AbstractType
                         'choice_label' => 'name',
                         'choices' => $locations
                     ]);
+
+                    $hours = (int)$datas['durationHours'];
+                    $minutes = (int)$datas['durationMinutes'];
+
+                    if ($hours === 0 && $minutes === 0) {
+                        $form->addError(
+                            new FormError('La durée doit être supérieure à 0 minute')
+                        );
+                    }
 
 
                 }
