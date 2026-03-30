@@ -17,9 +17,11 @@
         }
     </style>
 
+    {# Les boutons pour l'affichage #}
     <a href="#tabRando">
         <button> Gestion des randonnées</button>
     </a>
+
     <a href="#tabUser">
         <button> Gestion des utilisateurs</button>
     </a>
@@ -28,10 +30,17 @@
         <button> Gestion des Campus</button>
     </a>
 
+
     <a href="#tabVille">
         <button> Gestion des Villes</button>
     </a>
 
+    {# ----------------------------------------------------- #}
+
+
+    {# Affichage des données #}
+
+    {# Onglet gestion des Randonnées #}
     <div class="onglets">
         <div id="tabRando">
             {% for hike in hikes %}
@@ -46,6 +55,8 @@
             {% endfor %}
         </div>
 
+        {# ----------------------------------------------------- #}
+        {# Onglet gestion des utilisateurs #}
         <div id="tabUser">
             {% for user in users %}
                 <a href="{{ path('app_profile', {'id' : user.id}) }}">
@@ -80,6 +91,8 @@
             {% endfor %}
         </div>
 
+        {# ----------------------------------------------------- #}
+        {# Onglet gestion des campus #}
         <div id="tabCampus">
             {% for element in campus %}
                 Campus : {{ element.name }}<br>
@@ -99,6 +112,8 @@
             {% endfor %}
         </div>
 
+        {# ----------------------------------------------------- #}
+        {# Onglet gestion des villes #}
         <div id="tabVille">
             {% for ville in villes %}
                 Ville : {{ ville.name }}<br>
