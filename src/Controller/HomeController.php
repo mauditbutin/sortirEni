@@ -12,14 +12,14 @@ use App\Security\Voter\UserVoter;
 use App\Service\UpdateStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/home', name: 'home')]
 final class HomeController extends AbstractController
 {
-    #[Route('', name: '')]
+    #[Route('/home', name: 'home')]
     public function home(HikeRepository $hikeRepository, Request $request, UpdateStatus $updateStatus): Response
     {
 
@@ -43,5 +43,11 @@ final class HomeController extends AbstractController
 
 
         return $this->render('home/home.html.twig', ['hikes' => $hikes, 'form' => $form]);
+    }
+
+    #[Route('', name: 'home_redirect')]
+    public function redirectHome() :RedirectResponse
+    {
+        return $this->redirectToRoute('home');
     }
 }

@@ -3,54 +3,97 @@
 {% block title %} {{ parent() }} | Home{% endblock %}
 
 {% block body %}
-    <style>
-        .example-wrapper {
-            margin: 1em auto;
-            max-width: 800px;
-            width: 95%;
-            font: 18px/1.5 sans-serif;
-        }
+{#    <style>#}
+{#        .example-wrapper {#}
+{#            margin: 1em auto;#}
+{#            max-width: 800px;#}
+{#            width: 95%;#}
+{#            font: 18px/1.5 sans-serif;#}
+{#        }#}
 
-        .example-wrapper code {
-            background: #F5F5F5;
-            padding: 2px 6px;
-        }
-    </style>
+{#        .example-wrapper code {#}
+{#            background: #F5F5F5;#}
+{#            padding: 2px 6px;#}
+{#        }#}
+{#    </style>#}
 
-    <div class="example-wrapper">
+{#    <div class="example-wrapper">#}
 
     {# affichage form de filtrage #}
-    <div>
-        <h2>Filtrez vos sorties : </h2>
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <button> Rechercher</button>
-        {{ form_end(form) }}
-    </div>
 
-    {# affichage des données #}
-    {% for hike in hikes %}
-        <div>
-            <a href="{{ path('hike_detail', {'id' : hike.id}) }}">
+    <h1 class="titre-home">Découvre les randonnées<br>prévues et inscris-toi !</h1>
+
+    <div class="home-conteneur-filter">
+        <button type="button" class="button-collapsible">Trier les résultats</button>
+        <div class="content-collapsible">
+            {{ form_start(form) }}
                 <div>
-                    <img
-                        src="{{ asset('images/hikes/' ~ hike.picture ) }}"
-                        alt="{{ hike.name }}" style="width: 10rem">
+                {{ form_row(form.name, {label: 'Titre'}) }}
+                {{ form_row(form.campus, {label: 'Campus'}) }}
+                {{ form_row(form.dateStart, {label: 'Date de début'}) }}
+                {{ form_row(form.dateEnd, {label: 'Date de fin'}) }}
                 </div>
                 <div>
-                    nom : {{ hike.name }}
-                    <br>
-                    description : {{ hike.description }}
-            </a>
-            <br>
-            <a href="{{ path('app_profile', {'id' : hike.planner.id}) }}">
-                organisateur : {{ hike.planner.username }}
-            </a>
-            <br>
-            date de l'évènement : {{ hike.dateEvent | date ('d-m-Y') }}
+                    {{ form_row(form.organise, {label: 'J\'organise'}) }}
+                    {{ form_row(form.participe, {label: 'Je participe'}) }}
+                    {{ form_row(form.participePas, {label: 'Je ne participe pas'}) }}
+                    {{ form_row(form.terminee, {label: 'Randonnées terminées'}) }}
+                </div>
+            <button>Rechercher</button>
+            {{ form_end(form) }}
         </div>
-        <br>
+    </div>
 
-        </div>
-    {% endfor %}
+    <div class="home-conteneur-hikes">
+        {# affichage des données #}
+        {% for hike in hikes %}
+            <div class="home-box-oneHike">
+            <a href="{{ path('hike_detail', {'id' : hike.id}) }}">
+
+
+                <div class="oneHike-container-coverImg">
+                    <img
+                        src="{{ asset('images/hikes/' ~ hike.picture ) }}"
+                        alt="{{ hike.name }}"
+                        class="oneHike-coverImg">
+                </div>
+
+                <div class="oneHike-infos">
+
+                    <h2>{{ hike.name }}</h2>
+
+                    <div class="oneHike-infosCartouches">
+                        <div class="date">{{ hike.dateEvent | date ('d-m-Y') }}</div>
+                        <div class="duration">{{ hike.duration }} minutes</div>
+                        <div class="subscription"> {{ hike.participant|length }} / {{ hike.nbMaxSubscription }} participants</div>
+                    </div>
+
+                    <div class="oneHike-difficulty">
+                        <span class="etoile">
+                        {% if hike.difficulty.label == 'Facile' %}
+                            ★
+                            {% elseif hike.difficulty.label == 'Intermédiaire' %}
+                                ★★
+                                {% elseif hike.difficulty.label == 'Expert' %}
+                                    ★★★
+                        {% endif %}
+                        </span>
+                        Randonnée {{ hike.difficulty.label }}
+                    </div>
+
+                    <div class="oneHike-description">
+                        {{ hike.description | u.truncate(105) }}... <span class="lirePlus">Lire plus</span>
+                    </div>
+
+                </div>
+
+    {#            <a href="{{ path('app_profile', {'id' : hike.planner.id}) }}">#}
+    {#                organisateur : {{ hike.planner.username }}#}
+    {#            </a>#}
+
+
+            </a>            </div>
+
+        {% endfor %}
+    </div>
 {% endblock %}

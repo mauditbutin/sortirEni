@@ -9,6 +9,7 @@ use App\Entity\Hike;
 use App\Entity\Location;
 use App\Entity\Status;
 use App\Entity\User;
+use App\Repository\LocationRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
@@ -21,13 +22,23 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class HikeCreateType extends AbstractType
 {
+//
+    public function __construct(private LocationRepository $locationRepository)
+    {
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $locationRepository = $this->locationRepository;
+
         $builder
             ->add('name', TextType::class)
             ->add('dateEvent', DateTimeType::class)
@@ -64,9 +75,6 @@ class HikeCreateType extends AbstractType
                     '30' => 30,
                     '45' => 45,
                 ],
-                'constraints' => [
-                    new Assert\NotBlank(message: 'Entrez une durée'),
-                ],
             ])
             ->add('description', TextareaType::class)
             ->add('picture', FileType::class, [
@@ -76,13 +84,15 @@ class HikeCreateType extends AbstractType
                 'class' => City::class,
                 'placeholder' => 'Sélectionnez une ville',
                 'choice_label' => 'name',
-                'mapped' => false
+                'mapped' => false,
+                'attr' => ['class' => 'hike_city_select']
             ])
             ->add('location', EntityType::class, [
                 'class' => Location::class,
                 'placeholder' => 'Sélectionnez un lieu',
                 'choice_label' => 'name',
-//                'choices' => []
+                'choices' => [],
+                'attr' => ['class' => 'hike_location_select']
             ])
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
@@ -93,8 +103,34 @@ class HikeCreateType extends AbstractType
             ])
             ->add('publish', SubmitType::class, [
                 'label' => 'Publier',
-            ]);
+            ])
+            ->addEventListener(
+                FormEvents::PRE_SUBMIT,
+                function (FormEvent $event) use ($locationRepository){
+                    $datas = $event->getData();
+                    $locations = $locationRepository->getLocationsByCity($datas['city']);
+                    $form = $event->getForm();
+                    $form->remove('location');
+                    $form->add('location', EntityType::class, [
+                        'class' => Location::class,
+                        'placeholder' => 'Sélectionner un lieu',
+                        'choice_label' => 'name',
+                        'choices' => $locations
+                    ]);
 
+                    $hours = (int)$datas['durationHours'];
+                    $minutes = (int)$datas['durationMinutes'];
+
+                    if ($hours === 0 && $minutes === 0) {
+                        $form->addError(
+                            new FormError('La durée doit être supérieure à 0 minute')
+                        );
+                    }
+
+
+                }
+            )
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
