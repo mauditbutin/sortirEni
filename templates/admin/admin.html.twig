@@ -74,6 +74,8 @@
                 lastname : {{ user.lastname }}
                 mail : {{ user.email }}
 
+        {# ===== Bouton disable et reacivate ===== #}
+
                 {% if user.active %}
                     <span style="color: yellowgreen; font-weight: bold;">Active</span><br>
                     <a href="{{ path('admin_deactivate_user', {id: user.id}) }}"
@@ -91,9 +93,16 @@
                               border-radius: 4px; text-decoration: none;
                               font-size: 0.85rem; margin-left: 8px;">Reactivate
                     </a>
-
                 {% endif %}
 
+        {# ======= Bouton delete ======== #}
+
+                {% if app.user != user %}
+                    <a href="{{ path('admin_delete_user', {id: user.id}) }}"
+                       onclick="return confirm('Delete {{ user.firstname }} {{ user.lastname }} permanently ?\n\n All their hikes will be deleted.');"
+                       style="background: #111; color: ghostwhite; padding: 4px 12px; border-radius: 4px; text-decoration: none; font-size: 0.85rem; margin-left: 8px;">Delete
+                    </a>
+                {% endif %}
 
                 Randonnées organisées :
                 {% for hike in user.plannedHikes %}
