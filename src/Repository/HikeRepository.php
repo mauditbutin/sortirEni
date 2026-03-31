@@ -6,6 +6,7 @@ use App\Entity\Campus;
 use App\Entity\Hike;
 use App\Form\Model\HikeFilterDTO;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
@@ -72,7 +73,7 @@ class HikeRepository extends ServiceEntityRepository
         return $query->getResult(); //renvoie la requête
     }
 
-    public function hikeFiltered(HikeFilterDTO $hikeFilterDTO)
+    public function hikeFiltered(HikeFilterDTO $hikeFilterDTO, int $page = 1)
     {
         $qb = $this->createQueryBuilder('hike'); //récupère toutes les hikes
 
@@ -131,9 +132,13 @@ class HikeRepository extends ServiceEntityRepository
                 ->setParameter('today', $date);
         }
 
+        $resultParPage = 6;
         $query = $qb->getQuery(); //génère la requête
+        $query->setMaxResults($resultParPage);
+        $offset = ($page - 1) * $resultParPage; //Calcul de l'offset pour le changement de page. Si on est sur la page 1, offset à 0, si on est sur la page 2, offset à 50, etc.
+        $query->setFirstResult($offset);
 
-        return $query->getResult(); //renvoie la requête
+        return new Paginator($query); //renvoie la requête
     }
 
     public function findAllHikesPublished()
@@ -150,7 +155,9 @@ class HikeRepository extends ServiceEntityRepository
             ->where('status.label NOT IN (:exclues)')
             ->setParameter('exclues', [$creee, $annulee, $archivee]);
 
+
         $query = $qb->getQuery();
+
 
         return $query->getResult();
 

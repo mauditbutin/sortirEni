@@ -19,14 +19,20 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/home', name: 'home')]
 final class HomeController extends AbstractController
 {
-    #[Route('', name: '')]
-    public function home(HikeRepository $hikeRepository, Request $request, UpdateStatus $updateStatus): Response
+    #[Route('/{page}', name: '')]
+    public function home(
+        HikeRepository $hikeRepository,
+        Request        $request,
+        UpdateStatus   $updateStatus,
+        int            $page = 1
+    ): Response
     {
 
         $user = $this->getUser();
         $this->denyAccessUnlessGranted(UserVoter::VIEW, $user);
         //Mise à jour des statuts
         $updateStatus->updateStatus();
+
 
         $hikeDTO = new HikeFilterDTO();
         $hikeDTO->setUser($this->getUser()); //récupération de l'utilisateur connecté et set dans le DTO
@@ -37,11 +43,27 @@ final class HomeController extends AbstractController
 
         $form = $this->createForm(HikeFilterType::class, $hikeDTO);
         $form->handleRequest($request);
-        $hikes = $hikeRepository->hikeFiltered($hikeDTO);
-        
-        $this->addFlash('success', 'Coucou ' . $user->getUserIdentifier() . ' ! :)');
+        $hikes = $hikeRepository->hikeFiltered($hikeDTO, $page);
 
 
-        return $this->render('home/home.html.twig', ['hikes' => $hikes, 'form' => $form]);
+        // ----- Gestion des pages et du nombre de sortie par page
+
+        $nbHikeParPages = count($hikes);
+        $nbMaxPages = ceil($nbHikeParPages / 6);
+
+        if ($page > $nbMaxPages) {
+            throw $this->createNotFoundException("Plus rien ici...");
+        }
+        if ($page < 1) {
+            return $this->redirectToRoute('home', ['page' => 1]);
+        }
+
+
+        return $this->render('home/home.html.twig', [
+            'hikes' => $hikes,
+            'form' => $form,
+            'currentPage' => $page,
+            'maxPage' => $nbMaxPages
+        ]);
     }
 }

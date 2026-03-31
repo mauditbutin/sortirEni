@@ -53,4 +53,21 @@
 
         </div>
     {% endfor %}
+
+    <div>
+        {% if currentPage > 1 %}
+            <a href="{{ path('home', {'page': currentPage-1}) }}">
+                <button>
+                    Previous page
+                </button>
+            </a>
+        {% endif %}
+        {% if currentPage < maxPage %}
+            <a href="{{ path('home', {'page': currentPage+1}) }}">
+                <button>
+                    Next page
+                </button>
+            </a>
+        {% endif %}
+    </div>
 {% endblock %}
