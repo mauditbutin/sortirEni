@@ -23,6 +23,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use function Symfony\Component\Clock\now;
 
 #[Route('/admin', name: 'admin_')]
 final class AdminController extends AbstractController
@@ -43,7 +45,7 @@ final class AdminController extends AbstractController
         $users = $userRepository->AllUsersAndInfos();
         $campus = $campusRepository->allCampusAndInfos();
         $villes = $cityRepository->allCityAndInfos();
-       
+
         return $this->render('admin/admin.html.twig', ['hikes' => $hikes, 'users' => $users, 'villes' => $villes, 'campus' => $campus, 'activeTab' => $activeTab]);
     }
 
@@ -213,6 +215,67 @@ final class AdminController extends AbstractController
 
         }
         return $this->render('admin/uploadCSV.html.twig', ['form' => $form]);
+    }
+
+    // =================== Suppression d'un utilisateur =======================
+    #[Route('/user/{id}/delete', name: 'delete_user')]
+    public function deleteUser(
+        int $id,
+        UserRepository $userRepository,
+        EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted(UserVoter::ADMIN, $this->getUser());
+
+        $user = $userRepository->find($id);
+
+        if (!$user)
+        {
+            throw $this->createNotFoundException('User not found, sorry');
+        }
+
+        if ($user === $this->getUser())
+        {
+            $this->addFlash('danger', 'You cannot delete your own account, this is crazy.');
+            return $this->redirectToRoute('admin_main');
+        }
+
+        $fullName = $user->getFirstname() . ' ' . $user->getLastname();
+
+        // ====== where user like planner ============
+        foreach ($user->getPlannedHikes()->toArray() as $hike)
+        {
+            $hike->setPlanner(null);
+        }
+
+        // ====== where user like participant (remove in future hikes, but rest in passed hikes) ============
+        $now = new \DateTime();
+        foreach ($user->getParticipatedHikes()->toArray() as $hike)
+            {
+                if ($hike->getDateEvent() > $now)
+                {
+                    $hike->removeParticipant($user);
+                    $user->removeParticipatedHike($hike);
+                }
+            }
+        // ======= delete photo of profil ========
+        if ($user->getPicture())
+        {
+            $picturePath = $this->getParameter('kernel.project_dir')
+                . '/public/images/profilePictures/'
+                . $user->getPicture();
+
+            if (file_exists($picturePath))
+            {
+                unlink($picturePath);
+            }
+        }
+        // ======= delete in datab ==========
+        $entityManager->remove($user); // which user to DELETE
+        $entityManager->flush(); // SLQ DELETE
+
+        $this->addFlash('success', 'User' . $fullName . ' was deleted');
+        return $this->redirectToRoute('admin_main');
+
     }
 
     // ----------------- Annuler une randonnée -----------------------------------
