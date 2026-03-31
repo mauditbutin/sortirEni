@@ -1,16 +1,31 @@
-/****************************************/
-/* ONGLETS PAGE ADMIN */
-/****************************************/
-
-div.onglets div {
+/* Cache tout par défaut */
+div.onglets .tab {
     display: none;
 }
 
-div.onglets div:target {
-    display: inline;
+/* Affiche l'onglet actif par défaut */
+div.onglets .tab.active {
+    display: block;
+}
+
+/* Quand un onglet est ciblé via le hash */
+div.onglets .tab:target {
+    display: block;
+}
+
+/* Cache UNIQUEMENT .active si un onglet DIFFÉRENT est ciblé */
+body:has(#tabUser:target) #tabRando.active,
+body:has(#tabCampus:target) #tabRando.active,
+body:has(#tabVille:target) #tabRando.active,
+body:has(#tabRando:target) #tabUser.active,
+body:has(#tabCampus:target) #tabUser.active,
+body:has(#tabVille:target) #tabUser.active,
+body:has(#tabRando:target) #tabCampus.active,
+body:has(#tabUser:target) #tabCampus.active,
+body:has(#tabVille:target) #tabCampus.active {
+    display: none;
 }
 
 #tabRando, #tabUser, #tabVille, #tabCampus {
     scroll-margin-top: 100vh;
 }
-

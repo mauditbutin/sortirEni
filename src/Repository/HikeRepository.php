@@ -90,7 +90,7 @@ class HikeRepository extends ServiceEntityRepository
 
         //Si une condition du form est remplie, on ajoute un paramètre à la requête pour filtrer
         if ($hikeFilterDTO->getName()) {
-            $qb->where('hike.name LIKE :nameSelected')
+            $qb->andWhere('hike.name LIKE :nameSelected')
                 ->setParameter('nameSelected', '%' . $hikeFilterDTO->getName() . '%');
         }
 
@@ -132,7 +132,8 @@ class HikeRepository extends ServiceEntityRepository
                 ->setParameter('today', $date);
         }
 
-        $resultParPage = 6;
+        //Changer le nombre de résultat par pages + aller changer dans homeController (ceil($nbHikeParPages / nbResultat);)
+        $resultParPage = 12;
         $query = $qb->getQuery(); //génère la requête
         $query->setMaxResults($resultParPage);
         $offset = ($page - 1) * $resultParPage; //Calcul de l'offset pour le changement de page. Si on est sur la page 1, offset à 0, si on est sur la page 2, offset à 50, etc.

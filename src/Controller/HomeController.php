@@ -12,19 +12,19 @@ use App\Security\Voter\UserVoter;
 use App\Service\UpdateStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/home', name: 'home')]
 final class HomeController extends AbstractController
 {
     #[Route('/home/{page}', name: 'home')]
     public function home(
         HikeRepository $hikeRepository,
-        Request $request,
-        UpdateStatus $updateStatus,
-    int            $page = 1): Response
+        Request        $request,
+        UpdateStatus   $updateStatus,
+        int            $page = 1): Response
     {
 
         $user = $this->getUser();
@@ -48,7 +48,7 @@ final class HomeController extends AbstractController
         // ----- Gestion des pages et du nombre de sortie par page
 
         $nbHikeParPages = count($hikes);
-        $nbMaxPages = ceil($nbHikeParPages / 6);
+        $nbMaxPages = ceil($nbHikeParPages / 12); //CF valeur nbResultat dans HikeReposirory
 
         if ($page > $nbMaxPages) {
             throw $this->createNotFoundException("Plus rien ici...");
@@ -67,7 +67,7 @@ final class HomeController extends AbstractController
     }
 
     #[Route('', name: 'home_redirect')]
-    public function redirectHome() :RedirectResponse
+    public function redirectHome(): RedirectResponse
     {
         return $this->redirectToRoute('home');
     }
