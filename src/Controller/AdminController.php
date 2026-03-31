@@ -206,4 +206,40 @@ final class AdminController extends AbstractController
         }
         return $this->render('admin/uploadCSV.html.twig', ['form' => $form]);
     }
+
+    // =================== Suppression d'un utilisateur =======================
+    #[Route('/user/{id}/delete', name: 'delete_user')]
+    public function deleteUser(
+        int $id,
+        UserRepository $userRepository,
+        EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted(UserVoter::ADMIN, $this->getUser());
+
+        $user = $userRepository->find($id);
+
+        if (!$user)
+        {
+            throw $this->createNotFoundException('User not found, sorry');
+        }
+
+        if ($user === $this->getUser())
+        {
+            $this->addFlash('danger', 'You cannot delete your own account, this is crazy.');
+            return $this->redirectToRoute('admin_main');
+        }
+
+        foreach ($user->getParticipatedHikes()->toArray() as $hike)
+        {
+            $hike->removeParticipant($user);
+            $user->removeParticipatedHike($hike);
+        }
+
+
+
+
+    }
+
+
+
 }
