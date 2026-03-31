@@ -38,8 +38,8 @@ final class HomeController extends AbstractController
         $form = $this->createForm(HikeFilterType::class, $hikeDTO);
         $form->handleRequest($request);
         $hikes = $hikeRepository->hikeFiltered($hikeDTO);
-
-        $this->addFlash('success', 'Coucou Sylvain ! :)');
+        
+        $this->addFlash('success', 'Coucou ' . $user->getUserIdentifier() . ' ! :)');
 
 
         return $this->render('home/home.html.twig', ['hikes' => $hikes, 'form' => $form]);
