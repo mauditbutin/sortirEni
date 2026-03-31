@@ -19,13 +19,12 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/home', name: 'home')]
 final class HomeController extends AbstractController
 {
-    #[Route('/{page}', name: '')]
+    #[Route('/home/{page}', name: 'home')]
     public function home(
         HikeRepository $hikeRepository,
-        Request        $request,
-        UpdateStatus   $updateStatus,
-        int            $page = 1
-    ): Response
+        Request $request,
+        UpdateStatus $updateStatus,
+    int            $page = 1): Response
     {
 
         $user = $this->getUser();
@@ -65,5 +64,11 @@ final class HomeController extends AbstractController
             'currentPage' => $page,
             'maxPage' => $nbMaxPages
         ]);
+    }
+
+    #[Route('', name: 'home_redirect')]
+    public function redirectHome() :RedirectResponse
+    {
+        return $this->redirectToRoute('home');
     }
 }
