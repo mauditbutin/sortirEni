@@ -1,0 +1,19 @@
+{%  block form_row %}
+        <div class="form-label">
+            {{ form_label(form) }}
+        </div>
+        <div class="form-widget">
+            {{ form_widget((form)) }}
+        </div>
+        <div class="form-error">
+            {{  form_errors(form) }}
+        </div>
+{% endblock %}
+
+{% block file_widget %}
+    <input type="file" class="custom-file-input" {{  block('widget_attributes') }}>
+{% endblock %}
+
+{% block submit_widget %}
+    <button type="submit" class="form-button-submit" {{ block('button_attributes') }}>{{ label | trans }}</button>
+{% endblock %}

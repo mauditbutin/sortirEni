@@ -1,0 +1,121 @@
+/****************************************/
+/* Mise en page des forms */
+/****************************************/
+
+.form-label
+{
+    color: #22310C;
+    font-family: "BioRhyme", serif;
+    margin-top: 0rem;
+    margin-bottom: 0.5rem;
+}
+
+.label-added {
+    color: #22310C;
+    font-family: "BioRhyme", serif;
+}
+
+.form-widget {
+    margin-top: 0rem;
+    margin-bottom: 0.5rem;
+}
+
+.form-error {
+    color: #ff4341;
+    font-size: 0.8em;
+    margin-top: 0rem;
+    margin-bottom: 1rem;
+}
+
+.form-error ul li {
+    list-style: none;
+}
+
+.form-widget input:not([type="file"]),
+.form-widget select {
+    height: 2.5rem;
+    box-sizing: border-box;
+    width: 100%;
+    border-radius: 5px;
+    border:  solid 1px #22310C;
+    padding-left: 0.5rem;
+}
+
+.form-widget textarea {
+    height: 7rem;
+    width: 100%;
+    border-radius: 5px;
+    border:  solid 1px #22310C;
+    padding: 0.5em;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.form-col {
+    flex: 1;
+    min-width: 0;
+}
+
+.form-col input,
+.form-col select {
+    width: 100%;
+}
+
+.button-inside-form {
+    background-color: #FF9D53;
+    padding: 0.5rem;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #22310C;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+}
+
+.custom-file-input::file-selector-button {
+    background-color: #FF9D53;
+    padding: 0.5rem;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #22310C;
+    border: none;
+    cursor: pointer;
+}
+
+.form-button-submit {
+    background-color: #687c4c;
+    color: #F0EFE4;
+    padding: 0.5rem;
+    border-radius: 5px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.form-button-cancel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.1em;
+    color: #687c4c;
+    background-color: #F0EFE4;
+    border: solid 1px #687c4c;
+    padding: 0.5rem;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.form-buttons {
+    margin-top: 2em;
+}

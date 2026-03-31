@@ -1,0 +1,22 @@
+/****************************************/
+/* MODALE D'ANNULATION */
+/****************************************/
+
+.modale-form-cancel {
+    display: flex;
+    flex-direction: column;
+    background-color: #F0EFE4;
+    margin-left: auto;
+    margin-right: auto;
+    width: 600px;
+    padding: 2rem;
+    border-radius: 10px;
+}
+
+.modale-form-cancel p {
+    color: #ff893f;
+    font-family: "BioRhyme", serif;
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 1em;
+}

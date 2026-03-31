@@ -1,0 +1,50 @@
+/****************************************/
+/* PAGE CREATION DE RANDONNÉES */
+/****************************************/
+
+.create-container-form {
+    display: flex;
+    flex-direction: column;
+    background-color: #F0EFE4;
+    margin-left: auto;
+    margin-right: auto;
+    width: 700px;
+    padding: 2rem;
+    border-radius: 10px;
+}
+
+.form-create-adress {
+    background-color: #d6cec1;
+    color: #22310C;
+    width: 50%;
+    border-radius: 7px;
+    padding: 1rem;
+    line-height: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+/****************************************/
+/* MODALE CREATION DE LIEUX */
+/****************************************/
+
+.modale-form-location {
+    display: flex;
+    flex-direction: column;
+    background-color: #F0EFE4;
+    margin-left: auto;
+    margin-right: auto;
+    width: 600px;
+    padding: 2rem;
+    border-radius: 10px;
+}
+
+.form-location-titlePosition {
+    color: #ff893f;
+    font-family: "BioRhyme", serif;
+    text-align: center;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
