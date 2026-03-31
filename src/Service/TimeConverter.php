@@ -14,10 +14,10 @@ class TimeConverter
 
     public function minutesIntoDuration($time):string
     {
-        $hours = floor($time/60);
+        $hours = intdiv($time, 60);
         $hoursString = $hours ? ($hours . ' h ') : '' ;
 
-        $minutes = $time-($hours*60);
+        $minutes = $time % 60;
         $minutesString = $minutes ? ($minutes . ' minutes ') : '';
 
         return $hoursString . $minutesString;
