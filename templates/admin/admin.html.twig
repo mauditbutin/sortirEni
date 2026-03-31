@@ -38,9 +38,10 @@
 
     {# Affichage des données #}
 
-    {# Onglet gestion des Randonnées #}
+
     <div class="onglets">
-        <div id="tabRando">
+        {# Onglet gestion des Randonnées #}
+        <div id="tabRando" class="tab {% if activeTab == 'tabRando' %}active{% endif %}">
             {% for hike in hikes %}
                 <a href="{{ path('app_profile', {'id' : hike.planner.id}) }}">
                     Organisateur : {{ hike.planner.username }}<br>
@@ -49,13 +50,19 @@
                     Nom : {{ hike.name }}<br>
                     Status : {{ hike.status.label }}<br>
                 </a>
+                {% if hike.status.label != 'Annulée' and hike.status.label !='Archivée' and hike.status.label !='Passée' %}
+                    <a href="{{ path('admin_cancelHike', {'id': hike.id}) }}"
+                       onclick="return confirm('Etes vous sûr de vouloir supprimer cette randonnée ?');">
+                        <button> Annuler la randonnée</button>
+                    </a><br>
+                {% endif %}
                 -------<br>
             {% endfor %}
         </div>
 
         {# ----------------------------------------------------- #}
         {# Onglet gestion des utilisateurs #}
-        <div id="tabUser">
+        <div id="tabUser" class="tab {% if activeTab == 'tabUser' %}active{% endif %}">
 
             <a href="{{ path('admin_formUser') }}">
                 <button>ajouter un utilisateur</button>
@@ -128,7 +135,11 @@
 
         {# ----------------------------------------------------- #}
         {# Onglet gestion des campus #}
-        <div id="tabCampus">
+        <div id="tabCampus" class="tab {% if activeTab == 'tabCampus' %}active{% endif %}">
+            <a href="{{ path('admin_addCampus') }}">
+                <button>Ajouter un campus</button>
+            </a><br>
+
             {% for element in campus %}
                 Campus : {{ element.name }}<br>
                 Randonnées organisées sur ce campus : <br>
@@ -149,7 +160,11 @@
 
         {# ----------------------------------------------------- #}
         {# Onglet gestion des villes #}
-        <div id="tabVille">
+        <div id="tabVille" class="tab {% if activeTab == 'tabVille' %}active{% endif %}">
+
+            <a href="{{ path('admin_addCity') }}">
+                <button>Ajouter une ville</button>
+            </a><br>
             {% for ville in villes %}
                 Ville : {{ ville.name }}<br>
                 Code Postale : {{ ville.zipcode }} <br>

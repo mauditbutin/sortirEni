@@ -6,10 +6,13 @@ use App\Repository\CityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 //#[Groups(['city_api'])]
 #[ORM\Entity(repositoryClass: CityRepository::class)]
+#[UniqueEntity(fields: ['name'], message: 'Ce nom de ville existe déjà')]
 class City
 {
     #[ORM\Id]
@@ -18,11 +21,15 @@ class City
     private ?int $id = null;
 
     #[Groups(['location_api'])]
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
+    #[Assert\NotBlank(message: "Entrez un nom de ville")]
+    #[Assert\Length(min: 3, max: 255, minMessage: "Le nom de votre ville doit faire au moins 3 caractères", maxMessage: "Le nom de votre ville ne doit pas dépasser 255 caractères")]
     private ?string $name = null;
 
     #[Groups(['location_api'])]
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: "Entrez un code postal")]
+    #[Assert\Length(min: 3, max: 255, minMessage: "Le code postale doit faire au moins 3 caractères", maxMessage: "Le code postal ne doit pas dépasser 255 caractères")]
     private ?string $zipcode = null;
 
     /**
