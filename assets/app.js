@@ -12,6 +12,7 @@ import './styles/general.css';
 import './styles/admin.css';
 import './styles/home.css';
 import './styles/form.css';
+import './styles/login.css';
 import './styles/create-hike.css';
 import './styles/details-hike.css';
 

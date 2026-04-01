@@ -1,0 +1,60 @@
+/****************************************/
+/* Page login */
+/****************************************/
+
+.container-login {
+    display: flex;
+    flex-direction: column;
+    margin-top: 40vh;
+    transform: translateY(-40%);
+}
+
+.title-login {
+    text-align: center;
+    color: var(--color-orange-light);
+    font-family: "BioRhyme Expanded", serif;
+    font-size: 2em;
+    margin-bottom: 2rem;
+}
+
+.container-form-login {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-beige-base);
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px;
+    padding: 2rem;
+    border-radius: 10px;
+    color: var(--color-green-dark);
+}
+
+.form-login-label {
+    color: var(--color-green-dark);
+    font-family: "BioRhyme", serif;
+}
+
+.form-login input:not([type="checkbox"]) {
+    height: 2.5rem;
+    box-sizing: border-box;
+    width: 100%;
+    border-radius: 5px;
+    border:  solid 1px var(--color-green-dark);
+    padding-left: 0.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.login-rememberMe {
+    margin-bottom: 1rem;
+}
+
+.login-forgotPassword {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.login-link {
+    text-decoration: none;
+    color: var(--color-orange-dark);
+}
