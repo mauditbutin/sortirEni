@@ -5,7 +5,7 @@
 .create-container-form {
     display: flex;
     flex-direction: column;
-    background-color: #F0EFE4;
+    background-color: var(--color-beige-base);
     margin-left: auto;
     margin-right: auto;
     width: 700px;
@@ -14,8 +14,8 @@
 }
 
 .form-create-adress {
-    background-color: #d6cec1;
-    color: #22310C;
+    background-color: var(--color-beige-base);
+    color: var(--color-green-dark);
     width: 50%;
     border-radius: 7px;
     padding: 1rem;
@@ -33,7 +33,7 @@
 .modale-form-location {
     display: flex;
     flex-direction: column;
-    background-color: #F0EFE4;
+    background-color: var(--color-beige-base);
     margin-left: auto;
     margin-right: auto;
     width: 600px;
@@ -42,7 +42,7 @@
 }
 
 .form-location-titlePosition {
-    color: #ff893f;
+    color: var(--color-orange-dark);
     font-family: "BioRhyme", serif;
     text-align: center;
     margin-top: 1.5rem;

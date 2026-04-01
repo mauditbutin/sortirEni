@@ -4,14 +4,14 @@
 
 .form-label
 {
-    color: #22310C;
+    color: var(--color-green-dark);
     font-family: "BioRhyme", serif;
     margin-top: 0rem;
     margin-bottom: 0.5rem;
 }
 
 .label-added {
-    color: #22310C;
+    color: var(--color-green-dark);
     font-family: "BioRhyme", serif;
 }
 
@@ -21,7 +21,7 @@
 }
 
 .form-error {
-    color: #ff4341;
+    color: var(--color-red-error);
     font-size: 0.8em;
     margin-top: 0rem;
     margin-bottom: 1rem;
@@ -37,7 +37,7 @@
     box-sizing: border-box;
     width: 100%;
     border-radius: 5px;
-    border:  solid 1px #22310C;
+    border:  solid 1px var(--color-green-dark);
     padding-left: 0.5rem;
 }
 
@@ -45,7 +45,7 @@
     height: 7rem;
     width: 100%;
     border-radius: 5px;
-    border:  solid 1px #22310C;
+    border:  solid 1px var(--color-green-dark);
     padding: 0.5em;
 }
 
@@ -65,11 +65,11 @@
 }
 
 .button-inside-form {
-    background-color: #FF9D53;
+    background-color: var(--color-orange-light);
     padding: 0.5rem;
     border-radius: 5px;
     text-decoration: none;
-    color: #22310C;
+    color: var(--color-green-dark);
 }
 
 .visually-hidden {
@@ -81,18 +81,18 @@
 }
 
 .custom-file-input::file-selector-button {
-    background-color: #FF9D53;
+    background-color: var(--color-orange-light);
     padding: 0.5rem;
     border-radius: 5px;
     text-decoration: none;
-    color: #22310C;
+    color: var(--color-green-dark);
     border: none;
     cursor: pointer;
 }
 
 .form-button-submit {
-    background-color: #687c4c;
-    color: #F0EFE4;
+    background-color: var(--color-green-light);
+    color: var(--color-beige-base);
     padding: 0.5rem;
     border-radius: 5px;
     text-decoration: none;
@@ -106,9 +106,9 @@
     align-items: center;
     justify-content: center;
     height: 2.1em;
-    color: #687c4c;
-    background-color: #F0EFE4;
-    border: solid 1px #687c4c;
+    color: var(--color-green-light);
+    background-color: var(--color-beige-base);
+    border: solid 1px var(--color-green-light);
     padding: 0.5rem;
     border-radius: 5px;
     text-decoration: none;

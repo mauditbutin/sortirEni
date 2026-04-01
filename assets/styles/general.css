@@ -16,8 +16,8 @@
 body {
 
     font-family: "Montserrat", sans-serif;
-    color: #F0EFE4;
-    background-color: #4E5D39;
+    color: var(--color-beige-base);
+    background-color: var(--color-green-base);
 }
 
 main {
@@ -39,7 +39,7 @@ main {
 
 
 .navbar {
-    background-color: #F0EFE4;
+    background-color: var(--color-beige-base);
     padding-top: 10px;
     padding-bottom: 5px;
     position: sticky;
@@ -54,12 +54,12 @@ main {
 
 .navbar a {
     text-decoration: none;
-    color: #22310C;
+    color: var(--color-green-dark);
     transition: all 0.2s ease-in-out;
 }
 
 .navbar a:hover {
-    color: #FF9D53;
+    color: var(--color-orange-dark);
 }
 
 .scratch-border {
@@ -75,14 +75,14 @@ main {
 }
 
 .button-logout {
-    border: solid 1px #22310C;
+    border: solid 1px var(--color-green-dark);
     padding: 0.3em 0.8rem;
     border-radius: 20px;
     transition: all 0.2s ease-in-out;
 }
 
 .button-logout:hover {
-    border: solid 1px #FF9D53;
+    border: solid 1px var(--color-orange-dark);
 }
 
 
@@ -113,7 +113,7 @@ main {
 
 .modaleContent {
     position: relative;
-    background-color: #F0EFE4;
+    background-color: var(--color-beige-base);
     border-radius: 5px;
     /*width: fit-content;*/
     /*height: fit-content;*/
@@ -138,8 +138,8 @@ main {
     padding: 10px 14px;
     border-radius: 6px;
     font-size: 1.2rem;
-    color: #41ffa7;
-    background-color: #032e27;
+    color: var(--color-green-light);
+    background-color: var(--color-green-dark);
     opacity: 0;
     transform: translateY(-20px);
     animation: toast 3.3s ease forwards;
@@ -154,8 +154,8 @@ main {
     padding: 10px 14px;
     border-radius: 6px;
     font-size: 1.2rem;
-    color: #ff4341;
-    background-color: #032e27;
+    color: var(--color-red-error);
+    background-color: var(--color-green-dark);
     opacity: 0;
     transform: translateY(-20px);
     animation: toast 3.3s ease forwards;

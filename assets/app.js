@@ -7,6 +7,7 @@ import './stimulus_bootstrap.js';
  */
 
 import './styles/normalize.css';
+import './styles/variables.css';
 import './styles/general.css';
 import './styles/admin.css';
 import './styles/home.css';

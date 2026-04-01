@@ -5,7 +5,7 @@
 .modale-form-cancel {
     display: flex;
     flex-direction: column;
-    background-color: #F0EFE4;
+    background-color: var(--color-beige-base);
     margin-left: auto;
     margin-right: auto;
     width: 600px;
@@ -14,7 +14,7 @@
 }
 
 .modale-form-cancel p {
-    color: #ff893f;
+    color: var(--color-orange-dark);
     font-family: "BioRhyme", serif;
     text-align: center;
     font-size: 1.5rem;

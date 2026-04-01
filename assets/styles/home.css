@@ -3,7 +3,7 @@
 /****************************************/
 
 .titre-home {
-    color: #FF9D53;
+    color: var(--color-orange-light);
     font-family: "BioRhyme Expanded", serif;
     text-align: center;
     font-size: 2.5em;
@@ -20,11 +20,11 @@
 
 .button-collapsible {
     background-color: rgba(78, 93, 57, 0);
-    color: #F0EFE4;
+    color: var(--color-beige-base);
     cursor: pointer;
     font-family: "BioRhyme", serif;
     border: none;
-    border-bottom: 1px solid #F0EFE4;
+    border-bottom: 1px solid var(--color-beige-base);
     padding-bottom: 0.8rem;
     text-align: center;
     font-size: 1.2em;
@@ -33,7 +33,7 @@
 .button-collapsible:after{
     content: '\25BC';
     font-size: 0.9rem;
-    color: #F0EFE4;
+    color: var(--color-beige-base);
     margin-left: 0.5rem;
 }
 
@@ -70,7 +70,7 @@
 }
 
 .home-box-oneHike {
-    background-color: #F0EFE4;
+    background-color: var(--color-beige-base);
     border-radius: 8px;
     width: 550px;
     margin: 0.5rem;
@@ -91,7 +91,7 @@
 
 .home-box-oneHike h2 {
     font-family: "BioRhyme", serif;
-    color: #22310C;
+    color: var(--color-green-dark);
     font-size: 1.5em;
     margin-bottom: 0.4em;
 }
@@ -113,35 +113,35 @@
 }
 
 .oneHike-infosCartouches .date {
-    background-color: #FF9D53;
-    color: #22310C;
+    background-color: var(--color-orange-light);
+    color:var(--color-green-dark);
 }
 
 .oneHike-infosCartouches .duration {
-    background-color: #708451;
-    color: #F0EFE4;
+    background-color: var(--color-green-light);
+    color: var(--color-beige-base);
 }
 
 .oneHike-infosCartouches .subscription {
-    background-color: #22310C;
-    color: #F0EFE4;
+    background-color: var(--color-green-dark);
+    color: var(--color-beige-base);
 }
 
 .oneHike-difficulty {
-    color: #22310C;
+    color: var(--color-green-dark);
     margin-bottom: 0.8em;
 }
 
 .oneHike-difficulty .etoile{
-    color: #EE7113;
+    color: var(--color-orange-dark);
 }
 
 .oneHike-description {
-    color: #22310C;
+    color: var(--color-green-dark);
 }
 
 .oneHike-description .lirePlus {
-    color: #EE7113;
+    color: var(--color-orange-dark);
     text-decoration: underline;
 }
 
