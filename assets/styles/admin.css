@@ -1,16 +1,140 @@
-/****************************************/
-/* ONGLETS PAGE ADMIN */
-/****************************************/
-
-div.onglets div {
+/* Cache tout par défaut */
+div.admin_onglets .admin_tab {
     display: none;
 }
 
-div.onglets div:target {
-    display: inline;
+/* Affiche l'onglet actif par défaut */
+div.admin_onglets .admin_tab.active {
+    display: block;
+}
+
+/* Quand un onglet est ciblé via le hash */
+div.admin_onglets .admin_tab:target {
+    display: block;
+}
+
+/* Cache UNIQUEMENT .active si un onglet DIFFÉRENT est ciblé */
+body:has(#tabUser:target) #tabRando.active,
+body:has(#tabCampus:target) #tabRando.active,
+body:has(#tabVille:target) #tabRando.active,
+body:has(#tabRando:target) #tabUser.active,
+body:has(#tabCampus:target) #tabUser.active,
+body:has(#tabVille:target) #tabUser.active,
+body:has(#tabRando:target) #tabCampus.active,
+body:has(#tabUser:target) #tabCampus.active,
+body:has(#tabVille:target) #tabCampus.active {
+    display: none;
 }
 
 #tabRando, #tabUser, #tabVille, #tabCampus {
     scroll-margin-top: 100vh;
 }
 
+.admin_h2 {
+    font-family: 'BioRhyme Expanded', sans-serif;
+    text-align: center;
+    margin-top: 5rem;
+
+}
+
+.admin_container {
+    display: flex;
+    justify-content: center;
+
+}
+
+
+.admin_btnOnglet {
+    color: #F0EFE4;
+    background: #2F3624;
+    width: 15rem;
+    height: 3rem;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    margin: 5px;
+    margin-bottom: 0px;
+    margin-top: 5rem;
+    border: none;
+}
+
+.admin_btnOnglet:hover {
+    background: #495635;
+
+}
+
+.admin_clickedBtn {
+    background: #708451;
+}
+
+.admin_onglets {
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    background: #708451;
+    padding: 3rem;
+}
+
+.admin_btnAddUser_Container {
+    display: flex;
+    justify-content: center;
+}
+
+.admin_btnAddUser_Container button {
+    width: 18rem;
+    height: 3rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    margin-bottom: 2rem;
+    color: #F0EFE4;
+    background: #2F3624;
+    border: none;
+    border-radius: 7px;
+}
+
+.admin_btnAddUser_Container button:hover {
+    background: #495635;
+}
+
+.admin_deactiveStatus {
+    background: #e74c3c;
+    color: ghostwhite;
+    width: 6rem;
+    height: 2rem;
+    border-radius: 5px;
+    margin-right: 1rem;
+    margin-left: 1rem;
+    border: none;
+
+}
+
+.admin_reactiveStatus {
+    background: #27ae60;
+    color: ghostwhite;
+    width: 6rem;
+    height: 2rem;
+    border-radius: 5px;
+    margin-right: 1rem;
+    margin-left: 1rem;
+    border: none;
+
+}
+
+.admin_link {
+    text-decoration: none;
+}
+
+.admin_UserAction {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.admin_btnDeleteUser {
+    background: #111;
+    color: ghostwhite;
+    width: 6rem;
+    height: 2rem;
+    border-radius: 5px;
+    margin-right: 1rem;
+    margin-left: 1rem;
+    border: none;
+}

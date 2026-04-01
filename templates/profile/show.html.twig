@@ -10,8 +10,8 @@
         <div class="profile-card">
             {% if user.picture %}
                 <img src="{{ asset('images/profilePictures/' ~ user.picture) }}"
-                alt="Photo of {{ user.firstname }}"
-                class="profile-avatar" />
+                     alt="Photo of {{ user.firstname }}"
+                     class="profile-avatar"/>
             {% else %}
                 <div class="profile-avatar-placeholder">👤</div>
             {% endif %}
@@ -42,6 +42,48 @@
                         class="info-value {{ user.active ? 'badge-active' : 'badge-inactive' }}">{{ user.active ? 'Actif' : 'Inactif' }}</span>
                 </div>
             </div>
+
+            <fieldset>
+                <legend>Vos randonnées :</legend>
+                <fieldset>
+                    <legend>En tant que participant :</legend>
+                    {% for hike in user.participatedHikes %}
+                        <div>
+                            <a href="{{ path('hike_detail', {'id': hike.id}) }}">
+                                {{ hike.name }}<br>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </fieldset>
+                <fieldset>
+                    <legend>En tant qu'organisateur :</legend>
+                    <div>
+                        <h3>Randonnées publiées</h3>
+                        {% for hike in user.plannedHikes %}
+                            {% if hike.status.label != 'Créée' %}
+                                <div>
+                                    <a href="{{ path('hike_detail', {'id': hike.id}) }}">
+                                        {{ hike.name }}<br>
+                                    </a>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <h3>Randonnées en cours de création</h3>
+                        {% for hike in user.plannedHikes %}
+                            {% if hike.status.label == 'Créée' %}
+                                <div>
+                                    <a href="{{ path('hike_detail', {'id': hike.id}) }}">
+                                        {{ hike.name }}<br>
+                                    </a>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <div>
+
+                        </div>
+                    </div>
+                </fieldset>
+            </fieldset>
 
             {% if app.user == user %}
                 <a href="{{ path('app_profile_edit', {id: user.id}) }}" class="btn-edit">Modifier mon profil</a>

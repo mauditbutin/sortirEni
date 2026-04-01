@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h2>Ajoutez une nouvelle ville :</h2>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button>Créer</button>
+    {{ form_end(form) }}
+    <a href="{{ path('admin_main') }}">
+        <button>Annuler</button>
+    </a>
+
+{% endblock %}
+
+{% block title %}
+    | add city
+{% endblock %}
+

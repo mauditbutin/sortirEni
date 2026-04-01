@@ -6,6 +6,7 @@ use App\Entity\Campus;
 use App\Entity\Hike;
 use App\Form\Model\HikeFilterDTO;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
@@ -26,17 +27,17 @@ class HikeRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('hike');
         $qb
-            ->join('hike.difficulty', 'difficulty') //jointure à la table difficulty
+            ->leftjoin('hike.difficulty', 'difficulty') //jointure à la table difficulty
             ->addSelect('difficulty') // Les colonnes à rechercher
-            ->join('hike.campus', 'campus')
+            ->leftjoin('hike.campus', 'campus')
             ->addSelect('campus')
-            ->join('hike.location', 'location')
+            ->leftjoin('hike.location', 'location')
             ->addSelect('location')
-            ->join('hike.participants', 'participants')
+            ->leftjoin('hike.participants', 'participants')
             ->addSelect('participants')
-            ->join('hike.planner', 'planner')
+            ->leftjoin('hike.planner', 'planner')
             ->addSelect('planner')
-            ->join('hike.status', 'status')
+            ->leftjoin('hike.status', 'status')
             ->addSelect('status')
             ->addOrderBy('hike.dateEvent', 'ASC')
             ->where('hike.id = :id')
@@ -53,17 +54,17 @@ class HikeRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('hike');
         $qb
-            ->join('hike.difficulty', 'difficulty') //jointure à la table difficulty
+            ->leftjoin('hike.difficulty', 'difficulty') //jointure à la table difficulty
             ->addSelect('difficulty') // Les colonnes à rechercher
-            ->join('hike.campus', 'campus')
+            ->leftjoin('hike.campus', 'campus')
             ->addSelect('campus')
-            ->join('hike.location', 'location')
+            ->leftjoin('hike.location', 'location')
             ->addSelect('location')
-            ->join('hike.participants', 'participants')
+            ->leftjoin('hike.participants', 'participants')
             ->addSelect('participants')
-            ->join('hike.planner', 'planner')
+            ->leftjoin('hike.planner', 'planner')
             ->addSelect('planner')
-            ->join('hike.status', 'status')
+            ->leftjoin('hike.status', 'status')
             ->addSelect('status')
             ->addOrderBy('hike.dateEvent', 'ASC');
 
@@ -72,7 +73,7 @@ class HikeRepository extends ServiceEntityRepository
         return $query->getResult(); //renvoie la requête
     }
 
-    public function hikeFiltered(HikeFilterDTO $hikeFilterDTO)
+    public function hikeFiltered(HikeFilterDTO $hikeFilterDTO, int $page = 1): Paginator
     {
         $qb = $this->createQueryBuilder('hike'); //récupère toutes les hikes
 
@@ -81,20 +82,26 @@ class HikeRepository extends ServiceEntityRepository
         $archivee = 'Archivée';
 
         $qb
-            ->join('hike.status', 'status')
+            ->leftjoin('hike.status', 'status')
             ->addSelect('status')
+            ->leftJoin('hike.planner', 'planner')
+            ->addSelect('planner')
+            ->leftJoin('hike.location', 'location')
+            ->addSelect('location')
+            ->leftJoin('hike.difficulty', 'difficulty')
+            ->addSelect('difficulty')
             ->where('status.label NOT IN (:exclues)')
             ->setParameter('exclues', [$creee, $annulee, $archivee]);
 
 
         //Si une condition du form est remplie, on ajoute un paramètre à la requête pour filtrer
         if ($hikeFilterDTO->getName()) {
-            $qb->where('hike.name LIKE :nameSelected')
+            $qb->andWhere('hike.name LIKE :nameSelected')
                 ->setParameter('nameSelected', '%' . $hikeFilterDTO->getName() . '%');
         }
 
         if ($hikeFilterDTO->getCampus()) {
-            $qb->join('hike.campus', 'campus')
+            $qb->leftjoin('hike.campus', 'campus')
                 ->addSelect('campus')
                 ->andWhere('hike.campus = :campusSelected')
                 ->setParameter('campusSelected', $hikeFilterDTO->getCampus());
@@ -113,7 +120,7 @@ class HikeRepository extends ServiceEntityRepository
         }
         if ($hikeFilterDTO->isParticipe()) {
             $qb
-                ->join('hike.participants', 'p')
+                ->leftjoin('hike.participants', 'p')
                 ->andWhere('p = :user')
                 ->setParameter('user', $hikeFilterDTO->getUser());
         }
@@ -131,9 +138,14 @@ class HikeRepository extends ServiceEntityRepository
                 ->setParameter('today', $date);
         }
 
+        //Changer le nombre de résultat par pages + aller changer dans homeController (ceil($nbHikeParPages / nbResultat);)
+        $resultParPage = 12;
         $query = $qb->getQuery(); //génère la requête
+        $query->setMaxResults($resultParPage);
+        $offset = ($page - 1) * $resultParPage; //Calcul de l'offset pour le changement de page. Si on est sur la page 1, offset à 0, si on est sur la page 2, offset à 50, etc.
+        $query->setFirstResult($offset);
 
-        return $query->getResult(); //renvoie la requête
+        return new Paginator($query); //renvoie la requête
     }
 
     public function findAllHikesPublished()
@@ -145,12 +157,24 @@ class HikeRepository extends ServiceEntityRepository
 
         $qb = $this->createQueryBuilder('hike');
         $qb
-            ->join('hike.status', 'status')
+            ->leftjoin('hike.status', 'status')
             ->addSelect('status')
+            ->leftJoin('hike.difficulty', 'difficulty')
+            ->addSelect('difficulty')
+            ->leftJoin('hike.location', 'location')
+            ->addSelect('location')
+            ->leftJoin('hike.planner', 'planner')
+            ->addSelect('planner')
+            ->leftJoin('hike.participants', 'participants')
+            ->addSelect('participants')
+            ->leftJoin('hike.campus', 'campus')
+            ->addSelect('campus')
             ->where('status.label NOT IN (:exclues)')
             ->setParameter('exclues', [$creee, $annulee, $archivee]);
 
+
         $query = $qb->getQuery();
+
 
         return $query->getResult();
 

@@ -2,12 +2,17 @@
 
 namespace App\Controller;
 
+use App\Entity\Campus;
+use App\Entity\City;
 use App\Entity\User;
+use App\Form\AddCampusType;
+use App\Form\AddCityType;
 use App\Form\AddUserType;
 use App\Form\UploadCSVType;
 use App\Repository\CampusRepository;
 use App\Repository\CityRepository;
 use App\Repository\HikeRepository;
+use App\Repository\StatusRepository;
 use App\Repository\UserRepository;
 use App\Security\Voter\UserVoter;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,12 +24,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use function Symfony\Component\Clock\now;
 
 #[Route('/admin', name: 'admin_')]
 final class AdminController extends AbstractController
 {
-    #[Route('/main', name: 'main')]
-    public function index(HikeRepository $hikeRepository, UserRepository $userRepository, CampusRepository $campusRepository, CityRepository $cityRepository): Response
+    #[Route('/main/{activeTab}', name: 'main', defaults: ['activeTab' => 'tabUser'])]
+    public function index(HikeRepository   $hikeRepository,
+                          UserRepository   $userRepository,
+                          CampusRepository $campusRepository,
+                          CityRepository   $cityRepository,
+                          string           $activeTab
+    ): Response
     {
 
         //Récupération des données
@@ -35,8 +46,7 @@ final class AdminController extends AbstractController
         $campus = $campusRepository->allCampusAndInfos();
         $villes = $cityRepository->allCityAndInfos();
 
-
-        return $this->render('admin/admin.html.twig', ['hikes' => $hikes, 'users' => $users, 'villes' => $villes, 'campus' => $campus]);
+        return $this->render('admin/admin.html.twig', ['hikes' => $hikes, 'users' => $users, 'villes' => $villes, 'campus' => $campus, 'activeTab' => $activeTab]);
     }
 
     // ====================== Deacivation of User ========================
@@ -206,4 +216,129 @@ final class AdminController extends AbstractController
         }
         return $this->render('admin/uploadCSV.html.twig', ['form' => $form]);
     }
+
+    // =================== Suppression d'un utilisateur =======================
+    #[Route('/user/{id}/delete', name: 'delete_user')]
+    public function deleteUser(
+        int                    $id,
+        UserRepository         $userRepository,
+        EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted(UserVoter::ADMIN, $this->getUser());
+
+        $user = $userRepository->find($id);
+
+        if (!$user) {
+            throw $this->createNotFoundException('User not found, sorry');
+        }
+
+        if ($user === $this->getUser()) {
+            $this->addFlash('danger', 'You cannot delete your own account, this is crazy.');
+            return $this->redirectToRoute('admin_main');
+        }
+
+        $fullName = $user->getFirstname() . ' ' . $user->getLastname();
+
+        // ====== where user like planner ============
+        foreach ($user->getPlannedHikes()->toArray() as $hike) {
+            $hike->setPlanner(null);
+        }
+
+        // ====== where user like participant (remove in future hikes, but rest in passed hikes) ============
+        $now = new \DateTime();
+        foreach ($user->getParticipatedHikes()->toArray() as $hike) {
+            if ($hike->getDateEvent() > $now) {
+                $hike->removeParticipant($user);
+                $user->removeParticipatedHike($hike);
+            }
+        }
+        // ======= delete photo of profil ========
+        if ($user->getPicture()) {
+            $picturePath = $this->getParameter('kernel.project_dir')
+                . '/public/images/profilePictures/'
+                . $user->getPicture();
+
+            if (file_exists($picturePath)) {
+                unlink($picturePath);
+            }
+        }
+        // ======= delete in datab ==========
+        $entityManager->remove($user); // which user to DELETE
+        $entityManager->flush(); // SLQ DELETE
+
+        $this->addFlash('success', 'User' . $fullName . ' was deleted');
+        return $this->redirectToRoute('admin_main');
+
+    }
+
+    // ----------------- Annuler une randonnée -----------------------------------
+    #[Route('/cancelHike/{id}', name: 'cancelHike')]
+    public function cancelHike(int $id, HikeRepository $hikeRepository, StatusRepository $statusRepository, EntityManagerInterface $entityManager): Response
+    {
+
+        $user = $this->getUser();
+        $this->denyAccessUnlessGranted(UserVoter::ADMIN, $user);
+
+        $statusAnnulee = $statusRepository->findOneBy(['label' => 'Annulée']);
+        $hikeToCancel = $hikeRepository->find($id);
+        $hikeToCancel->setStatus($statusAnnulee);
+
+        $entityManager->persist($hikeToCancel);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Randonnée annulée');
+
+        return $this->redirectToRoute('admin_main', ['activeTab' => 'tabRando']);
+
+    }
+
+    // ----------------- Ajouter une ville -----------------------------------
+    #[Route('/addCity', name: 'addCity')]
+    public function addCity(EntityManagerInterface $entityManager, Request $request): Response
+    {
+
+        $user = $this->getUser();
+        $this->denyAccessUnlessGranted(UserVoter::ADMIN, $user);
+        $city = new City();
+        $form = $this->createForm(AddCityType::class, $city);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() and $form->isValid()) {
+
+            $entityManager->persist($city);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Ville ajoutée');
+            return $this->redirectToRoute('admin_main', ['activeTab' => 'tabVille']);
+        }
+
+        return $this->render('admin/addCity.html.twig', ['form' => $form]);
+
+    }
+
+    #[Route('/addCampus', name: 'addCampus')]
+    public function addCampus(EntityManagerInterface $entityManager, Request $request): Response
+    {
+
+        $user = $this->getUser();
+        $this->denyAccessUnlessGranted(UserVoter::ADMIN, $user);
+        $campus = new Campus();
+        $form = $this->createForm(AddCampusType::class, $campus);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() and $form->isValid()) {
+
+            $entityManager->persist($campus);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Campus ajouté !');
+            return $this->redirectToRoute('admin_main', ['activeTab' => 'tabCampus']);
+        }
+
+        return $this->render('admin/addCampus.html.twig', ['form' => $form]);
+
+    }
+
 }
