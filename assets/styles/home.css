@@ -1,4 +1,51 @@
 /****************************************/
+/* Section hero */
+/****************************************/
+
+.hero {
+    height: 100vh;
+    width: 100vw;
+    background-image: url(../images/assetsFront/pexels-ariane-633411126-33059864-cropped.jpg);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+    z-index: 0;
+}
+
+/****************************************/
+/* Transition hero > conteneur des hikes */
+/****************************************/
+
+.scratch-border-top-under {
+    position: absolute;
+    top: -23px;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    z-index: 1;
+}
+
+.scratch-border-top-above {
+    position: absolute;
+    top: -19px;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    z-index: 2;
+}
+
+.main-container {
+    background-color: #4E5D39;
+    position: relative;
+    padding-top: 20px;
+    margin-top: -40vh;
+    z-index: 2;
+}
+
+
+
+/****************************************/
 /* Liste des hikes */
 /****************************************/
 
