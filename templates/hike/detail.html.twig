@@ -11,7 +11,9 @@
             </div>
             <div>
                 Description : {{ hike.description }} <br>
-                Organisateur : {{ hike.planner.username }} <br>
+                Organisateur
+                : {% if hike.planner %}{{ hike.planner.username }}{% else %} utilisateur supprimé {% endif %}
+                <br>
                 Date de l'évènement : {{ hike.dateEvent | date ('d-m-Y') }}<br>
                 Date limite d'inscription : {{ hike.dateSubscription | date ('d-m-Y') }}<br>
                 Statut : {{ hike.status.label }}<br>
@@ -37,7 +39,9 @@
                 </a>
             {% endif %}
             {% if hike.status.label == 'Créée' or is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('hike_publish', {'id': hike.id}) }}"><button>Publier la randonnée</button></a>
+                <a href="{{ path('hike_publish', {'id': hike.id}) }}">
+                    <button>Publier la randonnée</button>
+                </a>
                 <a href="{{ path('hike_delete', {'id': hike.id}) }}">
                     <button> Supprimer</button>
                 </a>
