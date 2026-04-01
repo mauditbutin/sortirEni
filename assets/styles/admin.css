@@ -33,6 +33,13 @@ body:has(#tabVille:target) #tabCampus.active {
 }
 
 /* ------------ USER ------------------- */
+
+.admin_tableau table {
+    border-collapse: collapse;
+    width: 75%;
+    table-layout: fixed;
+}
+
 .admin_h2 {
     font-family: 'BioRhyme Expanded', sans-serif;
     text-align: center;
@@ -65,9 +72,10 @@ body:has(#tabVille:target) #tabCampus.active {
     background-color: var(--color-green-base);
 }
 
-/*.admin_tableau table tbody tr:nth-child(odd) {*/
-/*    background-color: var(--color-green-base); !* Couleur claire *!*/
-/*}*/
+.admin_tableau {
+    display: flex;
+    justify-content: center;
+}
 
 
 .admin_container {
@@ -252,8 +260,13 @@ body:has(#tabVille:target) #tabCampus.active {
 }
 
 .admin_linkHike a {
-    text-align: justify-all;
+
     color: var(--color-beige-base);
+    text-decoration: none;
+}
+
+.admin_linkHike {
+    text-align: justify-all;
     text-decoration: none;
 }
 
@@ -285,3 +298,19 @@ body:has(#tabVille:target) #tabCampus.active {
     text-decoration: none;
 }
 
+.admin_HikeCampus a {
+
+    color: var(--color-beige-base);
+    text-decoration: none;
+}
+
+.admin_HikeCampus {
+    text-align: start;
+    text-decoration: none;
+}
+
+/* ------------ Villes ------------------- */
+
+.admin_villes {
+    text-align: justify;
+}
