@@ -14,24 +14,81 @@
 }
 
 /****************************************/
+/* Icônes scout */
+/****************************************/
+
+.container-icons {
+    z-index: 3;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    margin-top: -30vh;
+    width: 220px;
+    height: 120px;
+}
+
+.icon {
+    position: absolute;
+}
+
+.icon:nth-child(1) {
+    top: -90px;
+    left: -40px;
+    rotate: 8deg;
+    width: 55%;
+}
+.icon:nth-child(2) {
+    top: -50px;
+    left: 160px;
+    rotate:  0deg;
+    width: 50%;
+}
+.icon:nth-child(3) {
+    top: 65px;
+    left: 20px;
+    rotate: 0deg;
+    width: 80%;
+}
+.icon:nth-child(4) {
+    top: 30px;
+    left: -120px;
+    rotate:  -12deg;
+    width: 38%;
+}
+.icon:nth-child(5) {
+    top: -170px;
+    left: 60px;
+    rotate: 55deg;
+    width: 65%;
+}
+.icon:nth-child(6) {
+    top: 80px;
+    left: 240px;
+    rotate:  10deg;
+    width: 30%;
+}
+
+
+
+/****************************************/
 /* Transition hero > conteneur des hikes */
 /****************************************/
 
 .scratch-border-top-under {
     position: absolute;
-    top: -23px;
+    top: -33px;
     left: 0;
     width: 100%;
-    height: 20px;
+    height: 30px;
     z-index: 1;
 }
 
 .scratch-border-top-above {
     position: absolute;
-    top: -19px;
+    top: -29px;
     left: 0;
     width: 100%;
-    height: 20px;
+    height: 30px;
     z-index: 2;
 }
 
