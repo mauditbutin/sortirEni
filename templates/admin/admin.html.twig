@@ -1,51 +1,166 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminController!{% endblock %}
+{% block title %}Admin{% endblock %}
 
 {% block body %}
-    <style>
-        .example-wrapper {
-            margin: 1em auto;
-            max-width: 800px;
-            width: 95%;
-            font: 18px/1.5 sans-serif;
-        }
-
-        .example-wrapper code {
-            background: #F5F5F5;
-            padding: 2px 6px;
-        }
-    </style>
-
-    {# Les boutons pour l'affichage #}
-    <a href="#tabRando">
-        <button> Gestion des randonnées</button>
-    </a>
-    <a href="#tabUser">
-        <button> Gestion des utilisateurs</button>
-    </a>
-
-    <a href="#tabCampus">
-        <button> Gestion des Campus</button>
-    </a>
-
-    <a href="#tabVille">
-        <button> Gestion des Villes</button>
-    </a>
-
-    {# ----------------------------------------------------- #}
 
 
-    {# Affichage des données #}
+    <h2 class="admin_h2">Espace Administrateur</h2>
+
+    <div class="admin_container">
+        {# Les boutons pour l'affichage #}
+
+        <a href="#tabUser">
+            <button id="admin_btn_tabUser" class="admin_btnOnglet admin_clickedBtn"> Gestion des utilisateurs</button>
+        </a>
+
+        <a href="#tabRando">
+            <button id="admin_btn_tabRando" class="admin_btnOnglet"> Gestion des randonnées</button>
+        </a>
+
+        <a href="#tabCampus">
+            <button id="admin_btn_tabCampus" class="admin_btnOnglet"> Gestion des Campus</button>
+        </a>
+
+        <a href="#tabVille">
+            <button id="admin_btn_tabVille" class="admin_btnOnglet"> Gestion des Villes</button>
+        </a>
+
+        {# ----------------------------------------------------- #}
 
 
-    <div class="onglets">
-        {# Onglet gestion des Randonnées #}
-        <div id="tabRando" class="tab {% if activeTab == 'tabRando' %}active{% endif %}">
-            {% for hike in hikes %}
-                <a href="{{ path('app_profile', {'id' : hike.planner.id}) }}">
-                    Organisateur : {{ hike.planner.username }}<br>
+        {# Affichage des données #}
+    </div>
+
+    <div class="admin_onglets">
+
+        {# Onglet gestion des utilisateurs #}
+        <div id="tabUser" class="admin_tab {% if activeTab == 'tabUser' %}active{% endif %}">
+            <div class="admin_btnAddUser_Container">
+                <a href="{{ path('admin_formUser') }}">
+                    <button>Ajouter un utilisateur</button>
                 </a>
+                <a href="{{ path('admin_uploadcsv') }}">
+                    <button>Importer un fichier csv</button>
+                </a>
+
+            </div>
+            <div>
+                <table>
+                    <thead>
+                    <tr>
+                        <th scope="col">Picture</th>
+                        <th scope="col">Pseudo</th>
+                        <th scope="col">prénom</th>
+                        <th scope="col">nom</th>
+                        <th scope="col">email</th>
+                        <th scope="col">campus</th>
+                        <th scope="col">statut</th>
+                        <th scope="col">actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <th scope="row">
+                            <a href="{{ path('app_profile', {'id' : user.id}) }}">
+                                <img
+                                    src="{{ asset('images/profilePictures/' ~ user.picture) }}"
+                                    alt="{{ user.username }}" style="width: 5rem"></a>
+                        </th>
+                        <td>
+                            <a href="{{ path('app_profile', {'id' : user.id}) }}">
+                                {{ user.username }}
+                            </a>
+                        </td>
+                        <td>
+                            {{ user.firstname }}
+                        </td>
+                        <td>
+                            {{ user.lastname }}
+                        </td>
+                        <td>
+                            {{ user.email }}
+                        </td>
+                        <td>
+                            {{ user.campus.name }}
+                        </td>
+
+                        {# ===== Satuts===== #}
+                        <td>
+                            {% if user.active %}
+                                <span style="color: yellowgreen; font-weight: bold;">Active</span><br>
+                            {% else %}
+                                <span style="color: red; font-weight: bold;">Inactive</span>
+                            {% endif %}
+                        </td>
+
+                        {# ======= Bouton delete / Activate /delete ======== #}
+                        <td>
+                            <div class="admin_UserAction">
+                                {% if user.active %}
+                                    <a class="admin_link" href="{{ path('admin_deactivate_user', {id: user.id}) }}">
+                                        <button class="admin_deactiveStatus"
+                                                onclick="return confirm('Disable {{ user.firstname }} {{ user.lastname }} ?\nHe will be removed from all his hikes.');">
+                                            Disable
+                                        </button>
+                                    </a>
+                                {% else %}
+                                    <a href="{{ path('admin_activate_user', {id: user.id}) }}"
+                                       onclick="return confirm('Reactivation account of {{ user.firstname }} {{ user.lastname }} ?');">
+                                        <button class="admin_reactiveStatus">Reactivate</button>
+                                    </a>
+                                {% endif %}
+
+                                {% if app.user != user %}
+                                    <a href="{{ path('admin_delete_user', {id: user.id}) }}"
+                                       onclick="return confirm('Delete {{ user.firstname }} {{ user.lastname }} permanently ?');">
+                                        <button class="admin_btnDeleteUser">
+                                            Delete
+                                        </button>
+                                    </a>
+                                {% endif %}
+                                
+                            </div>
+                        </td>
+
+                        Randonnées organisées :
+                        {% for hike in user.plannedHikes %}
+                            {% if hike.id is not null %}
+                                <a href="{{ path('hike_detail', {'id' : hike.id}) }}">
+                                    Nom : {{ hike.name }}<br>
+                                </a>
+                            {% endif %}
+                            -------<br>
+                        {% endfor %}
+
+                        Inscription aux randonnées :
+                        {% for hike in user.participatedHikes %}
+                            {% if hike.id is not null %}
+                                <a href="{{ path('hike_detail', {'id' : hike.id}) }}">
+                                    Nom : {{ hike.name }}<br>
+                                </a>
+                            {% endif %}
+                            -------<br>
+                        {% endfor %}
+                        {% endfor %}
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        {# ----------------------------------------------------- #}
+        {# Onglet gestion des Randonnées #}
+        <div id="tabRando" class="admin_tab {% if activeTab == 'tabRando' %}active{% endif %}">
+            {% for hike in hikes %}
+                {% if hike.planner %}
+                    <a href="{{ path('app_profile', {'id' : hike.planner.id}) }}">
+                        Organisateur : {{ hike.planner.username }}<br>
+                    </a>
+                {% else %} utilisateur supprimé {% endif %}<br>
                 <a href="{{ path('hike_detail', {'id' : hike.id}) }}">
                     Nom : {{ hike.name }}<br>
                     Status : {{ hike.status.label }}<br>
@@ -61,81 +176,8 @@
         </div>
 
         {# ----------------------------------------------------- #}
-        {# Onglet gestion des utilisateurs #}
-        <div id="tabUser" class="tab {% if activeTab == 'tabUser' %}active{% endif %}">
-
-            <a href="{{ path('admin_formUser') }}">
-                <button>ajouter un utilisateur</button>
-            </a>
-            <a href="{{ path('admin_uploadcsv') }}">
-                <button>importer un fichier .csv</button>
-            </a>
-            {% for user in users %}
-                <a href="{{ path('app_profile', {'id' : user.id}) }}">
-                    <img
-                        src="{{ asset('images/profilePictures/' ~ user.picture) }}"
-                        alt="{{ user.username }}" style="width: 5rem">
-                    Username : {{ user.username }}<br>
-                </a>
-                firstname : {{ user.firstname }}
-                lastname : {{ user.lastname }}
-                mail : {{ user.email }}
-
-        {# ===== Bouton disable et reacivate ===== #}
-
-                {% if user.active %}
-                    <span style="color: yellowgreen; font-weight: bold;">Active</span><br>
-                    <a href="{{ path('admin_deactivate_user', {id: user.id}) }}"
-                       onclick="return confirm('Disable {{ user.firstname }} {{ user.lastname }} ?\nHe will be removed from all his hikes.');"
-                       style="background: #e74c3c; color: ghostwhite; padding: 4px 12px;
-                              border-radius: 4px; text-decoration: none;
-                              font-size: 0.85rem; margin-left: 8px;">Disable
-                    </a>
-                {% else %}
-                    <span style="color: red; font-weight: bold;">Inactiv</span>
-
-                    <a href="{{ path('admin_activate_user', {id: user.id}) }}"
-                       onclick="return confirm('Reactivation account of {{ user.firstname }} {{ user.lastname }} ?');"
-                       style="background: #27ae60; color: ghostwhite; padding: 4px 12px;
-                              border-radius: 4px; text-decoration: none;
-                              font-size: 0.85rem; margin-left: 8px;">Reactivate
-                    </a>
-                {% endif %}
-
-        {# ======= Bouton delete ======== #}
-
-                {% if app.user != user %}
-                    <a href="{{ path('admin_delete_user', {id: user.id}) }}"
-                       onclick="return confirm('Delete {{ user.firstname }} {{ user.lastname }} permanently ?\n\n All their hikes will be deleted.');"
-                       style="background: #111; color: ghostwhite; padding: 4px 12px; border-radius: 4px; text-decoration: none; font-size: 0.85rem; margin-left: 8px;">Delete
-                    </a>
-                {% endif %}
-
-                Randonnées organisées :
-                {% for hike in user.plannedHikes %}
-                    {% if hike.id is not null %}
-                        <a href="{{ path('hike_detail', {'id' : hike.id}) }}">
-                            Nom : {{ hike.name }}<br>
-                        </a>
-                    {% endif %}
-                    -------<br>
-                {% endfor %}
-
-                Inscription aux randonnées :
-                {% for hike in user.participatedHikes %}
-                    {% if hike.id is not null %}
-                        <a href="{{ path('hike_detail', {'id' : hike.id}) }}">
-                            Nom : {{ hike.name }}<br>
-                        </a>
-                    {% endif %}
-                    -------<br>
-                {% endfor %}
-            {% endfor %}
-        </div>
-
-        {# ----------------------------------------------------- #}
         {# Onglet gestion des campus #}
-        <div id="tabCampus" class="tab {% if activeTab == 'tabCampus' %}active{% endif %}">
+        <div id="tabCampus" class="admin_tab {% if activeTab == 'tabCampus' %}active{% endif %}">
             <a href="{{ path('admin_addCampus') }}">
                 <button>Ajouter un campus</button>
             </a><br>
@@ -160,7 +202,7 @@
 
         {# ----------------------------------------------------- #}
         {# Onglet gestion des villes #}
-        <div id="tabVille" class="tab {% if activeTab == 'tabVille' %}active{% endif %}">
+        <div id="tabVille" class="admin_tab {% if activeTab == 'tabVille' %}active{% endif %}">
 
             <a href="{{ path('admin_addCity') }}">
                 <button>Ajouter une ville</button>
@@ -176,5 +218,6 @@
             {% endfor %}
 
         </div>
+    </div>
     </div>
 {% endblock %}
