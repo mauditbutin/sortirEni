@@ -119,3 +119,55 @@
 .form-buttons {
     margin-top: 2em;
 }
+
+
+/****************************************/
+/* Mise en page des filters */
+/****************************************/
+
+.filter-label {
+    color: var(--color-beige-base);
+    font-family: "BioRhyme", serif;
+    /*margin-top: 0rem;*/
+    /*margin-bottom: 0.5rem;*/
+}
+
+.filter-widget input:not([type="checkbox"]) {
+    height: 2rem;
+    box-sizing: border-box;
+    width: 100%;
+    border-radius: 5px;
+    border:  solid 1px var(--color-beige-base);
+    padding-left: 0.5rem;
+    margin-bottom: 1rem;
+    margin-top: 0.5rem;
+    background-color: var(--color-beige-base);
+}
+
+.filter-widget select {
+    height: 2rem;
+    box-sizing: border-box;
+    width: 100%;
+    border-radius: 5px;
+    border:  solid 1px var(--color-beige-base);
+    padding-left: 0.5rem;
+    margin-bottom: 1rem;
+    margin-top: 0.5rem;
+    background-color: var(--color-beige-base);
+}
+
+.filter-button-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.1em;
+    background-color: var(--color-orange-light);
+    color: var(--color-green-dark);
+    border: none;
+    padding: 0.5rem;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 2rem;
+}

@@ -1,5 +1,50 @@
 {% extends 'base.html.twig' %}
 
+{#+++++++++++++++ BLOCK MAP +++++++++++++++++#}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <style>
+        /* Стили карты и кнопок переключения */
+        #map {
+            height: 420px;
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        .map-controls {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        .map-controls button {
+            padding: 6px 14px;
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .map-controls button:hover {
+            border-color: #4a7c59;
+            background: #f0f7f2;
+        }
+        .map-controls button.active {
+            border-color: #4a7c59;
+            background: #4a7c59;
+            color: white;
+        }
+    </style>
+{% endblock %}
+
+
+
 {% block body %}
     <div>
         <h2>{{ hike.name }}</h2>
@@ -30,6 +75,28 @@
                 Campus de rattachement : {{ hike.campus.name }}<br>
             </div>
         </div>
+{#++++++++++++++ BLOCK MAP ++++++++++++++++#}
+        {% if hike.location.latitude and hike.location.longitude %}
+
+            {# button of style #}
+            <div class="map-controls">
+                <strong style="line-height: 2;">Style :</strong>
+                <button class="active" onclick="setLayer('streets', this)">🗺️ Plan</button>
+                <button onclick="setLayer('satellite', this)">🛰️ Satellite</button>
+                <button onclick="setLayer('terrain', this)">🏔️ Relief</button>
+            </div>
+
+
+            <div id="map"></div>
+
+        {% else %}
+
+            <p style="color: gray; font-style: italic; margin-top: 1rem;">
+                📍 Aucune coordonnée disponible pour afficher la carte.
+            </p>
+        {% endif %}
+
+
 
         {% if user == hike.planner or is_granted('ROLE_ADMIN') %}
             <button><a href="{{ path('hike_edit', {'id': hike.id}) }}">Modifier la randonnée</a></button>
@@ -85,5 +152,77 @@
 
 {% block title %}
     {{ parent() }} | Hike Details
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {# Leaflet #}
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    {# code of map #}
+    {% if hike.location.latitude and hike.location.longitude %}
+        <script>
+
+            const lat = {{ hike.location.latitude }};
+            const lng = {{ hike.location.longitude }};
+
+
+            const locationName = "{{ hike.location.name | e('js') }}";
+
+
+            const map = L.map('map').setView([lat, lng], 13);
+
+
+
+
+            const streets = L.tileLayer(
+                'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                { attribution: '© <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors' }
+            );
+
+            // Esri
+            const satellite = L.tileLayer(
+                'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+                { attribution: '© Esri' }
+            );
+
+            // OpenTopoMap
+            const terrain = L.tileLayer(
+                'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+                { attribution: '© <a href="https://opentopomap.org/">OpenTopoMap</a> contributors' }
+            );
+
+
+            streets.addTo(map);
+            let currentLayer = streets;
+
+
+
+            function setLayer(type, btn) {
+
+                map.removeLayer(currentLayer);
+
+
+                if (type === 'streets')   currentLayer = streets;
+                if (type === 'satellite') currentLayer = satellite;
+                if (type === 'terrain')   currentLayer = terrain;
+
+
+                currentLayer.addTo(map);
+
+
+                document.querySelectorAll('.map-controls button').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            }
+
+            // add marker to the map
+
+            L.marker([lat, lng])
+                .addTo(map)
+                .bindPopup('<strong>📍 Point de départ</strong><br>' + locationName)
+                .openPopup();
+        </script>
+    {% endif %}
 {% endblock %}
 

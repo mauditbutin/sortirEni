@@ -1,45 +1,51 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} {{ parent() }} | Home{% endblock %}
+{% block title %} {{ parent() }} | Accueil{% endblock %}
 
 {% block body %}
-    {#    <style> #}
-    {#        .example-wrapper { #}
-    {#            margin: 1em auto; #}
-    {#            max-width: 800px; #}
-    {#            width: 95%; #}
-    {#            font: 18px/1.5 sans-serif; #}
-    {#        } #}
 
-    {#        .example-wrapper code { #}
-    {#            background: #F5F5F5; #}
-    {#            padding: 2px 6px; #}
-    {#        } #}
-    {#    </style> #}
+    <div class="hero"></div>
 
-    {#    <div class="example-wrapper"> #}
+    <div class="main-container">
+    <main>
 
-    {# affichage form de filtrage #}
+    <svg class="scratch-border-top-under" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1738 74" preserveAspectRatio="none">
+        <path d="M520.5 8.5L532.5 5L549.5 8.5L567 19.5L597.5 13L612 16L624 8.5L651 5L674.5 24H741.5L781 39.5H798L855.5 35.5L880.5 29.5L909.5 16L925.5 29.5L960 43.5H1081.5L1114 39.5L1154.5 29.5L1178 16C1182.83 25.5 1195.8 45.8 1209 51C1222.2 56.2 1240.17 43.1667 1247.5 36L1271 47.5L1315 43.5L1447 54L1490 39.5L1554 43.5L1625.5 59L1678 28.5C1690.67 30.6667 1720.2 33.7 1737 28.5C1737.31 28.403 1737.65 28.5653 1738 28.9756V74H0V25.4541L1 24.5L69 19.5L105 34.5L116 28L138.5 38L181 24.5L207 28L224 38H255.5L277 34.5L301.5 38L320 28L351 34.5L361.5 51H385L457 28L492.5 0L520.5 8.5Z" fill="#F0EFE4"></path>
+    </svg>
+    <svg class="scratch-border-top-above" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1738 74" preserveAspectRatio="none">
+        <path d="M520.5 8.5L532.5 5L549.5 8.5L567 19.5L597.5 13L612 16L624 8.5L651 5L674.5 24H741.5L781 39.5H798L855.5 35.5L880.5 29.5L909.5 16L925.5 29.5L960 43.5H1081.5L1114 39.5L1154.5 29.5L1178 16C1182.83 25.5 1195.8 45.8 1209 51C1222.2 56.2 1240.17 43.1667 1247.5 36L1271 47.5L1315 43.5L1447 54L1490 39.5L1554 43.5L1625.5 59L1678 28.5C1690.67 30.6667 1720.2 33.7 1737 28.5C1737.31 28.403 1737.65 28.5653 1738 28.9756V74H0V25.4541L1 24.5L69 19.5L105 34.5L116 28L138.5 38L181 24.5L207 28L224 38H255.5L277 34.5L301.5 38L320 28L351 34.5L361.5 51H385L457 28L492.5 0L520.5 8.5Z" fill="#4E5D39"></path>
+    </svg>
 
     <h1 class="titre-home">Découvre les randonnées<br>prévues et inscris-toi !</h1>
+
+        {# affichage form de filtrage #}
 
     <div class="home-conteneur-filter">
         <button type="button" class="button-collapsible">Trier les résultats</button>
         <div class="content-collapsible">
+
+            {% form_theme form 'views/filter-theme.html.twig' %}
+
             {{ form_start(form) }}
             <div>
-                {{ form_row(form.name, {label: 'Titre'}) }}
-                {{ form_row(form.campus, {label: 'Campus'}) }}
-                {{ form_row(form.dateStart, {label: 'Date de début'}) }}
-                {{ form_row(form.dateEnd, {label: 'Date de fin'}) }}
+                <div class="form-row">
+                    <div class="form-col">{{ form_row(form.name, {label: 'Titre'}) }}</div>
+                    <div class="form-col">{{ form_row(form.campus, {label: 'Campus'}) }}</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-col">{{ form_row(form.dateStart, {label: 'Date de début'}) }}</div>
+                    <div class="form-col">{{ form_row(form.dateEnd, {label: 'Date de fin'}) }}</div>
+                </div>
             </div>
             <div>
-                {{ form_row(form.organise, {label: 'J\'organise'}) }}
-                {{ form_row(form.participe, {label: 'Je participe'}) }}
-                {{ form_row(form.participePas, {label: 'Je ne participe pas'}) }}
-                {{ form_row(form.terminee, {label: 'Randonnées terminées'}) }}
+                <div class="form-row">
+                    {{ form_row(form.organise, {label: 'J\'organise'}) }}
+                    {{ form_row(form.participe, {label: 'Je participe'}) }}
+                    {{ form_row(form.participePas, {label: 'Je ne participe pas'}) }}
+                    {{ form_row(form.terminee, {label: 'Randonnées terminées'}) }}
+                </div>
             </div>
-            <button>Rechercher</button>
+            <button class="filter-button-submit">Rechercher</button>
             {{ form_end(form) }}
         </div>
     </div>
@@ -49,7 +55,6 @@
         {% for hike in hikes %}
             <div class="home-box-oneHike">
                 <a href="{{ path('hike_detail', {'id' : hike.id}) }}">
-
 
                     <div class="oneHike-container-coverImg">
                         <img
@@ -116,4 +121,8 @@
             </a>
         {% endif %}
     </div>
+
+    </main>
+    </div>
+
 {% endblock %}
