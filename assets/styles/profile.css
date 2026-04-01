@@ -1,3 +1,22 @@
 /****************************************/
 /* Page de profil */
 /****************************************/
+
+.profile-container {
+    background-color: var(--color-beige-base);
+    width: 90%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: row;
+    margin-left: auto;
+    margin-right: auto;
+    color: var(--color-green-dark);
+    border-radius: 20px;
+    margin-top: 3rem;
+    padding: 2rem;
+}
+
+.profile-avatar {
+    width: 200px;
+    height: 200px;
+}

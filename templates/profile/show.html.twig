@@ -1,12 +1,12 @@
 {# Roman #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Profile - {{ user.firstname }} {{ user.lastname }}
+{% block title %}{{ parent() }} | Profil de {{ user.firstname }} {{ user.lastname }}
 {% endblock %}
 
 {% block body %}
 
-    <div class="profile-wrapper">
+    <div class="profile-container">
         <div class="profile-card">
             {% if user.picture %}
                 <img src="{{ asset('images/profilePictures/' ~ user.picture) }}"
@@ -42,6 +42,8 @@
                         class="info-value {{ user.active ? 'badge-active' : 'badge-inactive' }}">{{ user.active ? 'Actif' : 'Inactif' }}</span>
                 </div>
             </div>
+
+            {% if app.user == user %}
 
             <fieldset>
                 <legend>Vos randonnées :</legend>
@@ -85,13 +87,15 @@
                 </fieldset>
             </fieldset>
 
-            {% if app.user == user %}
+
                 <a href="{{ path('app_profile_edit', {id: user.id}) }}" class="btn-edit">Modifier mon profil</a>
             {% endif %}
-            <a href="{{ path('home') }}" class="btn-back">Retour</a>
+
 
         </div>
     </div>
+
+    <a href="{{ path('home') }}" class="btn-back">Retour</a>
 {% endblock %}
 
 
