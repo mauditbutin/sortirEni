@@ -2,8 +2,11 @@
     --color-green-light: #708451;
     --color-green-base: #4E5D39;
     --color-green-dark: #22310C;
+    --color-green-hover: #314907;
+    --color-green-validate: #79b50f;
     --color-orange-light: #FF9D53;
     --color-orange-dark: #EE7113;
     --color-beige-base: #F0EFE4;
     --color-red-error: #ff4341;
+    --color-red-hover: #da1d1b;
 }

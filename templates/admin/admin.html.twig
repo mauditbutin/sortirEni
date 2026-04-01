@@ -45,31 +45,31 @@
                 </a>
 
             </div>
-            <div>
+            <div class="admin_tableau">
                 <table>
                     <thead>
-                    <tr>
-                        <th scope="col">Picture</th>
-                        <th scope="col">Pseudo</th>
-                        <th scope="col">prénom</th>
-                        <th scope="col">nom</th>
-                        <th scope="col">email</th>
-                        <th scope="col">campus</th>
-                        <th scope="col">statut</th>
-                        <th scope="col">actions</th>
+                    <tr class="admin_tableauThead">
+                        <th scope="col" class="admin_tableHeader">Picture</th>
+                        <th scope="col" class="admin_tableHeader">Pseudo</th>
+                        <th scope="col" class="admin_tableHeader">prénom</th>
+                        <th scope="col" class="admin_tableHeader">nom</th>
+                        <th scope="col" class="admin_tableHeader">email</th>
+                        <th scope="col" class="admin_tableHeader">campus</th>
+                        <th scope="col" class="admin_tableHeader">statut</th>
+                        <th scope="col" class="admin_tableHeader">actions</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for user in users %}
-                        <tr>
+                        <tr class="{% if loop.index is odd %}admin_odd{% endif %}">
                             <th scope="row">
                                 <a href="{{ path('app_profile', {'id' : user.id}) }}">
-                                    <img
-                                        src="{{ asset('images/profilePictures/' ~ user.picture) }}"
-                                        alt="{{ user.username }}" style="width: 5rem"></a>
+                                    <img class="admin_imgProfil"
+                                         src="{{ asset('images/profilePictures/' ~ user.picture) }}"
+                                         alt="{{ user.username }}"></a>
                             </th>
                             <td>
-                                <a href="{{ path('app_profile', {'id' : user.id}) }}">
+                                <a class="admin_username" href="{{ path('app_profile', {'id' : user.id}) }}">
                                     {{ user.username }}
                                 </a>
                             </td>
@@ -89,9 +89,13 @@
                             {# ===== Satuts===== #}
                             <td>
                                 {% if user.active %}
-                                    <span style="color: yellowgreen; font-weight: bold;">Active</span><br>
+                                    <div class="admin_activeSign">
+                                        <p>Active</p>
+                                    </div>
                                 {% else %}
-                                    <span style="color: red; font-weight: bold;">Inactive</span>
+                                    <div class="admin_inctiveSign">
+                                        <p>Inactive</p>
+                                    </div>
                                 {% endif %}
                             </td>
 
@@ -131,47 +135,57 @@
                                 </div>
 
                             </td>
-                        <tr class="admin_sectionRando admin_InfoHide"
-                            data-user-id="{{ user.id }}">{# data-user-id permet de cibler uniquement l'utilisateur de cette itération de la boucle for générale #}
-
-                            <td colspan="3">
-                                {% if user.plannedHikes | length > 0 %}
-                                    Randonnées organisées :<br>
-                                {% endif %}
-                            </td>
-                            <td colspan="5">
-
-                                {% for hike in user.plannedHikes %}
-                                    {% if hike.id is not null %}
-
-                                        <a href="{{ path('hike_detail', {'id' : hike.id}) }}">
-                                            {{ hike.name }}<br>
-                                        </a>
-
-                                    {% endif %}
-                                {% endfor %}
-
-                            </td>
                         </tr>
-                        <tr class="admin_sectionRando admin_InfoHide" data-user-id="{{ user.id }}">
-                            <td colspan="3">
-                                {% if user.participatedHikes | length > 0 %}
-                                    Inscription aux randonnées :<br>
-                                {% endif %}
-                            </td>
-                            <td colspan="5">
+                        <tr class="admin_sectionRando admin_InfoHide {% if loop.index is odd %}admin_odd{% endif %}"
+                            data-user-id="{{ user.id }}">
+                            {% if user.plannedHikes | length > 0 %}
+                                <td colspan="8">
+                                    <hr class="admin_hr">
+                                </td>
+                            {% endif %}
+                        </tr>
+                        <tr class="admin_sectionRando admin_InfoHide {% if loop.index is odd %}admin_odd{% endif %}"
+                            data-user-id="{{ user.id }}">{# data-user-id permet de cibler uniquement l'utilisateur de cette itération de la boucle for générale #}
+                            {% if user.plannedHikes | length > 0 %}
+                                <td colspan="3">
+                                    <p class="admin_hikeTitre">Randonnées organisées :</p>
+                                </td>
+                                <td colspan="5">
+                                    <div class="admin_linkHike">
+                                        {% for hike in user.plannedHikes %}
 
-                                {% for hike in user.participatedHikes %}
-                                    {% if hike.id is not null %}
+                                            {% if hike.id is not null %}
+                                                <a href="{{ path('hike_detail', {'id' : hike.id}) }}">
+                                                    {{ hike.name }} ;
+                                                </a>
+                                            {% endif %}
 
-                                        <a href="{{ path('hike_detail', {'id' : hike.id}) }}">
-                                            {{ hike.name }}<br>
-                                        </a>
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                            {% endif %}
+                        </tr>
+                        <tr class="admin_sectionRando admin_InfoHide {% if loop.index is odd %}admin_odd{% endif %}"
+                            data-user-id="{{ user.id }}">
+                            {% if user.participatedHikes | length > 0 %}
+                                <td colspan="3">
+                                    <p>Inscription aux randonnées :</p>
+                                </td>
+                                <td colspan="5">
+                                    <div class="admin_linkHike">
+                                        {% for hike in user.participatedHikes %}
 
-                                    {% endif %}
-                                {% endfor %}
+                                            {% if hike.id is not null %}
+                                                <a href="{{ path('hike_detail', {'id' : hike.id}) }}">
+                                                    {{ hike.name }} ;
+                                                </a>
+                                            {% endif %}
 
-                            </td>
+                                        {% endfor %}
+                                    </div>
+
+                                </td>
+                            {% endif %}
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -182,25 +196,65 @@
 
         {# ----------------------------------------------------- #}
         {# Onglet gestion des Randonnées #}
+
+
         <div id="tabRando" class="admin_tab {% if activeTab == 'tabRando' %}active{% endif %}">
-            {% for hike in hikes %}
-                {% if hike.planner %}
-                    <a href="{{ path('app_profile', {'id' : hike.planner.id}) }}">
-                        Organisateur : {{ hike.planner.username }}<br>
-                    </a>
-                {% else %} utilisateur supprimé {% endif %}<br>
-                <a href="{{ path('hike_detail', {'id' : hike.id}) }}">
-                    Nom : {{ hike.name }}<br>
-                    Status : {{ hike.status.label }}<br>
-                </a>
-                {% if hike.status.label != 'Annulée' and hike.status.label !='Archivée' and hike.status.label !='Passée' %}
-                    <a href="{{ path('admin_cancelHike', {'id': hike.id}) }}"
-                       onclick="return confirm('Etes vous sûr de vouloir supprimer cette randonnée ?');">
-                        <button> Annuler la randonnée</button>
-                    </a><br>
-                {% endif %}
-                -------<br>
-            {% endfor %}
+            <div class="admin_tableau">
+                <table>
+                    <thead>
+                    <tr class="admin_tableauThead">
+                        <th scope="col" class="admin_tableHeader">Picture</th>
+                        <th scope="col" class="admin_tableHeader">Nom de la randonnée</th>
+                        <th scope="col" class="admin_tableHeader">Organisateur</th>
+                        <th scope="col" class="admin_tableHeader">Date de la randonnée</th>
+                        <th scope="col" class="admin_tableHeader">Statut</th>
+                        <th scope="col" class="admin_tableHeader">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for hike in hikes %}
+                        <tr class="{% if loop.index is odd %}admin_odd{% endif %}">
+                            <th>
+                                {% if hike.planner %}
+                                    <a href="{{ path('hike_detail', {'id' : hike.id}) }}">
+                                        <img class="admin_imgHike" src="{{ asset('images/hikes/' ~ hike.picture ) }}"
+                                             alt="{{ hike.name }}">
+                                    </a>
+                                {% endif %}
+                            </th>
+                            <td>
+                                <a class="admin_linkHike" href="{{ path('hike_detail', {'id' : hike.id}) }}">
+                                    {{ hike.name }}
+                                </a>
+                            </td>
+                            <td class="admin_username">
+                                {% if hike.planner %}
+                                    <a class="admin_username"
+                                       href="{{ path('app_profile', {'id' : hike.planner.id}) }}">
+                                        {{ hike.planner.username }}
+                                    </a>
+                                {% else %} <p class="admin_username"> utilisateur supprimé</p>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ hike.dateEvent | format_date(pattern="d MMMM yyyy", locale="fr") }}
+                            </td>
+                            <td>
+                                {{ hike.status.label }}
+                            </td>
+                            <td>
+                                {% if hike.status.label != 'Annulée' and hike.status.label !='Archivée' and hike.status.label !='Passée' %}
+                                    <a href="{{ path('admin_cancelHike', {'id': hike.id}) }}"
+                                       onclick="return confirm('Etes vous sûr de vouloir annuler cette randonnée ?');">
+                                        <button class="admin_deactiveStatus"> Annuler</button>
+                                    </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         {# ----------------------------------------------------- #}
@@ -247,5 +301,5 @@
 
         </div>
     </div>
-    
+
 {% endblock %}

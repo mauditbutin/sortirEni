@@ -154,7 +154,7 @@ class AppFixtures extends Fixture
         $arthur->setPhoneNumber('0608080824');
         $arthur->setEmail('arthur@arthur.fr');
         $arthur->setActive(true);
-        $arthur->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Nantes']));
+        $arthur->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Quimper']));
         $arthur->setPicture('arthur.jpg');
         $manager->persist($arthur);
 
@@ -168,7 +168,7 @@ class AppFixtures extends Fixture
         $adrienl->setPhoneNumber('0608080823');
         $adrienl->setEmail('adrienl@adrienl.fr');
         $adrienl->setActive(true);
-        $adrienl->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Nantes']));
+        $adrienl->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Quimper']));
         $adrienl->setPicture('adrienl.png');
         $manager->persist($adrienl);
 
@@ -181,7 +181,7 @@ class AppFixtures extends Fixture
         $mael->setPhoneNumber('0608080822');
         $mael->setEmail('mael@mael.fr');
         $mael->setActive(true);
-        $mael->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Nantes']));
+        $mael->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Niort']));
         $mael->setPicture('mael.jpeg');
         $manager->persist($mael);
 
@@ -207,7 +207,7 @@ class AppFixtures extends Fixture
         $mathilde->setPhoneNumber('0608080820');
         $mathilde->setEmail('mathilde@mathilde.fr');
         $mathilde->setActive(true);
-        $mathilde->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Nantes']));
+        $mathilde->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Chartres de Bretagne']));
         $mathilde->setPicture('mathilde.avif');
         $manager->persist($mathilde);
 
@@ -220,7 +220,7 @@ class AppFixtures extends Fixture
         $almo->setPhoneNumber('0608080819');
         $almo->setEmail('almo@almo.fr');
         $almo->setActive(true);
-        $almo->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Nantes']));
+        $almo->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Quimper']));
         $almo->setPicture('almo.jpeg');
         $manager->persist($almo);
 
@@ -233,7 +233,7 @@ class AppFixtures extends Fixture
         $david->setPhoneNumber('0608080818');
         $david->setEmail('david@david.fr');
         $david->setActive(true);
-        $david->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Nantes']));
+        $david->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Niort']));
         $david->setPicture('david.webp');
         $manager->persist($david);
 
@@ -272,7 +272,7 @@ class AppFixtures extends Fixture
         $adrienq->setPhoneNumber('0608080815');
         $adrienq->setEmail('adrienq@adrienq.fr');
         $adrienq->setActive(true);
-        $adrienq->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Nantes']));
+        $adrienq->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Quimper']));
         $adrienq->setPicture('adrienq.jpg');
         $manager->persist($adrienq);
 
@@ -285,7 +285,7 @@ class AppFixtures extends Fixture
         $emilia->setPhoneNumber('0608080815');
         $emilia->setEmail('emilia@emilia.fr');
         $emilia->setActive(true);
-        $emilia->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Nantes']));
+        $emilia->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Quimper']));
         $emilia->setPicture('emilia.jpg');
         $manager->persist($emilia);
 
@@ -298,7 +298,7 @@ class AppFixtures extends Fixture
         $vanina->setPhoneNumber('0608080814');
         $vanina->setEmail('vanina@vanina.fr');
         $vanina->setActive(true);
-        $vanina->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Nantes']));
+        $vanina->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Chartres de Bretagne']));
         $vanina->setPicture('vanina.jpg');
         $manager->persist($vanina);
 
@@ -311,7 +311,7 @@ class AppFixtures extends Fixture
         $silvia->setPhoneNumber('0608080813');
         $silvia->setEmail('silvia@silvia.fr');
         $silvia->setActive(true);
-        $silvia->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Nantes']));
+        $silvia->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Niort']));
         $silvia->setPicture('silvia.jpeg');
         $manager->persist($silvia);
 
@@ -324,7 +324,7 @@ class AppFixtures extends Fixture
         $antonin->setPhoneNumber('0608080812');
         $antonin->setEmail('antonin@antonin.fr');
         $antonin->setActive(true);
-        $antonin->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Nantes']));
+        $antonin->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Chartres de Bretagne']));
         $antonin->setPicture('antonin.jpeg');
         $manager->persist($antonin);
 
@@ -337,7 +337,7 @@ class AppFixtures extends Fixture
         $camille->setPhoneNumber('0608080811');
         $camille->setEmail('camille@camille.fr');
         $camille->setActive(true);
-        $camille->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Nantes']));
+        $camille->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Niort']));
         $camille->setPicture('camille.jpeg');
         $manager->persist($camille);
 
@@ -363,7 +363,7 @@ class AppFixtures extends Fixture
         $yasmine->setPhoneNumber('0608080809');
         $yasmine->setEmail('yasmine@yasmine.fr');
         $yasmine->setActive(true);
-        $yasmine->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Nantes']));
+        $yasmine->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Quimper']));
         $yasmine->setPicture('yasmine.jpg');
         $manager->persist($yasmine);
 
