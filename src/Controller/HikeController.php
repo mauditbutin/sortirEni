@@ -37,7 +37,7 @@ final class HikeController extends AbstractController
     {
 
         $hike = new Hike();
-        
+
 
         $hike->setCampus($this->getUser()->getCampus());
         $hikeForm = $this->createForm(HikeCreateType::class, $hike);
@@ -91,13 +91,13 @@ final class HikeController extends AbstractController
     #[Route('/{id}/edit', name: 'edit', requirements: ['id' => '[0-9]+'])]
     #[IsGranted('HIKE_EDIT', 'hike')]
     public function hikeEdit(
-        Hike $hike,
+        Hike                   $hike,
         EntityManagerInterface $manager,
-        FileUploader $fileUploader,
-        Request $request,
-        TimeConverter $timeConverter,
-        HikeRepository $hikeRepository,
-        int $id):Response
+        FileUploader           $fileUploader,
+        Request                $request,
+        TimeConverter          $timeConverter,
+        HikeRepository         $hikeRepository,
+        int                    $id): Response
     {
         $hike = $hikeRepository->find($id);
 
@@ -109,7 +109,7 @@ final class HikeController extends AbstractController
             // Gestion de l'image avec supression si image préexistante
             $file = $hikeForm->get('picture')->getData();
             if ($file) {
-                if ($hike->getPicture()){
+                if ($hike->getPicture()) {
                     $fileUploader->deleteFile($hike->getPicture(), 'images/hikes');
                     $hike->setPicture($fileUploader->uploadFile($file, 'images/hikes', $hike->getName()));
                 } else {
@@ -249,17 +249,18 @@ final class HikeController extends AbstractController
 
     #[Route('/{id}/publish', name: 'publish', requirements: ['id' => '[0-9]+'])]
     public function publish(
-        int $id,
-        HikeRepository $hikeRepository,
-        StatusRepository $statusRepository,
+        int                    $id,
+        HikeRepository         $hikeRepository,
+        StatusRepository       $statusRepository,
         EntityManagerInterface $manager
     )
     {
         $hike = $hikeRepository->find($id);
+        $this->denyAccessUnlessGranted(HikeVoter::EDIT, $hike);
 
-        if ($hike->getStatus()->getLabel() !== 'Créée'){
+        if ($hike->getStatus()->getLabel() !== 'Créée') {
             $this->addFlash('error', 'La randonnée est déjà publiée');
-            return $this->redirectToRoute('hike_detail', ['id' => $id] );
+            return $this->redirectToRoute('hike_detail', ['id' => $id]);
         }
 
         $hike->setStatus($statusRepository->findOneBy(['label' => 'Ouverte']));
@@ -267,7 +268,7 @@ final class HikeController extends AbstractController
         $manager->flush();
 
         $this->addFlash('success', 'La randonnée a bien été publiée');
-        return $this->redirectToRoute('hike_detail', ['id' => $id] );
+        return $this->redirectToRoute('hike_detail', ['id' => $id]);
     }
 
 }
