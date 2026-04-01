@@ -7,9 +7,13 @@ import './stimulus_bootstrap.js';
  */
 
 import './styles/normalize.css';
+import './styles/variables.css';
 import './styles/general.css';
 import './styles/admin.css';
 import './styles/home.css';
+import './styles/form.css';
+import './styles/create-hike.css';
+import './styles/details-hike.css';
 
 import './hike-form.js';
 import './cancel-form.js';

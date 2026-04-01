@@ -7,15 +7,85 @@
     padding: 0;
 }
 
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 body {
+
+    font-family: "Montserrat", sans-serif;
+    color: var(--color-beige-base);
+    background-color: var(--color-green-base);
+}
+
+main {
     width: 95%;
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
-    font-family: "Montserrat", sans-serif;
-    color: #F0EFE4;
-    background-color: #4E5D39;
 }
+
+.txt-gras {
+    font-weight: bold;
+    font-family: "BioRhyme", serif;
+}
+
+
+/****************************************/
+/* NAV */
+/****************************************/
+
+
+.navbar {
+    background-color: var(--color-beige-base);
+    padding-top: 10px;
+    padding-bottom: 5px;
+    position: sticky;
+    z-index: 50;
+    top: 0;
+    display: flex;
+    gap: 3rem;
+    font-family: "BioRhyme", serif;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: var(--color-green-dark);
+    transition: all 0.2s ease-in-out;
+}
+
+.navbar a:hover {
+    color: var(--color-orange-dark);
+}
+
+.scratch-border {
+    position: absolute;
+    bottom: -19px;
+    left: 0;
+    width: 100%;
+    height: 20px;
+}
+
+.logo-navbar {
+    width: 40px;
+}
+
+.button-logout {
+    border: solid 1px var(--color-green-dark);
+    padding: 0.3em 0.8rem;
+    border-radius: 20px;
+    transition: all 0.2s ease-in-out;
+}
+
+.button-logout:hover {
+    border: solid 1px var(--color-orange-dark);
+}
+
+
 
 
 /****************************************/
@@ -43,11 +113,15 @@ body {
 
 .modaleContent {
     position: relative;
-    background-color: white;
+    background-color: var(--color-beige-base);
     border-radius: 5px;
-    width: fit-content;
-    height: fit-content;
-    padding: 2em;
+    /*width: fit-content;*/
+    /*height: fit-content;*/
+    /*padding: 2em;*/
+}
+
+.no-scroll {
+    overflow: hidden;
 }
 
 
@@ -64,8 +138,8 @@ body {
     padding: 10px 14px;
     border-radius: 6px;
     font-size: 1.2rem;
-    color: #41ffa7;
-    background-color: #032e27;
+    color: var(--color-green-light);
+    background-color: var(--color-green-dark);
     opacity: 0;
     transform: translateY(-20px);
     animation: toast 3.3s ease forwards;
@@ -80,8 +154,8 @@ body {
     padding: 10px 14px;
     border-radius: 6px;
     font-size: 1.2rem;
-    color: #ff4341;
-    background-color: #032e27;
+    color: var(--color-red-error);
+    background-color: var(--color-green-dark);
     opacity: 0;
     transform: translateY(-20px);
     animation: toast 3.3s ease forwards;

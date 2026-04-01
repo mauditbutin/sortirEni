@@ -99,7 +99,7 @@ class HikeCreateType extends AbstractType
                 'choice_label' => 'name',
             ])
             ->add('create', SubmitType::class, [
-                'label' => 'Sauvegarder un brouillon',
+                'label' => 'Enregistrer',
             ])
             ->add('publish', SubmitType::class, [
                 'label' => 'Publier',
