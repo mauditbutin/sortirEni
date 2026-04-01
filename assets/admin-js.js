@@ -3,10 +3,16 @@ let btnUser = document.getElementById('admin_btn_tabUser')
 let btnVille = document.getElementById('admin_btn_tabVille')
 let btnCampus = document.getElementById('admin_btn_tabCampus')
 
+
+//Récupération des boutons hikes
+let btnsHikes = document.querySelectorAll('.admin_BtnInfosUserRando')
+
+
 btnVille.addEventListener('click', ChangeCouleurFondVille)
 btnUser.addEventListener('click', ChangeCouleurFondUser)
 btnCampus.addEventListener('click', ChangeCouleurFondCampus)
 btnRando.addEventListener('click', ChangeCouleurFondRando)
+
 
 function ChangeCouleurFondVille() {
     btnRando.classList.remove('admin_clickedBtn')
@@ -47,3 +53,24 @@ function ChangeCouleurFondCampus() {
         btnCampus.classList.add('admin_clickedBtn')
     }
 }
+
+btnsHikes.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+        // On récupère l'id du user associé au bouton cliqué
+        let userId = btn.dataset.userId
+
+        // On cible uniquement les tr de CE user
+        let sections = document.querySelectorAll('.admin_sectionRando[data-user-id="' + userId + '"]')
+
+        sections.forEach(function (section) {
+            // toggle affiche/cache
+            section.classList.toggle('admin_InfoHide')
+            section.classList.toggle('admin_InfoDisplay')
+
+        })
+    })
+})
+
+
+
+

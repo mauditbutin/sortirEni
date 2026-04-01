@@ -1,3 +1,5 @@
+/* ------------ BOUTONS MENU ------------------- */
+
 /* Cache tout par défaut */
 div.admin_onglets .admin_tab {
     display: none;
@@ -30,12 +32,51 @@ body:has(#tabVille:target) #tabCampus.active {
     scroll-margin-top: 100vh;
 }
 
+/* ------------ USER ------------------- */
+
+.admin_tableau table {
+    border-collapse: collapse;
+    width: 75%;
+    table-layout: fixed;
+}
+
 .admin_h2 {
     font-family: 'BioRhyme Expanded', sans-serif;
     text-align: center;
     margin-top: 5rem;
+    color: var(--color-orange-light);
 
 }
+
+
+.admin_tableHeader {
+    font-family: 'BioRhyme Expanded', sans-serif;
+    font-size: smaller;
+    color: var(--color-orange-light);
+    height: 4rem;
+}
+
+.admin_tableau table {
+    border-collapse: collapse;
+}
+
+.admin_tableau th, td {
+    padding: 8px; /* Espace intérieur */
+}
+
+.admin_tableauThead {
+    background-color: var(--color-green-dark);
+}
+
+.admin_odd {
+    background-color: var(--color-green-base);
+}
+
+.admin_tableau {
+    display: flex;
+    justify-content: center;
+}
+
 
 .admin_container {
     display: flex;
@@ -45,8 +86,8 @@ body:has(#tabVille:target) #tabCampus.active {
 
 
 .admin_btnOnglet {
-    color: #F0EFE4;
-    background: #2F3624;
+    color: var(--color-beige-base);
+    background: var(--color-green-dark);
     width: 15rem;
     height: 3rem;
     border-top-left-radius: 7px;
@@ -58,25 +99,39 @@ body:has(#tabVille:target) #tabCampus.active {
 }
 
 .admin_btnOnglet:hover {
-    background: #495635;
+    background: var(--color-green-hover);
 
 }
 
 .admin_clickedBtn {
-    background: #708451;
+    background: var(--color-green-light);
 }
 
 .admin_onglets {
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
-    background: #708451;
-    padding: 3rem;
+    background: var(--color-green-light);
+    padding-top: 3rem;
 }
+
 
 .admin_btnAddUser_Container {
     display: flex;
     justify-content: center;
 }
+
+.admin_imgProfil {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 100%;
+    object-fit: cover;
+}
+
+.admin_tableau tbody {
+    text-align: center;
+    vertical-align: center;
+}
+
 
 .admin_btnAddUser_Container button {
     width: 18rem;
@@ -84,38 +139,46 @@ body:has(#tabVille:target) #tabCampus.active {
     margin-left: 2rem;
     margin-right: 2rem;
     margin-bottom: 2rem;
-    color: #F0EFE4;
-    background: #2F3624;
+    color: var(--color-beige-base);
+    background: var(--color-green-dark);
     border: none;
     border-radius: 7px;
 }
 
 .admin_btnAddUser_Container button:hover {
-    background: #495635;
+    background: var(--color-green-hover);
 }
 
 .admin_deactiveStatus {
-    background: #e74c3c;
-    color: ghostwhite;
+    background: var(--color-red-error);
+    color: var(--color-beige-base);
     width: 6rem;
     height: 2rem;
     border-radius: 5px;
-    margin-right: 1rem;
-    margin-left: 1rem;
+    margin-right: 5px;
+    margin-left: 5px;
     border: none;
 
 }
 
+.admin_deactiveStatus:hover {
+    background: var(--color-red-hover);
+}
+
+
 .admin_reactiveStatus {
-    background: #27ae60;
-    color: ghostwhite;
+    background: var(--color-green-light);
+    color: var(--color-beige-base);
     width: 6rem;
     height: 2rem;
     border-radius: 5px;
-    margin-right: 1rem;
-    margin-left: 1rem;
+    margin-right: 5px;
+    margin-left: 5px;
     border: none;
+}
 
+.admin_reactiveStatus:hover {
+    background-color: var(--color-green-hover);
 }
 
 .admin_link {
@@ -130,11 +193,124 @@ body:has(#tabVille:target) #tabCampus.active {
 
 .admin_btnDeleteUser {
     background: #111;
-    color: ghostwhite;
+    color: var(--color-beige-base);
     width: 6rem;
     height: 2rem;
     border-radius: 5px;
-    margin-right: 1rem;
-    margin-left: 1rem;
+    margin-right: 5px;
+    margin-left: 5px;
     border: none;
+}
+
+.admin_btnDeleteUser:hover {
+    background-color: #686161;
+}
+
+.admin_BtnInfosUserRando {
+    background: var(--color-green-dark);
+    color: var(--color-beige-base);
+    width: 6rem;
+    height: 2rem;
+    border-radius: 5px;
+    margin-right: 5px;
+    margin-left: 5px;
+    border: none;
+}
+
+.admin_activeSign {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-green-validate);
+    height: 2rem;
+    border-radius: 7px;
+}
+
+.admin_inctiveSign {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    height: 2rem;
+    border-radius: 7px;
+}
+
+.admin_inctiveSign p {
+    color: var(--color-orange-dark);
+}
+
+.admin_activeSign p {
+    color: var(--color-green-dark);
+}
+
+.admin_BtnInfosUserRando:hover {
+    background-color: var(--color-green-hover);
+}
+
+.admin_InfoHide {
+    display: none;
+}
+
+.admin_InfoDisplay {
+    display: table-row;
+}
+
+.admin_sectionRando p {
+    color: var(--color-orange-light);
+}
+
+.admin_linkHike a {
+
+    color: var(--color-beige-base);
+    text-decoration: none;
+}
+
+.admin_linkHike {
+    text-align: justify-all;
+    text-decoration: none;
+}
+
+.admin_hr {
+
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid black;
+}
+
+.admin_username {
+    text-decoration: none;
+    color: var(--color-orange-dark);
+}
+
+/* ------------ HIKES ------------------- */
+
+.admin_imgHike {
+    height: 6rem;
+    width: 12rem;
+    border-radius: 7px;
+    object-fit: cover;
+}
+
+.admin_linkHike {
+    text-align: justify-all;
+    color: var(--color-beige-base);
+    text-decoration: none;
+}
+
+.admin_HikeCampus a {
+
+    color: var(--color-beige-base);
+    text-decoration: none;
+}
+
+.admin_HikeCampus {
+    text-align: start;
+    text-decoration: none;
+}
+
+/* ------------ Villes ------------------- */
+
+.admin_villes {
+    text-align: justify;
 }

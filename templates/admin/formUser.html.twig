@@ -4,10 +4,46 @@
 
 
 {% block body %}
+    {% form_theme formUser 'views/form-theme.html.twig' %}
+    <h2 class="title-create">Ajoutez un nouvel utilisateur :</h2>
 
-    {{ form_start(formUser) }}
-    {{ form_widget(formUser) }}
-    <button>Créer un utilisateur</button>
-    {{ form_end(formUser) }}
+    <div class="create-container-form">
+        {{ form_start(formUser) }}
 
+        <div class="form-row">
+            <div class="form-col">{{ form_row(formUser.username, {label: 'Pseudo'}) }}</div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-col">{{ form_row(formUser.firstname, {label: 'Prénom'}) }}</div>
+            <div class="form-col">{{ form_row(formUser.lastname, {label: 'Nom'}) }}</div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-col">{{ form_row(formUser.phoneNumber, {label: 'Téléphone'}) }}</div>
+            <div class="form-col">{{ form_row(formUser.email, {label: 'Email'}) }}</div>
+        </div>
+
+        <div class="form-col">{{ form_row(formUser.password, {label: 'Mot de passe'}) }}</div>
+        <div class="form-col">{{ form_row(formUser.passwordConfirmation, {label: 'Confirmez le mot de passe'}) }}</div>
+
+        {{ form_row(formUser.picture, {label: 'Ajoutez une photo'}) }}
+
+        <div class="form-row">
+            <div class="form-col">
+                {{ form_row(formUser.roles, {label: 'Roles'}) }}</div>
+            <div class="form-col">{{ form_row(formUser.active, {label: 'Statut utilisateur'}) }}</div>
+        </div>
+
+        {{ form_row(formUser.campus, {label: 'Campus de rattachement'}) }}
+        <div class="form-row form-buttons">
+            <button type="submit" class="form-col form-button-submit">Créer un utilisateur</button>
+            <div class="form-col">
+                <a class="form-button-cancel" href="{{ path('admin_main') }}">
+                    Annuler
+                </a>
+            </div>
+            {{ form_end(formUser) }}
+        </div>
+    </div>
 {% endblock %}
