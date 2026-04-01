@@ -24,16 +24,19 @@ if (hikeForm){
     const modale = document.getElementById('modaleFormLocation');
     buttonOpenLocationModale.addEventListener('click', function (){
         modale.style.display = 'flex';
+        document.body.classList.add('no-scroll');
     })
 
     // Fermeture de la modale d'ajout d'un lieu
     const buttonCloseLocationModale = document.getElementById('buttonCloseLocationModale');
     buttonCloseLocationModale.addEventListener('click', function (){
         modale.style.display = 'none';
+        document.body.classList.remove('no-scroll');
     })
     const modaleLocationOverlay = document.getElementById('modaleLocationOverlay');
     modaleLocationOverlay.addEventListener('click', function (){
-        modale.style.display = 'none'
+        modale.style.display = 'none';
+        document.body.classList.remove('no-scroll');
     })
 
 
@@ -72,7 +75,17 @@ if (hikeForm){
 
 
         } else {
-            alert('Erreur : ' + data.errors);
+            // document.querySelectorAll('.form-error').forEach(el => el.innerHTML = '');
+            //
+            // for (const field in data.errors) {
+            //     const input = document.querySelector(`[name$="[${field}]"]`);
+            //
+            //     if (input) {
+            //         const errorDiv = input.closest('.form-widget').nextElementSibling;
+            //
+            //         errorDiv.innerHTML = data.errors[field].join('<br>');
+            //     }
+            // }
         }
     });
 

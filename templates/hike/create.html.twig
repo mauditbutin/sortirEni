@@ -8,48 +8,77 @@
 
     <h2>Créer une randonnée</h2>
 
+    <div class="create-container-form">
+
+    {% form_theme hikeForm 'views/form-theme.html.twig' %}
+
     {{  form_start(hikeForm, {'attr' : {'id' : 'hikeCreateForm'}}) }}
         {{ form_row(hikeForm.name, {label: 'Nom'}) }}
-        {{ form_row(hikeForm.dateEvent, {label: 'Date et heure de l\'évènement'}) }}
-        {{ form_row(hikeForm.dateSubscription, {label: 'Date limite d\'inscription'}) }}
-        {{ form_row(hikeForm.nbMaxSubscription, {label: 'Nombre de places'}) }}
-        {{ form_row(hikeForm.difficulty, {label: 'Sélectionnez un niveau'}) }}
-        <fieldset>
-            Durée
-            {{ form_row(hikeForm.durationHours, {label:'Heures'}) }}
-            {{ form_row(hikeForm.durationMinutes, {label:'Minutes'}) }}
-        </fieldset>
-        {{ form_errors(hikeForm) }}
+
+        <div class="form-row">
+            <div class="form-col">{{ form_row(hikeForm.dateEvent, {label: 'Date et heure de l\'évènement'}) }}</div>
+            <div class="form-col">{{ form_row(hikeForm.dateSubscription, {label: 'Date limite d\'inscription'}) }}</div>
+        </div>
+        <div class="form-row">
+            <div class="form-col">{{ form_row(hikeForm.nbMaxSubscription, {label: 'Nombre de places'}) }}</div>
+            <div class="form-col">{{ form_row(hikeForm.campus, {label: 'Campus'}) }}</div>
+        </div>
+        {{ form_row(hikeForm.difficulty, {label: 'Niveau de difficulté'}) }}
+        <div class="label-added">Durée</div>
+        <div class="form-row">
+            <div class="form-col">{{ form_row(hikeForm.durationHours, {label:'Heures', label_attr: {class: 'visually-hidden'}}) }}</div>
+            <div class="form-col">{{ form_row(hikeForm.durationMinutes, {label:'Minutes', label_attr: {class: 'visually-hidden'}}) }}</div>
+        </div>
         {{ form_row(hikeForm.description, {label: 'Description et infos'}) }}
         {{ form_row(hikeForm.picture, {label: 'Ajouter une photo'}) }}
-        {{ form_row(hikeForm.city, {label: 'Choisir une ville'}) }}
-        {{ form_row(hikeForm.location, {label: 'Choisir un lieu'}) }}
-        <a href="#modaleFormLocation" id="buttonOpenLocationModale">Ajouter un lieu</a>
-            <fieldset>
-                <div>Adresse : <span id="adressLocationHikeCreate"></span></div>
-                <div>Code Postal : <span id="zipLocationHikeCreate"></span></div>
-                <div>Ville : <span id="cityLocationHikeCreate"></span></div>
-            </fieldset>
-        {{ form_row(hikeForm.campus, {label: 'Campus'}) }}
-        {{ form_widget(hikeForm) }}
-        <a href="{{ path('home') }}">Annuler</a>
-    {{  form_end(hikeForm) }}
+        <div class="label-added">Renseigner une adresse</div>
+        <div class="form-row">
+            <div class="form-col">
+                {{ form_row(hikeForm.city, {label: 'Choisir une ville', label_attr: {class: 'visually-hidden'}}) }}
+                {{ form_row(hikeForm.location, {label: 'Choisir un lieu', label_attr: {class: 'visually-hidden'}}) }}
+                <a href="#modaleFormLocation" id="buttonOpenLocationModale" class="button-inside-form">Ajouter un lieu</a>
+            </div>
+            <div class="form-create-adress">
+                <div><span class="txt-gras">Adresse :</span> <span id="adressLocationHikeCreate"></span></div>
+                <div><span class="txt-gras">Code Postal :</span> <span id="zipLocationHikeCreate"></span></div>
+                <div><span class="txt-gras">Ville :</span> <span id="cityLocationHikeCreate"></span></div>
+            </div>
+        </div>
+
+        {{ form_errors(hikeForm) }}
+        <div class="form-row form-buttons">
+            <div class="form-col">{{ form_row(hikeForm.create) }}</div>
+            <div class="form-col">{{ form_row(hikeForm.publish) }}</div>
+            <div class="form-col"><a href="{{ path('home') }}" class="form-button-cancel">Annuler</a></div>
+        </div>
+
+        {{  form_end(hikeForm) }}
+
+    </div>
 
 
     <div id="modaleFormLocation" class="modale">
         <a href="#" class="modaleOverlay" id="modaleLocationOverlay"></a>
-        <div class="modaleContent">
-            <h2>Ajouter un lieu</h2>
+        <div class="modaleContent modale-form-location">
+
+            {% form_theme locationForm 'views/form-theme.html.twig' %}
 
             {{  form_start(locationForm, {'attr' : {'id': 'locationCreateForm'}}) }}
                 {{ form_row(locationForm.name, {label: 'Nom du lieu'}) }}
                 {{ form_row(locationForm.address, {label: 'Adresse'}) }}
-                {{ form_row(locationForm.zipcode, {label: 'Code Postal'}) }}
-                {{ form_row(locationForm.city, {label: 'Ville'}) }}
-                {{ form_row(locationForm.latitude, {label: 'Latitude'}) }}
-                {{ form_row(locationForm.longitude, {label: 'Longitude'}) }}
-                <button type="submit">Ajouter le lieu</button>
-                <a href="#" id="buttonCloseLocationModale">Annuler</a>
+            <div class="form-row">
+                <div class="form-col">{{ form_row(locationForm.zipcode, {label: 'Code Postal'}) }}</div>
+                <div class="form-col">{{ form_row(locationForm.city, {label: 'Ville'}) }}</div>
+            </div>
+            <p class="form-location-titlePosition">Ajouter des coordonnées (optionnel)</h3>
+            <div class="form-row">
+                <div class="form-col">{{ form_row(locationForm.latitude, {label: 'Latitude'}) }}</div>
+                <div class="form-col">{{ form_row(locationForm.longitude, {label: 'Longitude'}) }}</div>
+            </div>
+            <div class="form-row form-buttons">
+                <button type="submit" class="form-col form-button-submit">Ajouter le lieu</button>
+                <a href="#" id="buttonCloseLocationModale" class="form-col form-button-cancel">Annuler</a>
+            </div>
             {{ form_end(locationForm) }}
 
         </div>

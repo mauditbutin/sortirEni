@@ -52,9 +52,16 @@ final class LocationController extends AbstractController
 
         }
 
+//        $errors = [];
+//
+//        foreach ($locationForm->getErrors(true) as $error) {
+//            $field = $error->getOrigin()->getName();
+//            $errors[$field][] = $error->getMessage();
+//        }
+
         return $this->json([
             'success' => false,
-            'errors' => (string) $locationForm->getErrors(true, false)
+//            'errors' => $errors
         ], 400);
     }
 

@@ -1,28 +1,42 @@
 <header>
-    <nav>
-        <img src="{{ asset('images/logoSite/conception-modele-logo-montagne-minimaliste_698780-847.avif') }}" alt=""
-             style="width: 10rem">
+    {% if app.user %}
 
-        {% if app.user %}
-            <ul>
-                <li>
+    <nav class="navbar">
+        <img src="{{ asset('images/logoSite/logo.svg') }}" alt="Logo, illustration de montagne" class="logo-navbar">
+
+
+                <div>
                     <a href="{{ path('home') }}">Accueil</a>
-                </li>
-                <li>
+                </div>
+                <div>
                     <a href="{{ path('hike_create') }}">Ajouter une randonnée</a>
-                </li>
-                <li>
+                </div>
+                <div>
                     <a href="{{ path ('app_profile', {'id': app.user.id}) }}">Mon compte</a>
-                </li>
+                </div>
                 {% if is_granted('ROLE_ADMIN') %}
-                    <li>
+                    <div>
                         <a href="{{ path('admin_main') }}">Espace admin</a>
-                    </li>
+                    </div>
                 {% endif %}
-                <li>
-                    <a href="{{ path('app_logout') }}">Déconnexion</a>
-                </li>
-            </ul>
-        {% endif %}
+                <div>
+                    <a href="{{ path('app_logout') }}" class="button-logout">Déconnexion</a>
+                </div>
+
+
+        <svg class="scratch-border" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024.801 16.449" preserveAspectRatio="none">
+            <path d="M1024.801,10.745V0H0v9.793l43.969-0.95l20.292,2.853c10.146-2.853,16.911,0.951,16.911,0.951l27.058-2.854
+        c13.529,0.952,13.529,0.952,13.529,0.952l0,0l13.528,1.901h16.911l13.528-0.951l13.529,0.951
+        c10.146-1.901,10.146-1.901,10.146-1.901l0,0l20.293,0.95c3.382,2.854,3.382,2.854,3.382,2.854l0,0h16.911
+        c10.146-0.952,10.146-0.952,10.146-0.952l0,0l27.058-2.852l23.675-4.755c16.91,1.902,30.439,0.95,30.439,0.95l13.529,1.902
+        c23.675,0,23.675,0,23.675,0l0,0l27.058-2.853l13.529,3.803h37.204c13.528,3.804,33.821,2.854,33.821,2.854l26.405-0.087
+        c5.266,0.151,17.563-0.864,17.563-0.864l0,0c13.529-2.853,23.676-2.853,23.676-2.853c6.764,3.804,27.058,4.754,27.058,4.754
+        c13.527,0,13.527,0,13.527,0l0,0h47.351c20.294,0,30.44,0,30.44,0l37.204-4.754c6.765,4.754,20.293,6.657,20.293,6.657
+        c10.146,0,20.292-2.854,20.292-2.854l16.912,1.902l23.675-0.952c23.676,0.952,40.587,0.952,40.587,0.952l37.204,0.951l23.675-2.854
+        l40.586,0.95l40.587,2.853l30.438-5.704C987.597,10.745,1011.273,12.646,1024.801,10.745z" fill="#F0EFE4"></path>
+        </svg>
+
     </nav>
+
+    {% endif %}
 </header>

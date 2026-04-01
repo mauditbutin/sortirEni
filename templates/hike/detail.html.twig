@@ -63,12 +63,15 @@
 
     <div id="modalCancel" class="modale">
         <a href="#" class="modaleOverlay" id="modaleCancelOverlay"></a>
-        <div class="modaleContent">
-            <h2>Motif d'annulation de la randonnée : </h2>
+        <div class="modaleContent modale-form-cancel">
+            <p>Motif d'annulation de la randonnée : </p>
+            {% form_theme formCancel 'views/form-theme.html.twig' %}
             {{ form_start(formCancel, {'action': path('hike_cancel', {'id': hike.id}), 'method': 'POST'}) }}
-            {{ form_widget(formCancel) }}
-            <button type="submit">Confirmer l'annulation</button>
-            <button id="buttonCancelModale">Retour</button>
+            {{ form_row(formCancel.description, {label: 'Description', label_attr: {class: 'visually-hidden'}}) }}
+            <div class="form-row form-buttons">
+                <button type="submit" class="form-col form-button-submit">Confirmer l'annulation</button>
+                <button id="buttonCancelModale" class="form-col form-button-cancel">Retour</button>
+            </div>
             {{ form_end(formCancel) }}
         </div>
 
