@@ -31,7 +31,7 @@
     list-style: none;
 }
 
-.form-widget input:not([type="file"]),
+.form-widget input:not([type="file"]):not([type="checkbox"]),
 .form-widget select {
     height: 2.5rem;
     box-sizing: border-box;
