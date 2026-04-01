@@ -15,6 +15,7 @@ import './styles/form.css';
 import './styles/login.css';
 import './styles/create-hike.css';
 import './styles/details-hike.css';
+import './styles/profile.css';
 
 import './hike-form.js';
 import './cancel-form.js';
