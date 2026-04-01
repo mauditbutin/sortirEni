@@ -29,7 +29,7 @@ class ProfileEditType extends AbstractType
                 'label' => 'Name',
                 'required' => true,
                 'constraints' => [
-                    new NotBlank(['message' => 'Name is cannot be empty']),
+                    new NotBlank(['message' => 'Le prénom ne doit pas être vide']),
                     new Length(['min' => 2, 'max' => 50]),
                 ],
             ])
@@ -37,7 +37,7 @@ class ProfileEditType extends AbstractType
                 'label' => 'Lastname',
                 'required' => true,
                 'constraints' => [
-                    new NotBlank(['message' => 'Lastname is cannot be empty']),
+                    new NotBlank(['message' => 'Le nom ne doit pas être vide']),
                     new Length(['min' => 2, 'max' => 50]),
                 ],
             ])
@@ -52,14 +52,14 @@ class ProfileEditType extends AbstractType
                 'label' => 'Email',
                 'required' => true,
                 'constraints' => [
-                    new NotBlank(['message' => 'Email is cannot be empty']),
+                    new NotBlank(['message' => 'L\'email ne doit pas être vide']),
                     new Length(['max' => 100]),
                 ],
             ])
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
                 'choice_label' => 'name',
-                'placeholder' => 'Choose a campus',
+                'placeholder' => 'Choisissez un campus',
             ])
 
             ->add('picture', FileType::class, [
@@ -70,30 +70,30 @@ class ProfileEditType extends AbstractType
                     new File([
                         'maxSize' => '2m',
                         'mimeTypes' => ['image/jpeg', 'image/png'],
-                        'mimeTypesMessage' => 'Please upload a valid image file.',
+                        'mimeTypesMessage' => 'Choisissez un format d\'image valide (Jpeg, PNG)',
                     ])
                 ],
             ])
 
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
-                'first_options' => ['label' => 'New Password'],
-                'second_options' => ['label' => 'Confirm Password'],
+                'first_options' => ['label' => 'Nouveau mot de passe'],
+                'second_options' => ['label' => 'Confirmez le nouveau mot de passe'],
                 'mapped' => false,
                 'required' => false,
                 'attr' => [
-                    'placeholder' => 'Leave blank to keep current password',
+                    'placeholder' => 'Laissez vide pour conserver le mot de passe',
                 ],
                 'constraints' => [
                     new Length([
                         'min' => 8,
-                        'minMessage' => 'Password must be at least 8 characters long',
+                        'minMessage' => 'Le mot de passe doit faire au mojns 8 caractères',
                         'max' => 255,
                     ]),
 
                     new Regex([
                         'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
-                        'message' => 'Mot de passe doit contenir: majuscule, minuscule, chiffre, caractère spécial (@$!%*?&)',
+                        'message' => 'Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial (@$!%*?&)',
                     ]),
                 ],
             ]);

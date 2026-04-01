@@ -189,3 +189,34 @@
     text-decoration: underline;
 }
 
+
+/****************************************/
+/* Liste > Cartes des hikes */
+/****************************************/
+
+.home-buttons-previousNext {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    align-items: center;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.home-buttons-previousNext a {
+    color: var(--color-green-dark);
+    text-decoration: none;
+}
+
+.button-previousNext {
+    text-align: center;
+    height: 2.1em;
+    width: 200px;
+    background-color: var(--color-orange-light);
+    border: none;
+    padding: 0.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 2rem;
+    color: var(--color-green-dark);
+}

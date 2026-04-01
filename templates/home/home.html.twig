@@ -105,18 +105,18 @@
     </div>
 
 
-    <div>
+    <div class="home-buttons-previousNext">
         {% if currentPage > 1 %}
             <a href="{{ path('home', {'page': currentPage-1}) }}">
-                <button>
-                    Previous page
+                <button class="button-previousNext">
+                    Page précédente
                 </button>
             </a>
         {% endif %}
         {% if currentPage < maxPage %}
             <a href="{{ path('home', {'page': currentPage+1}) }}">
-                <button>
-                    Next page
+                <button class="button-previousNext">
+                    Page suivante
                 </button>
             </a>
         {% endif %}
