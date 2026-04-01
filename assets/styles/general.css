@@ -86,6 +86,23 @@ main {
 }
 
 
+/****************************************/
+/* FOOTER */
+/****************************************/
+
+footer {
+    color: var(--color-beige-base);
+    text-align: center;
+    font-size: 0.8em;
+    padding-bottom: 1rem;
+    margin-top: 2rem;
+}
+
+footer a {
+    color: var(--color-orange-light);
+    text-decoration: none;
+}
+
 
 
 /****************************************/
