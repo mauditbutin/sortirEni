@@ -2,6 +2,15 @@
 /* PAGE CREATION DE RANDONNÉES */
 /****************************************/
 
+.title-create {
+    padding-top: 5rem;
+    text-align: center;
+    color: var(--color-orange-light);
+    font-family: "BioRhyme Expanded", serif;
+    font-size: 2em;
+    margin-bottom: 3rem;
+}
+
 .create-container-form {
     display: flex;
     flex-direction: column;
@@ -14,7 +23,7 @@
 }
 
 .form-create-adress {
-    background-color: var(--color-beige-base);
+    background-color: #cdcdb6;
     color: var(--color-green-dark);
     width: 50%;
     border-radius: 7px;

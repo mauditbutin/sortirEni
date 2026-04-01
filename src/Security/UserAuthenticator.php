@@ -36,10 +36,10 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
             new UserBadge($identifier, function ($identifier) {
                 $user = $this->userRepository->findByUsernameOrEmail($identifier);
                 if (!$user) {
-                    throw new CustomUserMessageAuthenticationException('Invalid username or email.');
+                    throw new CustomUserMessageAuthenticationException('Identifiants incorrects');
                 }
                 if (!$user->isActive()) {
-                    throw new CustomUserMessageAuthenticationException('Your account is inactive. Please contact support.');
+                    throw new CustomUserMessageAuthenticationException('Votre compte est désactivez, contactez un administrateur.');
                 }
 
                 return $user;

@@ -1,0 +1,15 @@
+{%  block form_row %}
+        <span class="filter-label">
+            {{ form_label(form) }}
+        </span>
+        <span class="filter-widget">
+            {{ form_widget((form)) }}
+        </span>
+        <div class="filter-error">
+            {{  form_errors(form) }}
+        </div>
+{% endblock %}
+
+{% block submit_widget %}
+    <button type="submit" class="filter-button-submit" {{ block('button_attributes') }}>{{ label | trans }}</button>
+{% endblock %}
