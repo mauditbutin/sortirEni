@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{#+++++++++++++++ BLOCK MAP +++++++++++++++++#}
+{# +++++++++++++++ BLOCK MAP +++++++++++++++++ #}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -8,39 +8,6 @@
         rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     />
-    <style>
-        /* Стили карты и кнопок переключения */
-        #map {
-            height: 420px;
-            width: 100%;
-            border-radius: 8px;
-            margin-top: 1rem;
-        }
-        .map-controls {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 8px;
-            flex-wrap: wrap;
-        }
-        .map-controls button {
-            padding: 6px 14px;
-            border: 2px solid #ccc;
-            border-radius: 6px;
-            background: white;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-        }
-        .map-controls button:hover {
-            border-color: #4a7c59;
-            background: #f0f7f2;
-        }
-        .map-controls button.active {
-            border-color: #4a7c59;
-            background: #4a7c59;
-            color: white;
-        }
-    </style>
 {% endblock %}
 
 
@@ -52,9 +19,21 @@
 
             <div class="details-row d-row1">
 
-                <div class="details-container-img"><img src="{{ asset('images/hikes/' ~ hike.picture ) }}" class="details-img" alt="Image de la randonnée"></div>
+                <div class="details-container-img">
+                    <img src="{{ asset('images/hikes/' ~ hike.picture ) }}"
+                                                        class="details-img" alt="Image de la randonnée"></div>
 
-                <div class="details-container-map"><img src="{{ asset('images/hikes/' ~ hike.picture ) }}" class="details-map"></div>
+                {% if hike.location.latitude and hike.location.longitude %}
+
+                <div class="details-container-map" id="map">
+
+                    {% else %}
+                        {#                        <img src="{{ asset('images/hikes/' ~ hike.picture ) }}" class="details-map"> #}
+                        <p>
+                            📍 Aucune coordonnées disponibles pour afficher la carte.
+                        </p>
+                    {% endif %}
+                </div>
 
             </div>
 
@@ -64,42 +43,83 @@
 
                     <h2 class="details-title">{{ hike.name }}</h2>
 
-                    <div class="details-statut">{{ hike.status.label }}</div>
+                    <div class="oneHike-infosCartouches">
+                        <div class="date">{{ hike.dateEvent |format_date(pattern="d MMMM yyyy",locale='fr') }}</div>
+                        <div class="duration">Durée prévue : {{ durationString }}</div>
+                        <div class="subscription">Campus : {{ hike.campus.name }}</div>
+                    </div>
 
-                    <div class="details-date">{{ hike.dateEvent | date ('d-m-Y') }}</div>
+                    <div class="oneHike-difficulty">
+                    <span class="etoile">
+                        {% if hike.difficulty.label == 'Facile' %}
+                            ★
+                        {% elseif hike.difficulty.label == 'Intermédiaire' %}
+                            ★★
+                        {% elseif hike.difficulty.label == 'Expert' %}
+                            ★★★
+                        {% endif %}
+                        </span>
+                    Difficulté : Randonnée {{ hike.difficulty.label |lower }}
+                    </div>
 
-                    <div class="details-date-subscription">{{ hike.dateSubscription | date ('d-m-Y') }}</div>
-
-                    <div class="details-duration">{{ durationString }}</div>
-
-                    <div class="details-difficulty">{{ hike.difficulty.label }}</div>
 
                     <div class="details-description">{{ hike.description }}</div>
 
-                    <div class="details-campus">{{ hike.campus.name }}</div>
+                    <div class="subscription">Statut : randonnée {{ hike.status.label |lower}}.</div>
+                    <div class="details-date-subscription">Date limite d'inscription : {{ hike.dateSubscription |format_date(pattern="d MMMM yyyy",locale='fr') }}</div>
 
-                    <button>Modifier</button>
-                    <button>Annuler la randonnée</button>
+
+                    {% if user == hike.planner or is_granted('ROLE_ADMIN') %}
+                        <button class="detail-hike-button"><a href="{{ path('hike_edit', {'id': hike.id}) }}" >Modifier la randonnée</a></button>
+                        {% if hike.status.label == 'Ouverte' or hike.status.label == 'Clôturée' or is_granted('ROLE_ADMIN') %}
+                            <a href="#modalCancel" id="buttonOpenLocationModale">
+                                <button id="buttonHikeCancel" class="detail-hike-button detail-hike-button-delete"> Annuler la randonnée</button>
+                            </a>
+                        {% endif %}
+                        {% if hike.status.label == 'Créée' or is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('hike_publish', {'id': hike.id}) }}">
+                                <button class="detail-hike-button">Publier la randonnée</button>
+                            </a>
+                            <a href="{{ path('hike_delete', {'id': hike.id}) }}">
+                                <button class="detail-hike-button detail-hike-button-delete"> Supprimer</button>
+                            </a>
+                        {% endif %}
+                    {% elseif hike.participant.contains(user) %}
+                        <a href="{{ path('hike_unsubscribe', {'id': hike.id}) }}" >
+                            <button class="detail-hike-button"> Se désinscrire</button>
+                        </a>
+                    {% else %}
+                        {% if hike.status.label != 'Créée' %}
+                            <a href="{{ path('hike_subscribe', {'id': hike.id}) }}" >
+                                <button class="detail-hike-button"> S'inscrire</button>
+                            </a>
+                        {% endif %}
+                    {% endif %}
 
                 </div>
 
 
                 <div class="details-col">
 
-                    <div class="details-label">Adresse</div>
-                    <div class="details-location">
-                        {{ hike.location.name }}</div>
+                    <div class="container-details-adress">
+                        <div class="details-label">Adresse</div>
+                        <div class="details-location">
+                            {{ hike.location.name }}</div>
 
-                    <div class="details-adress">
-                        {{ hike.location.address }} </div>
+                        <div class="details-adress">
+                            {{ hike.location.address }} </div>
+                    </div>
 
                     <div class="details-label">Organisateur</div>
                     <div class="details-container-planner">
                         <div class="detail-user-container">
 
                             {% if hike.planner %}
-                                <img src="{{ asset('images/profilePictures/' ~ hike.planner.picture) }}" class="user-pp">
-                                <div class="tooltip">{{ hike.planner.username }}</div>
+                            <a
+                                href="{{ path('app_profile', {'id': hike.planner.id}) }}">
+                                <img src="{{ asset('images/profilePictures/' ~ hike.planner.picture) }}" class="user-pp"
+                                     alt="Photo de profil de l'organisateur"></a>
+{#                                <div class="tooltip">{{ hike.planner.username }}</div>#}
                             {% else %}
                                 Utilisateur supprimé
                             {% endif %}
@@ -107,40 +127,21 @@
                         </div>
                     </div>
 
-                    <div class="details-label">Participants : {{ hike.participant|length }} / {{ hike.nbMaxSubscription }}</div>
+                    <div class="details-label">Participants : {{ hike.participant|length }}
+                        / {{ hike.nbMaxSubscription }}</div>
                     <div class="details-container-participants">
 
                         {% for participant in hike.participant %}
 
-
                             <a
-                            href="{{ path('app_profile', {'id': participant.id}) }}"><img
-                                src="{{ asset('images/profilePictures/' ~ participant.picture) }}"
-                                alt="{{ participant.username }}" class="user-pp"></a>
-                            <div class="tooltip">{{ participant.username }}</div>
+                                href="{{ path('app_profile', {'id': participant.id}) }}"><img
+                                    src="{{ asset('images/profilePictures/' ~ participant.picture) }}"
+                                    alt="{{ participant.username }}" class="user-pp"></a>
+{#                            <div class="tooltip">{{ participant.username }}</div>#}
 
                         {% endfor %}
 
-{#                        #}
-{#                        <div class="detail-user-container">#}
-{#                            <img src="badge2.svg" class="user-pp">#}
-{#                            <div class="tooltip">Maud Butin</div>#}
-{#                        </div>#}
-{#                        <div class="detail-user-container">#}
-{#                            <img src="badge2.svg" class="user-pp">#}
-{#                            <div class="tooltip">Maud Butin</div>#}
-{#                        </div>#}
-{#                        <div class="detail-user-container">#}
-{#                            <img src="badge2.svg" class="user-pp">#}
-{#                            <div class="tooltip">Maud Butin</div>#}
-{#                        </div>#}
-{#                        <div class="detail-user-container">#}
-{#                            <img src="badge2.svg" class="user-pp">#}
-{#                            <div class="tooltip">Maud Butin</div>#}
-{#                        </div>#}
                     </div>
-
-                    <button>S'inscrire</button>
 
 
                 </div>
@@ -151,98 +152,6 @@
 
     </div>
 
-
-
- {#---------------------------------------------------- #}
-
-
-
-
-
-{#    <div>#}
-{#        <h2>{{ hike.name }}</h2>#}
-{#        <div>#}
-{#            <div>#}
-{#                <img#}
-{#                    src="{{ asset('images/hikes/' ~ hike.picture ) }}"#}
-{#                    alt="{{ hike.name }}" style="width: 10rem">#}
-{#            </div>#}
-{#            <div>#}
-{#                Description : {{ hike.description }} <br>#}
-{#                Organisateur#}
-{#                : {% if hike.planner %}{{ hike.planner.username }}{% else %} utilisateur supprimé {% endif %}#}
-{#                <br>#}
-{#                Date de l'évènement : {{ hike.dateEvent | date ('d-m-Y') }}<br>#}
-{#                Date limite d'inscription : {{ hike.dateSubscription | date ('d-m-Y') }}<br>#}
-{#                Statut : {{ hike.status.label }}<br>#}
-{#                Difficulté : {{ hike.difficulty.label }}<br>#}
-{#                Durée estimée : {{ durationString }}<br>#}
-{#                Nombre de participants : {{ hike.participant|length }} / {{ hike.nbMaxSubscription }}<br>#}
-
-{#                participants : <br>{% for participant in hike.participant %} <a#}
-{#                href="{{ path('app_profile', {'id': participant.id}) }}"><img#}
-{#                    src="{{ asset('images/profilePictures/' ~ participant.picture) }}"#}
-{#                    alt="{{ participant.username }}" style="width: 5rem"> {{ participant.username }}</a><br>{% endfor %}#}
-
-{#                Point de rendez-vous : {{ hike.location.name }}<br>#}
-{#                Campus de rattachement : {{ hike.campus.name }}<br>#}
-{#            </div>#}
-{#        </div>#}
-
-
-{#++++++++++++++ BLOCK MAP ++++++++++++++++#}
-
-        {% if hike.location.latitude and hike.location.longitude %}
-
-            {# button of style #}
-            <div class="map-controls">
-                <strong style="line-height: 2;">Style :</strong>
-                <button class="active" onclick="setLayer('streets', this)">🗺️ Plan</button>
-                <button onclick="setLayer('satellite', this)">🛰️ Satellite</button>
-                <button onclick="setLayer('terrain', this)">🏔️ Relief</button>
-            </div>
-
-
-            <div id="map"></div>
-
-        {% else %}
-
-            <p style="color: gray; font-style: italic; margin-top: 1rem;">
-                📍 Aucune coordonnée disponible pour afficher la carte.
-            </p>
-        {% endif %}
-
-
-
-        {% if user == hike.planner or is_granted('ROLE_ADMIN') %}
-            <button><a href="{{ path('hike_edit', {'id': hike.id}) }}">Modifier la randonnée</a></button>
-            {% if hike.status.label == 'Ouverte' or hike.status.label == 'Clôturée' or is_granted('ROLE_ADMIN') %}
-                <a href="#modalCancel" id="buttonOpenLocationModale">
-                    <button id="buttonHikeCancel"> Annuler la randonnée</button>
-                </a>
-            {% endif %}
-            {% if hike.status.label == 'Créée' or is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('hike_publish', {'id': hike.id}) }}">
-                    <button>Publier la randonnée</button>
-                </a>
-                <a href="{{ path('hike_delete', {'id': hike.id}) }}">
-                    <button> Supprimer</button>
-                </a>
-            {% endif %}
-        {% elseif hike.participant.contains(user) %}
-            <a href="{{ path('hike_unsubscribe', {'id': hike.id}) }}">
-                <button> Se désinscrire</button>
-            </a>
-        {% else %}
-            {% if hike.status.label != 'Créée' %}
-                <a href="{{ path('hike_subscribe', {'id': hike.id}) }}">
-                    <button> S'inscrire</button>
-                </a>
-            {% endif %}
-        {% endif %}
-
-
-    </div>
 
     <div id="modalCancel" class="modale">
         <a href="#" class="modaleOverlay" id="modaleCancelOverlay"></a>
@@ -267,7 +176,7 @@
 {% endblock %}
 
 {% block title %}
-    {{ parent() }} | Hike Details
+    {{ parent() }} | Détails
 {% endblock %}
 
 {% block javascripts %}
@@ -290,23 +199,21 @@
             const map = L.map('map').setView([lat, lng], 13);
 
 
-
-
             const streets = L.tileLayer(
                 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                { attribution: '© <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors' }
+                {attribution: '© <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'}
             );
 
             // Esri
             const satellite = L.tileLayer(
                 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-                { attribution: '© Esri' }
+                {attribution: '© Esri'}
             );
 
             // OpenTopoMap
             const terrain = L.tileLayer(
                 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
-                { attribution: '© <a href="https://opentopomap.org/">OpenTopoMap</a> contributors' }
+                {attribution: '© <a href="https://opentopomap.org/">OpenTopoMap</a> contributors'}
             );
 
 
@@ -314,15 +221,14 @@
             let currentLayer = streets;
 
 
-
             function setLayer(type, btn) {
 
                 map.removeLayer(currentLayer);
 
 
-                if (type === 'streets')   currentLayer = streets;
+                if (type === 'streets') currentLayer = streets;
                 if (type === 'satellite') currentLayer = satellite;
-                if (type === 'terrain')   currentLayer = terrain;
+                if (type === 'terrain') currentLayer = terrain;
 
 
                 currentLayer.addTo(map);

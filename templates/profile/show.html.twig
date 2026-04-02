@@ -38,8 +38,8 @@
 
                 <div class="profile-statistiques">
                     <h2>Statistiques</h2>
-                    <div>Randonnées organisées : {{ user.plannedHikes | length }}</div>
-                    <div class="statistique-label">Randonnées participées : {{ user.participatedHikes | length }}</div>
+                    <div>Randonnées organisées : <span class="txt-gras">{{ user.plannedHikes | length }}</span></div>
+                    <div class="statistique-label">Randonnées participées : <span class="txt-gras"> {{ user.participatedHikes | length }}</span></div>
                 </div>
 
                 <div class="profile-badges">
@@ -74,7 +74,17 @@
                         {% for hike in user.plannedHikes %}
                             {% if hike.status.label != 'Créée' %}
                                 <div>
-                                    <span class="dashboard-user-statut">{{ hike.status.label }}</span><br>
+                            {% if hike.status.label == 'Annulée' %}
+                                <span class="dashboard-user-statut dashboard-user-cancel">
+                                        {{ hike.status.label }}</span><br>
+                                {% elseif hike.status.label == 'Clôturée' or hike.status.label == 'Passée' %}
+                                    <span class="dashboard-user-statut dashboard-user-indispo">
+                                        {{ hike.status.label }}</span><br>
+                                {% else %}
+                                    <span class="dashboard-user-statut">
+                                        {{ hike.status.label }}</span><br>
+                                    {% endif %}
+
                                     <a href="{{ path('hike_detail', {'id': hike.id}) }}">
                                         {{ hike.name }}
                                     </a>
@@ -89,7 +99,16 @@
                     <div class="dashboard-content">
                         {% for hike in user.participatedHikes %}
                             <div>
-                                <span class="dashboard-user-statut">{{ hike.status.label }}</span><br>
+                                {% if hike.status.label == 'Annulée' %}
+                                    <span class="dashboard-user-statut dashboard-user-cancel">
+                                        {{ hike.status.label }}</span><br>
+                                {% elseif hike.status.label == 'Clôturée' or hike.status.label == 'Passée' %}
+                                    <span class="dashboard-user-statut dashboard-user-indispo">
+                                        {{ hike.status.label }}</span><br>
+                                {% else %}
+                                    <span class="dashboard-user-statut">
+                                        {{ hike.status.label }}</span><br>
+                                {% endif %}
                                 <a href="{{ path('hike_detail', {'id': hike.id}) }}">
                                     {{ hike.name }}
                                 </a>
@@ -104,7 +123,16 @@
                         {% for hike in user.plannedHikes %}
                             {% if hike.status.label == 'Créée' %}
                                 <div>
-                                    <span class="dashboard-user-statut">{{ hike.status.label }}</span><br>
+                                    {% if hike.status.label == 'Annulée' %}
+                                        <span class="dashboard-user-statut dashboard-user-cancel">
+                                        {{ hike.status.label }}</span><br>
+                                    {% elseif hike.status.label == 'Clôturée' or hike.status.label == 'Passée' %}
+                                        <span class="dashboard-user-statut dashboard-user-indispo">
+                                        {{ hike.status.label }}</span><br>
+                                    {% else %}
+                                        <span class="dashboard-user-statut">
+                                        {{ hike.status.label }}</span><br>
+                                    {% endif %}
                                     <a href="{{ path('hike_detail', {'id': hike.id}) }}">
                                         {{ hike.name }}
                                     </a>

@@ -204,3 +204,11 @@
     font-size: 0.7em;
     color: rgb(165, 219, 66);
 }
+
+.dashboard-user-cancel {
+    color: var(--color-red-error);
+}
+
+.dashboard-user-indispo {
+    color: var(--color-orange-light);
+}
