@@ -31,8 +31,11 @@
 
         <div class="form-row">
             <div class="form-col">
-                {{ form_row(formUser.roles, {label: 'Roles'}) }}</div>
-            <div class="form-col">{{ form_row(formUser.active, {label: 'Statut utilisateur'}) }}</div>
+                {{ form_row(formUser.roles, {label: 'Roles'}) }}
+            </div>
+            <div class="form-col">
+                {{ form_row(formUser.active, {label: 'Utilisateur actif :'}) }}
+            </div>
         </div>
 
         {{ form_row(formUser.campus, {label: 'Campus de rattachement'}) }}

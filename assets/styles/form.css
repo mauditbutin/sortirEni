@@ -2,8 +2,7 @@
 /* Mise en page des forms */
 /****************************************/
 
-.form-label
-{
+.form-label {
     color: var(--color-green-dark);
     font-family: "BioRhyme", serif;
     margin-top: 0rem;
@@ -37,7 +36,7 @@
     box-sizing: border-box;
     width: 100%;
     border-radius: 5px;
-    border:  solid 1px var(--color-green-dark);
+    border: solid 1px var(--color-green-dark);
     padding-left: 0.5rem;
 }
 
@@ -45,7 +44,7 @@
     height: 7rem;
     width: 100%;
     border-radius: 5px;
-    border:  solid 1px var(--color-green-dark);
+    border: solid 1px var(--color-green-dark);
     padding: 0.5em;
 }
 
@@ -136,7 +135,7 @@
     box-sizing: border-box;
     width: 100%;
     border-radius: 5px;
-    border:  solid 1px var(--color-beige-base);
+    border: solid 1px var(--color-beige-base);
     padding-left: 0.5rem;
     margin-bottom: 1rem;
     margin-top: 0.5rem;
@@ -148,7 +147,7 @@
     box-sizing: border-box;
     width: 100%;
     border-radius: 5px;
-    border:  solid 1px var(--color-beige-base);
+    border: solid 1px var(--color-beige-base);
     padding-left: 0.5rem;
     margin-bottom: 1rem;
     margin-top: 0.5rem;
@@ -169,4 +168,15 @@
     cursor: pointer;
     width: 100%;
     margin-top: 2rem;
+}
+
+#add_user_roles label {
+    color: var(--color-green-dark);
+    justify-content: center;
+}
+
+#add_user_roles {
+    display: flex;
+    padding: 0;
+    margin: 0;
 }
