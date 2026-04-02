@@ -40,53 +40,34 @@ class ProfileController extends AbstractController
         EntityManagerInterface $entityManager,
         UserPasswordHasherInterface $passwordHasher,
         FileUploader $fileUploader,
-    ): Response
-    {
+    ): Response {
         $user = $userRepository->find($id);
-        $this->denyAccessUnlessGranted(UserVoter::EDIT, $user);
 
         if (!$user) {
             throw $this->createNotFoundException('Utilisateur introuvable');
         }
-        if ($this->getUser() !== $user) {
-            $this->addFlash('error','Vous n\'êtes pas autorisé à modifier ce profil');
 
-            return $this->redirectToRoute('home');
-        }
+        $this->denyAccessUnlessGranted(UserVoter::EDIT, $user);
 
         $form = $this->createForm(ProfileEditType::class, $user);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $pictureFile = $form->get('picture')->getData();
+
             if ($pictureFile) {
-//                $newFilename = uniqid() . '.' . $pictureFile->guessExtension();
-//
-//                $uploadDir = $this->getParameter('kernel.project_dir') . '/public/uploads/profile_pictures';
-//
-//                $pictureFile->move($uploadDir, $newFilename);
-//
-//                if ($user->getPicture()) {
-//                    $oldFilePath = $uploadDir . '/' . $user->getPicture();
-//                    if (file_exists($oldFilePath)) {
-//                        unlink($oldFilePath); // unlink() - supprime le fichier du serveur
-//                    }
-//                }
-//
-//                $user->setPicture($newFilename);
-                if ($user->getPicture()){
+                if ($user->getPicture()) {
                     $fileUploader->deleteFile($user->getPicture(), 'images/profilePictures');
-                    $user->setPicture($fileUploader->uploadFile($pictureFile, 'images/profilePictures', $user->getUsername()));
-                } else {
-                    $user->setPicture($fileUploader->uploadFile($pictureFile, 'images/profilePictures', $user->getUsername()));
                 }
 
+                $user->setPicture(
+                    $fileUploader->uploadFile(
+                        $pictureFile,
+                        $this->getParameter('kernel.project_dir') . '/public/images/profilePictures',
+                        $user->getUsername()
+                    )
+                );
             }
-
-
-
 
             $plainPassword = $form->get('plainPassword')->getData();
 
@@ -95,15 +76,15 @@ class ProfileController extends AbstractController
                 $user->setPassword($hashedPassword);
             }
 
-            $entityManager->persist($user);
             $entityManager->flush();
 
             $this->addFlash('success', 'Le profil a bien été modifié');
+
             return $this->redirectToRoute('app_profile', ['id' => $user->getId()]);
         }
 
         return $this->render('profile/edit.html.twig', [
-            'form' => $form,
+            'form' => $form->createView(),
             'user' => $user,
         ]);
     }
