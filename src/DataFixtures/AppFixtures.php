@@ -142,7 +142,7 @@ class AppFixtures extends Fixture
         $raman->setEmail('raman@raman.fr');
         $raman->setActive(true);
         $raman->setCampus($manager->getRepository(Campus::class)->findOneBy(['name' => 'Nantes']));
-        $raman->setPicture('raman.png');
+        $raman->setPicture('raman.jpg');
         $manager->persist($raman);
 
         $arthur = new User();
