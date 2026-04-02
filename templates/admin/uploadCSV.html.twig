@@ -1,13 +1,34 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button>charger</button>
-    {{ form_end(form) }}
+
+    {% form_theme form 'views/form-theme.html.twig' %}
+
+    <h2 class="title-create">Importez un fichier CSV :</h2>
+
+    <div class="create-container-form">
+        {{ form_start(form) }}
+
+        <div class="form-group">
+            {{ form_widget(form) }}
+        </div>
+        <div class="form-row form-buttons">
+            <div class="form-row form-buttons">
+
+                <button type="submit" class="form-col form-button-submit">Uploader</button>
+
+                <div class="form-col">
+                    <a class="form-button-cancel" href="{{ path('admin_main') }}">
+                        Annuler
+                    </a>
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock %}
 
-{% block title %}
-    | upload csv
-{% endblock %}
+    {% block title %}
+        | upload csv
+    {% endblock %}
 

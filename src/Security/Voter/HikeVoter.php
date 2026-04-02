@@ -63,7 +63,10 @@ final class HikeVoter extends Voter
                 break;
 
             case self::CANCEL:
-                if (($user->getUserIdentifier() == $hike->getPlanner()->getUserIdentifier()) and (($hike->getStatus()->getLabel() == 'Ouverte') or ($hike->getStatus()->getLabel() == 'Clôturée') or ($hike->getStatus()->getLabel() == 'Activité en cours'))) {
+                if (($user->getUserIdentifier() == $hike->getPlanner()->getUserIdentifier())
+                    and (($hike->getStatus()->getLabel() == 'Ouverte')
+                        or ($hike->getStatus()->getLabel() == 'Clôturée')
+                        or ($hike->getStatus()->getLabel() == 'Activité en cours'))) {
 
                     return true;
                 } else if ((in_array('ROLE_ADMIN', $user->getRoles()))) {
@@ -72,7 +75,9 @@ final class HikeVoter extends Voter
                 break;
 
             case self::DELETE:
-                if (($user->getUserIdentifier() == $hike->getPlanner()->getUserIdentifier()) and ($hike->getStatus()->getLabel() == 'Créée')) {
+                if (($user->getUserIdentifier() == $hike->getPlanner()->getUserIdentifier())
+                    and ($hike->getStatus()->getLabel() == 'Créée')) {
+
                     return true;
                 } else if ((in_array('ROLE_ADMIN', $user->getRoles()))) {
                     return true;
@@ -80,13 +85,20 @@ final class HikeVoter extends Voter
                 break;
 
             case self::SUBSCRIBE:
-                if (($user->getUserIdentifier() !== $hike->getPlanner()->getUserIdentifier()) and (!$hike->getParticipant()->contains($user)) and ($date < $hike->getDateSubscription()) and ($hike->getStatus()->getLabel() == 'Ouverte')) {
+                if (($user->getUserIdentifier() !== $hike->getPlanner()->getUserIdentifier())
+                    and (!$hike->getParticipant()->contains($user))
+                    and ($date < $hike->getDateSubscription())
+                    and ($hike->getStatus()->getLabel() == 'Ouverte')) {
+
                     return true;
                 }
                 break;
 
             case self::UNSUBSCRIBE:
-                if (($user->getUserIdentifier() !== $hike->getPlanner()->getUserIdentifier()) and ($hike->getParticipant()->contains($user)) and ($date < $hike->getDateEvent())) {
+                if (($user->getUserIdentifier() !== $hike->getPlanner()->getUserIdentifier())
+                    and ($hike->getParticipant()->contains($user))
+                    and ($date < $hike->getDateEvent())) {
+                    
                     return true;
                 }
                 break;

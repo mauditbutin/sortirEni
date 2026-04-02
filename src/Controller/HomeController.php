@@ -46,9 +46,8 @@ final class HomeController extends AbstractController
 
 
         // ----- Gestion des pages et du nombre de sortie par page
-
-        $nbHikeParPages = count($hikes);
-        $nbMaxPages = ceil($nbHikeParPages / 12); //CF valeur nbResultat dans HikeReposirory
+        
+        $nbMaxPages = ceil(count($hikes) / 12); //CF valeur nbResultat dans HikeReposirory
 
         if ($page > $nbMaxPages) {
             throw $this->createNotFoundException("Plus rien ici...");
