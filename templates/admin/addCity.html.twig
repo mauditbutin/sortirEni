@@ -2,14 +2,25 @@
 
 {% block body %}
 
-    <h2>Ajoutez une nouvelle ville :</h2>
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button>Créer</button>
-    {{ form_end(form) }}
-    <a href="{{ path('admin_main') }}">
-        <button>Annuler</button>
-    </a>
+    {% form_theme form 'views/form-theme.html.twig' %}
+
+    <h2 class="title-create">Ajoutez une nouvelle ville :</h2>
+
+    <div class="create-container-form">
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <div class="form-row form-buttons">
+            <button type="submit" class="form-col form-button-submit">Créer</button>
+
+            <div class="form-col">
+                <a class="form-button-cancel" href="{{ path('admin_main') }}">
+                    Annuler
+                </a>
+            </div>
+        </div>
+        {{ form_end(form) }}
+
+    </div>
 
 {% endblock %}
 
