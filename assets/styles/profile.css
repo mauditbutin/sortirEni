@@ -2,21 +2,213 @@
 /* Page de profil */
 /****************************************/
 
-.profile-container {
+
+.profile-card {
+    padding: 2em;
     background-color: var(--color-beige-base);
+    border-radius: 10px;
     width: 90%;
-    max-width: 1200px;
-    display: flex;
-    flex-direction: row;
+    max-width: 700px;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 4rem;
     color: var(--color-green-dark);
-    border-radius: 20px;
-    margin-top: 3rem;
-    padding: 2rem;
 }
 
-.profile-avatar {
-    width: 200px;
-    height: 200px;
+.profile-card-row {
+    display: grid;
+    gap: 1rem;
+}
+
+.pc-row1 {
+    grid-template-columns: 33% 67%;
+    border-bottom: 2px solid var(--color-orange-light);
+    padding-bottom: 1rem;
+}
+
+
+.pc-row2 > div:first-child {
+    border-right: 2px solid var(--color-orange-light);
+}
+
+.pc-row2 {
+    grid-template-columns: 50% 50%;
+}
+
+.profil-picture {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 5px;
+}
+
+.profile-card h2 {
+    font-family: "BioRhyme Expanded", serif;
+    color: var(--color-orange-dark);
+    margin-bottom: 0.5rem;
+}
+
+.profile-infos-label {
+    font-family: "BioRhyme", serif;
+    line-height: 2em;
+    background-color: #b7c0ab;
+    padding-left: 0.7em;
+    padding-right: 0.7em;
+    border-radius: 20px;
+    margin-right: 0.2em;
+}
+
+.button-edit-profile {
+    background-color: var(--color-orange-light);
+    padding: 0.5em;
+    font-family: "Montserrat", sans-serif;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    margin-top: 1em;
+}
+
+.button-edit-profile a {
+    text-decoration: none;
+    color: var(--color-green-dark);
+}
+
+.profile-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem auto 3rem auto;
+}
+
+.button-home-profile {
+    background-color: var(--color-orange-light);
+    padding: 0.5rem;
+    border-radius: 5px;
+    text-decoration: none;
+    color: var(--color-green-dark);
+}
+
+.profile-statistiques {
+    padding-top: 0.8rem;
+}
+
+.statistique-label {
+    line-height: 1.8em;
+}
+
+.profile-badges {
+    padding-top: 0.8rem;
+}
+
+.profile-badge-icon {
+    width: 50px;
+}
+
+.badge-container {
+    position: relative;
+}
+
+.badge-row {
+    display: flex;
+}
+
+.tooltip {
+    position: absolute;
+    bottom: 55px;
+    white-space: nowrap;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    background-color: var(--color-green-dark);
+    color: var(--color-beige-base);
+    padding: 0.3em 0.7em;
+    border-radius: 7px;
+    font-size: 0.8em;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.badge-container:hover .tooltip {
+    opacity: 1;
+}
+
+.badge-container:hover .profile-badge-icon {
+    transform: scale(1.05);
+}
+
+.dashboard-user-profile {
+    margin-top: 2rem;
+    width: 90%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.dashboard-user-profile a {
+    text-decoration: none;
+    color: var(--color-beige-base);
+    display: block;
+    margin-top: 0.5rem;
+}
+
+.dashboard-row {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.dashboard-col {
+    background-color: #38442b;
+    border-radius: 10px;
+
+}
+
+.dashboard-user-profile h2 {
+    font-family: "BioRhyme Expanded", serif;
+    color: var(--color-orange-light);
+    margin-top: 4rem;
+    margin-bottom: 3rem;
+    font-size: 1.8em;
+    text-align: center;
+}
+
+.dashboard-user-profile h3 {
+    font-family: "BioRhyme", serif;
+    color: var(--color-orange-light);
+    text-align: center;
+
+}
+
+.dashboard-legend {
+    background-color: #181f10;
+    border-radius: 10px 10px 0 0;
+    padding: 1rem;
+    color: var(--color-orange-light);
+}
+
+.dashboard-content {
+    padding: 1rem;
+    color: var(--color-beige-base);
+}
+
+.dashboard-content div {
+    margin-bottom: 1.5em;
+}
+
+.dashboard-user-statut {
+    background-color: #151f09;
+    padding: 0.2em 0.5em;
+    border-radius: 20px;
+    font-size: 0.7em;
+    color: rgb(165, 219, 66);
+}
+
+.dashboard-user-cancel {
+    color: var(--color-red-error);
+}
+
+.dashboard-user-indispo {
+    color: var(--color-orange-light);
 }

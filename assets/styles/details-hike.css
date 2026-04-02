@@ -20,3 +20,137 @@
     font-size: 1.5rem;
     margin-bottom: 1em;
 }
+
+
+/****************************************/
+/* CSS GLOBAL PAGE */
+/****************************************/
+
+
+
+.container-details {
+    background-color: var(--color-beige-base);
+    width: 90%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 4rem;
+    border-radius: 10px;
+}
+
+.container-details a {
+    text-decoration: none;
+}
+
+.container-details-adress {
+    /*padding-bottom: 1rem;*/
+    /*margin-bottom: 1rem;*/
+    /*border-bottom: solid 1px var(--color-orange-light);*/
+    margin-bottom: 1rem;
+
+}
+
+.user-pp {
+    width: 40px;
+    height: 40px;
+    margin-right: 0.5em;
+    border-radius: 50px;
+    margin-bottom: 1em;
+}
+
+.detail-user-container {
+    position: relative;
+}
+
+.details-container-participants,
+.details-container-planner {
+    display: flex;
+}
+
+
+/*.detail-user-container:hover .tooltip {*/
+/*    opacity: 1;*/
+/*}*/
+
+/*.detail-user-container:hover .user-pp {*/
+/*    transform: scale(1.05);*/
+/*}*/
+
+.details-zone-infos {
+    padding: 2rem;
+    gap: 1rem;
+    color: var(--color-green-dark);
+}
+
+.details-row {
+    display: grid;
+    grid-template-columns: 67% 33%;
+
+}
+
+.d-row1 {
+    grid-template-columns: 67% 33%;
+}
+
+.details-container-img,
+.details-container-map {
+    height: 300px;
+}
+
+.details-title {
+    font-family: "BioRhyme Expanded", serif;
+    color: rgb(226, 139, 26);
+    margin-bottom: 1rem;
+    font-size: 1.7em;
+}
+
+.details-img,
+.details-map {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 10px 10px 0 0;
+}
+
+.details-img {
+    border-radius: 10px 0 0 0;
+}
+
+.details-map {
+    border-radius: 0 10px 0 0;
+}
+
+.details-label {
+    font-family: "BioRhyme", serif;
+    color: var(--color-green-light);
+    margin-bottom: 0.8rem;
+}
+
+.details-description {
+    margin-bottom: 0.4rem;
+}
+
+.detail-hike-button {
+    margin-top: 1rem;
+    align-items: center;
+    justify-content: center;
+    height: 2.1em;
+    color: var(--color-green-light);
+    background-color: var(--color-beige-base);
+    border: solid 1px var(--color-green-light);
+    padding: 0.5rem;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.detail-hike-button-delete {
+    color: var(--color-red-error);
+    border: solid 1px var(--color-red-error);
+}
+
+.detail-hike-button a {
+    color: var(--color-green-light);
+    text-decoration: none;
+}

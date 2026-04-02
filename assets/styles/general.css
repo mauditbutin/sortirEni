@@ -157,12 +157,13 @@ footer a {
     padding: 10px 14px;
     border-radius: 6px;
     font-size: 1.2rem;
-    color: var(--color-green-light);
+    color: rgb(165, 219, 66);
     background-color: var(--color-green-dark);
     opacity: 0;
     transform: translateY(-20px);
     animation: toast 3.3s ease forwards;
     pointer-events: none;
+    z-index: 200;
 }
 
 .alert-error {
@@ -179,6 +180,7 @@ footer a {
     transform: translateY(-20px);
     animation: toast 3.3s ease forwards;
     pointer-events: none;
+    z-index: 200;
 }
 
 @keyframes toast {
