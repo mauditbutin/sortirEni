@@ -199,7 +199,12 @@ final class HikeController extends AbstractController
 
 
     #[Route('/{id}/cancel', name: 'cancel', requirements: ['id' => '[0-9]+'])]
-    public function cancel(HikeRepository $hikeRepository, int $id, EntityManagerInterface $entityManager, StatusRepository $statusRepository, Request $request): Response
+    public function cancel(
+        HikeRepository         $hikeRepository,
+        int                    $id,
+        EntityManagerInterface $entityManager,
+        StatusRepository       $statusRepository,
+        Request                $request): Response
     {
 
         $hike = $hikeRepository->find($id);
@@ -227,7 +232,12 @@ final class HikeController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '[0-9]+'])]
-    public function delete(HikeRepository $hikeRepository, int $id, EntityManagerInterface $entityManager, StatusRepository $statusRepository, Request $request): Response
+    public function delete(
+        HikeRepository         $hikeRepository,
+        int                    $id,
+        EntityManagerInterface $entityManager,
+        StatusRepository       $statusRepository,
+        Request                $request): Response
     {
 
         $hike = $hikeRepository->find($id);
