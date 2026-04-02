@@ -49,7 +49,8 @@ final class HikeController extends AbstractController
             // Gestion de l'image
             $file = $hikeForm->get('picture')->getData();
             if ($file) {
-                $hike->setPicture($fileUploader->uploadFile($file, 'images/hikes', $hike->getName()));
+                $hike->setPicture($fileUploader->uploadFile($file,
+                    'images/hikes', $hike->getName()));
             } else {
                 $hike->setPicture('image-not-found.webp');
             }
@@ -61,16 +62,24 @@ final class HikeController extends AbstractController
             // Gestion du temps de la randonnée
             $hike->setDuration(
                 $timeConverter->durationIntoMinutes(
-                    $hikeForm->get('durationHours')->getData(), $hikeForm->get('durationMinutes')->getData()
+                    $hikeForm->get('durationHours')->getData(),
+                    $hikeForm->get('durationMinutes')->getData()
                 ));
 
             // Ajout du statut selon le bouton cliqué
-            if ($hikeForm->getClickedButton() && 'create' === $hikeForm->getClickedButton()->getName()) {
-                $hike->setStatus($manager->getRepository(Status::class)->findOneBy(['label' => 'Créée']));
-                $this->addFlash('success', 'Votre randonnée a bien été créée, n\'hésitez pas à la publier');
-            } else if ($hikeForm->getClickedButton() && 'publish' === $hikeForm->getClickedButton()->getName()) {
-                $hike->setStatus($manager->getRepository(Status::class)->findOneBy(['label' => 'Ouverte']));
-                $this->addFlash('success', 'Votre randonnée a bien été publiée');
+            if ($hikeForm->getClickedButton() &&
+                'create' === $hikeForm->getClickedButton()->getName()) {
+                    $hike->setStatus($manager->getRepository(Status::class)
+                        ->findOneBy(['label' => 'Créée']));
+                    $this->addFlash('success',
+                        'Votre randonnée a bien été créée,
+                        n\'hésitez pas à la publier');
+            } else if ($hikeForm->getClickedButton() &&
+                'publish' === $hikeForm->getClickedButton()->getName()) {
+                $hike->setStatus($manager->getRepository(Status::class)
+                    ->findOneBy(['label' => 'Ouverte']));
+                $this->addFlash('success',
+                    'Votre randonnée a bien été publiée');
             }
 
             $manager->persist($hike);

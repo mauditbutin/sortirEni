@@ -90,6 +90,10 @@
     cursor: pointer;
 }
 
+.custom-file-input {
+    color: var(--color-green-dark);
+}
+
 .form-button-submit {
     background-color: var(--color-green-light);
     color: var(--color-beige-base);

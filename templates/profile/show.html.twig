@@ -6,96 +6,126 @@
 
 {% block body %}
 
-    <div class="profile-container">
+    <div class="container-profile">
+
         <div class="profile-card">
-            {% if user.picture %}
-                <img src="{{ asset('images/profilePictures/' ~ user.picture) }}"
-                     alt="Photo of {{ user.firstname }}"
-                     class="profile-avatar"/>
-            {% else %}
-                <div class="profile-avatar-placeholder">👤</div>
-            {% endif %}
 
-            <h1 class="profile-name">{{ user.firstname ~ ' ' ~ user.lastname }}</h1>
-            <p class="profile-username">@{{ user.username }}</p>
+            <div class="profile-card-row pc-row1">
 
-            <div class="profile-info">
-
-                <div class="info-row">
-                    <span class="info-label">Email</span>
-                    <span class="info-value">{{ user.email }}</span>
+                <div class="container-profil-picture">
+                    <img src="{{ asset('images/profilePictures/' ~ user.picture) }}"
+                         alt="Photo of {{ user.firstname }}"
+                         class="profil-picture"></div>
+                <div class="profile-infos">
+                    <h2>Carte de membre</h2>
+                    <div><span class="profile-infos-label">Pseudo</span> {{ user.username }}</div>
+                    <div><span class="profile-infos-label">Identité</span>{{ user.firstname ~ ' ' ~ user.lastname }}
+                    </div>
+                    <div><span class="profile-infos-label">Adresse email</span>{{ user.email }}</div>
+                    <div><span class="profile-infos-label">Numéro de téléphone</span>{{ user.phoneNumber }}</div>
+                    <div><span
+                            class="profile-infos-label">Campus</span>{{ user.campus ? user.campus.name : 'Information inconnue' }}
+                    </div>
+                    {% if app.user == user %}
+                    <button class="button-edit-profile"><a href="{{ path('app_profile_edit', {id: user.id}) }}">Modifier
+                            mon profil</a></button>
+                    {% endif %}
                 </div>
 
-                <div class="info-row">
-                    <span class="info-label">Telephone</span>
-                    <span class="info-value">{{ user.phoneNumber }}</span>
-                </div>
-
-                <div class="info-row">
-                    <span class="info-label">Campus</span>
-                    <span class="info-value">{{ user.campus ? user.campus.name : 'Not defined' }}</span>
-                </div>
-
-                <div class="info-row">
-                    <span class="info-label">Status</span>
-                    <span
-                        class="info-value {{ user.active ? 'badge-active' : 'badge-inactive' }}">{{ user.active ? 'Actif' : 'Inactif' }}</span>
-                </div>
             </div>
 
-            {% if app.user == user %}
+            <div class="profile-card-row pc-row2">
 
-            <fieldset>
-                <legend>Vos randonnées :</legend>
-                <fieldset>
-                    <legend>En tant que participant :</legend>
-                    {% for hike in user.participatedHikes %}
-                        <div>
-                            <a href="{{ path('hike_detail', {'id': hike.id}) }}">
-                                {{ hike.name }}<br>
-                            </a>
+                <div class="profile-statistiques">
+                    <h2>Statistiques</h2>
+                    <div>Randonnées organisées : {{ user.plannedHikes | length }}</div>
+                    <div class="statistique-label">Randonnées participées : {{ user.participatedHikes | length }}</div>
+                </div>
+
+                <div class="profile-badges">
+                    <h2>Badges gagnés</h2>
+                    <div class="badge-row">
+                        <div class="badge-container">
+                            <img src="{{ asset('images/assetsFront/badge2.svg') }}" class="profile-badge-icon">
+                            <div class="tooltip">Randonneur Niveau 1 : <br>vous avez participé à une randonnée</div>
                         </div>
-                    {% endfor %}
-                </fieldset>
-                <fieldset>
-                    <legend>En tant qu'organisateur :</legend>
-                    <div>
-                        <h3>Randonnées publiées</h3>
+                        <div class="badge-container">
+                            <img src="{{ asset('images/assetsFront/badge1.svg') }}" class="profile-badge-icon">
+                            <div class="tooltip">Meneur Niveau 1 : <br>vous avez organisé une sortie</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        {% if app.user == user %}
+
+        <div class="dashboard-user-profile">
+
+            <h2>Tableau de bord</h2>
+
+            <div class="dashboard-row">
+
+                <div class="dashboard-col">
+                    <div class="dashboard-legend"><h3>Randonnées organisées</h3></div>
+                    <div class="dashboard-content">
                         {% for hike in user.plannedHikes %}
                             {% if hike.status.label != 'Créée' %}
                                 <div>
+                                    <span class="dashboard-user-statut">{{ hike.status.label }}</span><br>
                                     <a href="{{ path('hike_detail', {'id': hike.id}) }}">
-                                        {{ hike.name }}<br>
+                                        {{ hike.name }}
                                     </a>
                                 </div>
                             {% endif %}
                         {% endfor %}
-                        <h3>Randonnées en cours de création</h3>
+                    </div>
+                </div>
+
+                <div class="dashboard-col">
+                    <div class="dashboard-legend"><h3>Randonnées participées</h3></div>
+                    <div class="dashboard-content">
+                        {% for hike in user.participatedHikes %}
+                            <div>
+                                <span class="dashboard-user-statut">{{ hike.status.label }}</span><br>
+                                <a href="{{ path('hike_detail', {'id': hike.id}) }}">
+                                    {{ hike.name }}
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="dashboard-col">
+                    <div class="dashboard-legend"><h3>Mes brouillons</h3></div>
+                    <div class="dashboard-content">
                         {% for hike in user.plannedHikes %}
                             {% if hike.status.label == 'Créée' %}
                                 <div>
+                                    <span class="dashboard-user-statut">{{ hike.status.label }}</span><br>
                                     <a href="{{ path('hike_detail', {'id': hike.id}) }}">
-                                        {{ hike.name }}<br>
+                                        {{ hike.name }}
                                     </a>
                                 </div>
                             {% endif %}
                         {% endfor %}
-                        <div>
-
-                        </div>
                     </div>
-                </fieldset>
-            </fieldset>
+                </div>
 
-
-                <a href="{{ path('app_profile_edit', {id: user.id}) }}" class="btn-edit">Modifier mon profil</a>
-            {% endif %}
-
+            </div>
 
         </div>
+
+        {% endif %}
+
     </div>
 
-    <a href="{{ path('home') }}" class="btn-back">Retour</a>
+    <div class="profile-buttons">
+        <a href="{{ path('home') }}" class="button-home-profile">Retour à l'accueil</a>
+    </div>
+
 {% endblock %}
 
 

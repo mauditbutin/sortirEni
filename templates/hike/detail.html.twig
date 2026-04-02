@@ -44,38 +44,154 @@
 {% endblock %}
 
 
-
 {% block body %}
-    <div>
-        <h2>{{ hike.name }}</h2>
-        <div>
-            <div>
-                <img
-                    src="{{ asset('images/hikes/' ~ hike.picture ) }}"
-                    alt="{{ hike.name }}" style="width: 10rem">
-            </div>
-            <div>
-                Description : {{ hike.description }} <br>
-                Organisateur
-                : {% if hike.planner %}{{ hike.planner.username }}{% else %} utilisateur supprimé {% endif %}
-                <br>
-                Date de l'évènement : {{ hike.dateEvent | date ('d-m-Y') }}<br>
-                Date limite d'inscription : {{ hike.dateSubscription | date ('d-m-Y') }}<br>
-                Statut : {{ hike.status.label }}<br>
-                Difficulté : {{ hike.difficulty.label }}<br>
-                Durée estimée : {{ durationString }}<br>
-                Nombre de participants : {{ hike.participant|length }} / {{ hike.nbMaxSubscription }}<br>
 
-                participants : <br>{% for participant in hike.participant %} <a
-                href="{{ path('app_profile', {'id': participant.id}) }}"><img
-                    src="{{ asset('images/profilePictures/' ~ participant.picture) }}"
-                    alt="{{ participant.username }}" style="width: 5rem"> {{ participant.username }}</a><br>{% endfor %}
+    <div class="container-details">
 
-                Point de rendez-vous : {{ hike.location.name }}<br>
-                Campus de rattachement : {{ hike.campus.name }}<br>
+        <div class="details">
+
+            <div class="details-row d-row1">
+
+                <div class="details-container-img"><img src="{{ asset('images/hikes/' ~ hike.picture ) }}" class="details-img" alt="Image de la randonnée"></div>
+
+                <div class="details-container-map"><img src="{{ asset('images/hikes/' ~ hike.picture ) }}" class="details-map"></div>
+
             </div>
+
+            <div class="details-row details-zone-infos">
+
+                <div class="details-col">
+
+                    <h2 class="details-title">{{ hike.name }}</h2>
+
+                    <div class="details-statut">{{ hike.status.label }}</div>
+
+                    <div class="details-date">{{ hike.dateEvent | date ('d-m-Y') }}</div>
+
+                    <div class="details-date-subscription">{{ hike.dateSubscription | date ('d-m-Y') }}</div>
+
+                    <div class="details-duration">{{ durationString }}</div>
+
+                    <div class="details-difficulty">{{ hike.difficulty.label }}</div>
+
+                    <div class="details-description">{{ hike.description }}</div>
+
+                    <div class="details-campus">{{ hike.campus.name }}</div>
+
+                    <button>Modifier</button>
+                    <button>Annuler la randonnée</button>
+
+                </div>
+
+
+                <div class="details-col">
+
+                    <div class="details-label">Adresse</div>
+                    <div class="details-location">
+                        {{ hike.location.name }}</div>
+
+                    <div class="details-adress">
+                        {{ hike.location.address }} </div>
+
+                    <div class="details-label">Organisateur</div>
+                    <div class="details-container-planner">
+                        <div class="detail-user-container">
+
+                            {% if hike.planner %}
+                                <img src="{{ asset('images/profilePictures/' ~ hike.planner.picture) }}" class="user-pp">
+                                <div class="tooltip">{{ hike.planner.username }}</div>
+                            {% else %}
+                                Utilisateur supprimé
+                            {% endif %}
+
+                        </div>
+                    </div>
+
+                    <div class="details-label">Participants : {{ hike.participant|length }} / {{ hike.nbMaxSubscription }}</div>
+                    <div class="details-container-participants">
+
+                        {% for participant in hike.participant %}
+
+
+                            <a
+                            href="{{ path('app_profile', {'id': participant.id}) }}"><img
+                                src="{{ asset('images/profilePictures/' ~ participant.picture) }}"
+                                alt="{{ participant.username }}" class="user-pp"></a>
+                            <div class="tooltip">{{ participant.username }}</div>
+
+                        {% endfor %}
+
+{#                        #}
+{#                        <div class="detail-user-container">#}
+{#                            <img src="badge2.svg" class="user-pp">#}
+{#                            <div class="tooltip">Maud Butin</div>#}
+{#                        </div>#}
+{#                        <div class="detail-user-container">#}
+{#                            <img src="badge2.svg" class="user-pp">#}
+{#                            <div class="tooltip">Maud Butin</div>#}
+{#                        </div>#}
+{#                        <div class="detail-user-container">#}
+{#                            <img src="badge2.svg" class="user-pp">#}
+{#                            <div class="tooltip">Maud Butin</div>#}
+{#                        </div>#}
+{#                        <div class="detail-user-container">#}
+{#                            <img src="badge2.svg" class="user-pp">#}
+{#                            <div class="tooltip">Maud Butin</div>#}
+{#                        </div>#}
+                    </div>
+
+                    <button>S'inscrire</button>
+
+
+                </div>
+
+            </div>
+
         </div>
+
+    </div>
+
+
+
+ {#---------------------------------------------------- #}
+
+
+
+
+
+{#    <div>#}
+{#        <h2>{{ hike.name }}</h2>#}
+{#        <div>#}
+{#            <div>#}
+{#                <img#}
+{#                    src="{{ asset('images/hikes/' ~ hike.picture ) }}"#}
+{#                    alt="{{ hike.name }}" style="width: 10rem">#}
+{#            </div>#}
+{#            <div>#}
+{#                Description : {{ hike.description }} <br>#}
+{#                Organisateur#}
+{#                : {% if hike.planner %}{{ hike.planner.username }}{% else %} utilisateur supprimé {% endif %}#}
+{#                <br>#}
+{#                Date de l'évènement : {{ hike.dateEvent | date ('d-m-Y') }}<br>#}
+{#                Date limite d'inscription : {{ hike.dateSubscription | date ('d-m-Y') }}<br>#}
+{#                Statut : {{ hike.status.label }}<br>#}
+{#                Difficulté : {{ hike.difficulty.label }}<br>#}
+{#                Durée estimée : {{ durationString }}<br>#}
+{#                Nombre de participants : {{ hike.participant|length }} / {{ hike.nbMaxSubscription }}<br>#}
+
+{#                participants : <br>{% for participant in hike.participant %} <a#}
+{#                href="{{ path('app_profile', {'id': participant.id}) }}"><img#}
+{#                    src="{{ asset('images/profilePictures/' ~ participant.picture) }}"#}
+{#                    alt="{{ participant.username }}" style="width: 5rem"> {{ participant.username }}</a><br>{% endfor %}#}
+
+{#                Point de rendez-vous : {{ hike.location.name }}<br>#}
+{#                Campus de rattachement : {{ hike.campus.name }}<br>#}
+{#            </div>#}
+{#        </div>#}
+
+
 {#++++++++++++++ BLOCK MAP ++++++++++++++++#}
+
         {% if hike.location.latitude and hike.location.longitude %}
 
             {# button of style #}
