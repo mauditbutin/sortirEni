@@ -95,6 +95,7 @@
 .details-container-img,
 .details-container-map {
     height: 300px;
+    z-index: 0;
 }
 
 .details-title {
@@ -118,6 +119,10 @@
 }
 
 .details-map {
+    border-radius: 0 10px 0 0;
+}
+
+#map {
     border-radius: 0 10px 0 0;
 }
 
