@@ -67,6 +67,7 @@ if (hikeForm){
             select.appendChild(newOption);
 
             modale.style.display = 'none';
+            document.body.classList.remove('no-scroll');
 
             let dataInfos = await callApi(getLocationInfo + '/' + data.id);
             divAdress.innerText = dataInfos[0].address;
