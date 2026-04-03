@@ -21,7 +21,7 @@
 
                 <div class="details-container-img">
                     <img src="{{ asset('images/hikes/' ~ hike.picture ) }}"
-                                                        class="details-img" alt="Image de la randonnée"></div>
+                         class="details-img" alt="Image de la randonnée"></div>
 
                 {% if hike.location.latitude and hike.location.longitude %}
 
@@ -59,21 +59,25 @@
                             ★★★
                         {% endif %}
                         </span>
-                    Difficulté : Randonnée {{ hike.difficulty.label |lower }}
+                        Difficulté : Randonnée {{ hike.difficulty.label |lower }}
                     </div>
 
 
                     <div class="details-description">{{ hike.description }}</div>
 
-                    <div class="subscription">Statut : randonnée {{ hike.status.label |lower}}.</div>
-                    <div class="details-date-subscription">Date limite d'inscription : {{ hike.dateSubscription |format_date(pattern="d MMMM yyyy",locale='fr') }}</div>
+                    <div class="subscription">Statut : randonnée {{ hike.status.label |lower }}.</div>
+                    <div class="details-date-subscription">Date limite d'inscription
+                        : {{ hike.dateSubscription |format_date(pattern="d MMMM yyyy",locale='fr') }}</div>
 
 
                     {% if user == hike.planner or is_granted('ROLE_ADMIN') %}
-                        <button class="detail-hike-button"><a href="{{ path('hike_edit', {'id': hike.id}) }}" >Modifier la randonnée</a></button>
+                        <button class="detail-hike-button"><a href="{{ path('hike_edit', {'id': hike.id}) }}">Modifier
+                                la randonnée</a></button>
                         {% if hike.status.label == 'Ouverte' or hike.status.label == 'Clôturée' or is_granted('ROLE_ADMIN') %}
                             <a href="#modalCancel" id="buttonOpenLocationModale">
-                                <button id="buttonHikeCancel" class="detail-hike-button detail-hike-button-delete"> Annuler la randonnée</button>
+                                <button id="buttonHikeCancel" class="detail-hike-button detail-hike-button-delete">
+                                    Annuler la randonnée
+                                </button>
                             </a>
                         {% endif %}
                         {% if hike.status.label == 'Créée' or is_granted('ROLE_ADMIN') %}
@@ -84,13 +88,13 @@
                                 <button class="detail-hike-button detail-hike-button-delete"> Supprimer</button>
                             </a>
                         {% endif %}
-                    {% elseif hike.participant.contains(user) %}
-                        <a href="{{ path('hike_unsubscribe', {'id': hike.id}) }}" >
+                    {% elseif hike.participant.contains(user) and hike.status.label != 'Clôturée' and hike.status.label != 'Passée' %}
+                        <a href="{{ path('hike_unsubscribe', {'id': hike.id}) }}">
                             <button class="detail-hike-button"> Se désinscrire</button>
                         </a>
                     {% else %}
-                        {% if hike.status.label != 'Créée' %}
-                            <a href="{{ path('hike_subscribe', {'id': hike.id}) }}" >
+                        {% if hike.status.label != 'Créée' and hike.status.label != 'Clôturée' and hike.status.label != 'Passée' %}
+                            <a href="{{ path('hike_subscribe', {'id': hike.id}) }}">
                                 <button class="detail-hike-button"> S'inscrire</button>
                             </a>
                         {% endif %}
@@ -115,11 +119,12 @@
                         <div class="detail-user-container">
 
                             {% if hike.planner %}
-                            <a
-                                href="{{ path('app_profile', {'id': hike.planner.id}) }}">
-                                <img src="{{ asset('images/profilePictures/' ~ hike.planner.picture) }}" class="user-pp"
-                                     alt="Photo de profil de l'organisateur"></a>
-{#                                <div class="tooltip">{{ hike.planner.username }}</div>#}
+                                <a
+                                    href="{{ path('app_profile', {'id': hike.planner.id}) }}">
+                                    <img src="{{ asset('images/profilePictures/' ~ hike.planner.picture) }}"
+                                         class="user-pp"
+                                         alt="Photo de profil de l'organisateur"></a>
+                                {#                                <div class="tooltip">{{ hike.planner.username }}</div> #}
                             {% else %}
                                 Utilisateur supprimé
                             {% endif %}
@@ -137,7 +142,7 @@
                                 href="{{ path('app_profile', {'id': participant.id}) }}"><img
                                     src="{{ asset('images/profilePictures/' ~ participant.picture) }}"
                                     alt="{{ participant.username }}" class="user-pp"></a>
-{#                            <div class="tooltip">{{ participant.username }}</div>#}
+                            {#                            <div class="tooltip">{{ participant.username }}</div> #}
 
                         {% endfor %}
 
